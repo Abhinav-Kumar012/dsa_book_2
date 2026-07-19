@@ -115,6 +115,110 @@
 
 ---
 
+# Part X: Computer Science Foundations
+
+- [Chapter 67: Algorithmic Thinking](./chapters/ch67-algorithmic-thinking.md)
+- [Chapter 68: Problem Modeling and Abstraction](./chapters/ch68-problem-modeling.md)
+- [Chapter 69: Correctness Proofs and Loop Invariants](./chapters/ch69-correctness-proofs.md)
+- [Chapter 70: Computational Models and Complexity Classes](./chapters/ch70-computational-models.md)
+
+# Part XI: Mathematics Handbook
+
+- [Chapter 71: Combinatorics](./chapters/ch71-combinatorics.md)
+- [Chapter 72: Probability and Expected Value](./chapters/ch72-probability.md)
+- [Chapter 73: Linear Algebra for Programming](./chapters/ch73-linear-algebra.md)
+
+# Part XII: Advanced Data Structures
+
+- [Chapter 74: Skip Lists](./chapters/ch74-skip-lists.md)
+- [Chapter 75: Persistent Data Structures](./chapters/ch75-persistent-ds.md)
+- [Chapter 76: Advanced Segment Trees](./chapters/ch76-advanced-seg-trees.md)
+- [Chapter 77: B-Trees and Database Indexing](./chapters/ch77-btrees.md)
+- [Chapter 78: KD Trees and Spatial Data Structures](./chapters/ch78-kd-trees.md)
+- [Chapter 79: Probabilistic Data Structures](./chapters/ch79-probabilistic-ds.md)
+- [Chapter 80: Advanced Heaps](./chapters/ch80-advanced-heaps.md)
+- [Chapter 98: Splay Trees](./chapters/ch98-splay-trees.md)
+- [Chapter 99: Scapegoat Trees and AA Trees](./chapters/ch99-scapegoat-aa-trees.md)
+- [Chapter 100: Van Emde Boas and X-Fast/Y-Fast Tries](./chapters/ch100-van-emde-boas.md)
+- [Chapter 101: Rope and Gap Buffer](./chapters/ch101-rope-gap-buffer.md)
+- [Chapter 102: Wavelet Trees](./chapters/ch102-wavelet-trees.md)
+- [Chapter 103: Interval Trees and Order Statistic Trees](./chapters/ch103-interval-order-statistic-trees.md)
+- [Chapter 104: Cartesian Trees and Tournament Trees](./chapters/ch104-cartesian-tournament-trees.md)
+- [Chapter 105: Cuckoo Hashing and Robin Hood Hashing](./chapters/ch105-cuckoo-robin-hood-hashing.md)
+
+# Part XIII: Advanced Graph Algorithms
+
+- [Chapter 81: SCC, Bridges, and Articulation Points](./chapters/ch81-scc-bridges.md)
+- [Chapter 82: Advanced Shortest Paths](./chapters/ch82-advanced-shortest-paths.md)
+- [Chapter 83: Advanced Network Flow](./chapters/ch83-advanced-flow.md)
+- [Chapter 84: Advanced Tree Algorithms](./chapters/ch84-tree-algorithms-advanced.md)
+- [Chapter 106: Euler Tour and Tree Flattening](./chapters/ch106-euler-tour-tree-flattening.md)
+- [Chapter 107: HLD and Centroid Decomposition Applications](./chapters/ch107-hld-centroid-applications.md)
+- [Chapter 108: DSU on Tree and Rerooting DP](./chapters/ch108-dsu-on-tree-rerooting.md)
+- [Chapter 109: Bridge Trees and Treewidth](./chapters/ch109-bridge-trees-treewidth.md)
+- [Chapter 110: Dominator Trees](./chapters/ch110-dominator-trees.md)
+- [Chapter 111: K-Core Decomposition and Transitive Closure](./chapters/ch111-kcore-transitive.md)
+- [Chapter 112: Hopcroft-Karp and Blossom Algorithm](./chapters/ch112-hopcroft-karp-blossom.md)
+
+# Part XIV: Advanced Dynamic Programming
+
+- [Chapter 85: Digit DP](./chapters/ch85-digit-dp.md)
+- [Chapter 86: DP Optimization Techniques](./chapters/ch86-dp-optimization.md)
+- [Chapter 113: Profile DP](./chapters/ch113-profile-dp.md)
+- [Chapter 114: Probability and Expected Value DP](./chapters/ch114-probability-dp.md)
+- [Chapter 115: Matrix DP](./chapters/ch115-matrix-dp.md)
+- [Chapter 116: Alien Trick and Parametric Search](./chapters/ch116-alien-trick-parametric.md)
+- [Chapter 117: Monotone Queue Optimization](./chapters/ch117-monotone-queue-optimization.md)
+- [Chapter 118: Bitset DP and Memory Optimization](./chapters/ch118-bitset-dp.md)
+
+# Part XV: Advanced String Algorithms
+
+- [Chapter 87: Suffix Tree](./chapters/ch87-suffix-tree.md)
+- [Chapter 88: Palindromic Tree](./chapters/ch88-palindromic-tree.md)
+- [Chapter 119: Manacher's Algorithm](./chapters/ch119-manacher.md)
+- [Chapter 120: Burrows-Wheeler Transform and FM-Index](./chapters/ch120-bwt-fmindex.md)
+- [Chapter 121: Lyndon Factorization](./chapters/ch121-lyndon-factorization.md)
+- [Chapter 122: Edit Distance Variants](./chapters/ch122-edit-distance-variants.md)
+- [Chapter 123: Regular Expression and Wildcard Matching](./chapters/ch123-regex-wildcard.md)
+
+# Part XVI: Engineering Knowledge
+
+- [Chapter 89: Cache and Memory Hierarchy](./chapters/ch89-engineering-cache.md)
+- [Chapter 90: C++ Deep Dive for Interviews](./chapters/ch90-cpp-deep-dive.md)
+- [Chapter 91: Profiling and Benchmarking](./chapters/ch91-profiling.md)
+- [Chapter 92: Undefined Behavior in C++](./chapters/ch92-undefined-behavior.md)
+- [Chapter 124: Branch Prediction](./chapters/ch124-branch-prediction.md)
+- [Chapter 125: SIMD Overview](./chapters/ch125-simd-overview.md)
+- [Chapter 126: RAII and Smart Pointers](./chapters/ch126-raii-smart-pointers.md)
+- [Chapter 127: Move Semantics Deep Dive](./chapters/ch127-move-semantics.md)
+- [Chapter 128: STL Internals](./chapters/ch128-stl-internals.md)
+- [Chapter 129: Compiler Optimizations](./chapters/ch129-compiler-optimizations.md)
+- [Chapter 137: Profiling Tools Reference](./chapters/ch137-profiling-tools.md)
+
+# Part XVII: Advanced Techniques
+
+- [Chapter 93: Sweep Line Algorithms](./chapters/ch93-sweep-line.md)
+- [Chapter 94: Hashing Deep Dive](./chapters/ch94-hashing-deep-dive.md)
+- [Chapter 95: Advanced Bit Manipulation](./chapters/ch95-bit-advanced.md)
+- [Chapter 96: NP-Completeness and Approximation](./chapters/ch96-np-approximation.md)
+- [Chapter 130: Coordinate Compression](./chapters/ch130-coordinate-compression.md)
+- [Chapter 131: Parallel Binary Search](./chapters/ch131-parallel-binary-search.md)
+- [Chapter 132: IDA* and Beam Search](./chapters/ch132-ida-star-beam-search.md)
+- [Chapter 133: Branch and Bound and Dancing Links](./chapters/ch133-branch-bound-dancing-links.md)
+- [Chapter 134: Consistent Hashing](./chapters/ch134-consistent-hashing.md)
+- [Chapter 135: De Bruijn Sequences and Morton Codes](./chapters/ch135-debruijn-morton.md)
+- [Chapter 136: Gray Code and Advanced Bit Tricks](./chapters/ch136-gray-code-bit-tricks.md)
+
+# Part XVIII: Interview Mastery
+
+- [Chapter 97: Pattern Recognition Handbook](./chapters/ch97-pattern-recognition.md)
+- [Chapter 138: Formula Handbook](./chapters/ch138-formula-handbook.md)
+- [Chapter 139: Complexity Handbook](./chapters/ch139-complexity-handbook.md)
+- [Chapter 140: Algorithm Selection Cheat Sheet](./chapters/ch140-algorithm-selection.md)
+- [Chapter 141: Data Structure Selection Cheat Sheet](./chapters/ch141-ds-selection.md)
+- [Chapter 142: Company-wise Preparation Guide](./chapters/ch142-company-handbook.md)
+- [Chapter 143: Knowledge Aids and Quick Reference](./chapters/ch143-knowledge-aids.md)
+
 # Appendices
 
 - [Appendix A: Complete STL Guide](./appendices/appendix-a-stl-guide.md)

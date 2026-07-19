@@ -774,3 +774,53 @@ int main() {
 | Fractional Cascading | Bridge between sorted arrays | O(log n + k) | Multi-array search |
 | Binary Lifting | Jump pointers (powers of 2) | O(log n) query | LCA, k-th ancestor |
 | Sparse Table | Binary lifting on arrays | O(1) query | Static RMQ |
+
+---
+
+## 65.6 Uniform Cost Search
+
+Dijkstra's algorithm without a goal test. Expands the node with lowest path cost.
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <climits>
+
+struct State { int node; int cost; };
+bool operator>(const State& a, const State& b) { return a.cost > b.cost; }
+
+int uniformCostSearch(int n, const std::vector<std::vector<std::pair<int,int>>>& adj,
+                      int start, int goal) {
+    std::vector<int> dist(n, INT_MAX);
+    std::priority_queue<State, std::vector<State>, std::greater<State>> pq;
+    
+    dist[start] = 0;
+    pq.push({start, 0});
+    
+    while (!pq.empty()) {
+        auto [u, cost] = pq.top(); pq.pop();
+        if (u == goal) return cost;
+        if (cost > dist[u]) continue;
+        for (auto& [v, w] : adj[u]) {
+            if (cost + w < dist[v]) {
+                dist[v] = cost + w;
+                pq.push({v, dist[v]});
+            }
+        }
+    }
+    return -1;
+}
+
+int main() {
+    int n = 5;
+    std::vector<std::vector<std::pair<int,int>>> adj(n);
+    adj[0] = {{1, 2}, {2, 5}};
+    adj[1] = {{3, 1}};
+    adj[2] = {{3, 3}, {4, 1}};
+    adj[3] = {{4, 2}};
+    
+    std::cout << "UCS cost 0 to 4: " << uniformCostSearch(n, adj, 0, 4) << "\n"; // 5
+    return 0;
+}
+```

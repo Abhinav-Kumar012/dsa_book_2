@@ -860,3 +860,73 @@ int main() {
 | Matrix exponentiation | Solves linear recurrences | O(k³) per multiplication |
 | Miller-Rabin | Fast primality test | Probabilistic (error negligible) |
 | Lucas Theorem | Handles huge n | Only works for prime modulus |
+
+---
+
+## 60.10 Segmented Sieve
+
+Generate primes in range [L, R] where R can be large but R-L is small.
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <cmath>
+
+std::vector<long long> segmentedSieve(long long L, long long R) {
+    int limit = std::sqrt(R) + 1;
+    std::vector<bool> isPrimeSmall(limit + 1, true);
+    std::vector<long long> primes;
+    
+    // Sieve for small primes
+    for (int i = 2; i <= limit; i++) {
+        if (isPrimeSmall[i]) {
+            primes.push_back(i);
+            for (int j = i * i; j <= limit; j += i)
+                isPrimeSmall[j] = false;
+        }
+    }
+    
+    // Segmented sieve for [L, R]
+    std::vector<bool> isPrime(R - L + 1, true);
+    
+    for (long long p : primes) {
+        long long start = std::max(p * p, (L + p - 1) / p * p);
+        for (long long j = start; j <= R; j += p)
+            isPrime[j - L] = false;
+    }
+    
+    if (L == 1) isPrime[0] = false;
+    
+    std::vector<long long> result;
+    for (long long i = 0; i <= R - L; i++)
+        if (isPrime[i]) result.push_back(L + i);
+    
+    return result;
+}
+
+int main() {
+    auto primes = segmentedSieve(1000000000LL, 1000000100LL);
+    std::cout << "Primes in [10^9, 10^9+100]:\n";
+    for (long long p : primes) std::cout << p << " ";
+    std::cout << "\n";
+    return 0;
+}
+```
+
+---
+
+## 60.11 Wilson's Theorem
+
+A number p > 1 is prime if and only if (p-1)! ≡ -1 (mod p).
+
+This is a primality test (not practical for large p, but theoretically important).
+
+---
+
+## 60.12 Pollard's Rho Algorithm (Overview)
+
+A probabilistic algorithm for integer factorization. Expected time O(n^{1/4}) to find a factor.
+
+**Key idea**: Use a pseudorandom sequence and Floyd's cycle detection to find a non-trivial factor via GCD.
+
+**Used for**: Factoring large numbers, RSA cryptanalysis.
