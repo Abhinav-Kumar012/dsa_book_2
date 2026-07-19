@@ -219,6 +219,32 @@
 - [Chapter 142: Company-wise Preparation Guide](./chapters/ch142-company-handbook.md)
 - [Chapter 143: Knowledge Aids and Quick Reference](./chapters/ch143-knowledge-aids.md)
 
+# Part XIX: Graduate Algorithms
+
+- [Chapter 144: Master Table of Contents](./chapters/ch144-master-toc.md)
+- [Chapter 145: Approximation Algorithms](./chapters/ch145-approximation-algorithms.md)
+- [Chapter 146: Online Algorithms](./chapters/ch146-online-algorithms.md)
+- [Chapter 147: Streaming Algorithms](./chapters/ch147-streaming-algorithms.md)
+- [Chapter 148: Parameterized Algorithms](./chapters/ch148-parameterized-algorithms.md)
+- [Chapter 149: Exact Exponential Algorithms](./chapters/ch149-exponential-algorithms.md)
+- [Chapter 150: Advanced Randomized Algorithms](./chapters/ch150-advanced-randomized.md)
+- [Chapter 151: Linear Programming](./chapters/ch151-linear-programming.md)
+- [Chapter 152: Integer Programming and LP Duality](./chapters/ch152-integer-programming.md)
+- [Chapter 153: Advanced Optimization](./chapters/ch153-advanced-optimization.md)
+- [Chapter 154: Spectral Graph Theory](./chapters/ch154-spectral-graph-theory.md)
+- [Chapter 155: Advanced Graph Theory](./chapters/ch155-advanced-graph-theory.md)
+- [Chapter 156: Dynamic Graph Algorithms](./chapters/ch156-dynamic-graph-algorithms.md)
+- [Chapter 157: Link-Cut Trees and Euler Tour Trees](./chapters/ch157-link-cut-trees.md)
+- [Chapter 158: Succinct Data Structures](./chapters/ch158-succinct-ds.md)
+- [Chapter 159: External Memory Algorithms](./chapters/ch159-external-memory.md)
+- [Chapter 160: Parallel Algorithms](./chapters/ch160-parallel-algorithms.md)
+- [Chapter 161: Advanced Computational Geometry](./chapters/ch161-adv-geometry.md)
+- [Chapter 162: Algorithmic Game Theory](./chapters/ch162-algorithmic-game-theory.md)
+- [Chapter 163: Advanced Mathematics for Algorithms](./chapters/ch163-advanced-math.md)
+- [Chapter 164: Advanced String Processing](./chapters/ch164-adv-strings.md)
+- [Chapter 165: Modern Research Topics](./chapters/ch165-modern-research.md)
+- [Chapter 166: Master Indexes](./chapters/ch166-master-indexes.md)
+
 # Appendices
 
 - [Appendix A: Complete STL Guide](./appendices/appendix-a-stl-guide.md)
