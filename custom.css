@@ -70,24 +70,6 @@ pre code {
 .difficulty-medium { color: #ff9800; font-weight: bold; }
 .difficulty-hard { color: #f44336; font-weight: bold; }
 
-/* Table improvements */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 16px 0;
-}
-
-th, td {
-    border: 1px solid #ddd;
-    padding: 8px 12px;
-    text-align: left;
-}
-
-th {
-    background: #f5f5f5;
-    font-weight: bold;
-}
-
 /* Responsive images */
 img {
     max-width: 100%;
@@ -109,75 +91,34 @@ img {
     font-size: 0.9em;
 }
 
-/* FIX: Ensure content is always visible in chapter view */
-#content {
-    visibility: visible !important;
-    display: block !important;
-    opacity: 1 !important;
-    min-height: 100vh;
+/*
+ * FIX: mdbook content visibility issue
+ * In chapter view, the .content div has overflow-y: auto which can
+ * cause the content to be invisible when the container height collapses.
+ * The print CSS fixes this with overflow-y: initial on .page and #page-wrapper.
+ * We apply the same fix for screen rendering.
+ */
+.page {
+    overflow: visible !important;
 }
 
-.content main {
-    visibility: visible !important;
-    display: block !important;
-    opacity: 1 !important;
+#page-wrapper.page-wrapper {
+    overflow: visible !important;
 }
 
-/* FIX: Ensure code blocks are visible and properly formatted */
+.content {
+    overflow: visible !important;
+    min-height: auto !important;
+}
+
+/* Ensure code blocks render properly */
 pre {
-    visibility: visible !important;
-    display: block !important;
     overflow-x: auto;
     padding: 16px;
-    background: var(--quote-bg, #f5f5f5);
-    border-radius: 4px;
 }
 
 pre code {
-    visibility: visible !important;
-    display: block !important;
-    color: var(--fg, #333) !important;
-    font-size: 0.85em;
-    line-height: 1.6;
     white-space: pre;
     overflow-wrap: normal;
     word-break: normal;
-}
-
-/* FIX: Ensure tables are visible */
-.table-wrapper {
-    overflow-x: auto;
-    visibility: visible !important;
-}
-
-table {
-    visibility: visible !important;
-    display: table !important;
-    width: 100%;
-    border-collapse: collapse;
-    margin: 16px 0;
-}
-
-/* FIX: Ensure blockquotes (interview tips etc) are visible */
-blockquote {
-    visibility: visible !important;
-    display: block !important;
-    border-left: 4px solid var(--links, #20609f);
-    padding: 12px 16px;
-    margin: 16px 0;
-    background: var(--quote-bg, #f9f9f9);
-}
-
-/* FIX: Override any potential hiding from theme transitions */
-.js .content {
-    visibility: visible !important;
-    opacity: 1 !important;
-}
-
-/* FIX: Ensure sidebar toggle doesn't hide content */
-#sidebar-toggle-anchor:checked ~ #content,
-#sidebar-toggle-anchor:not(:checked) ~ #content {
-    visibility: visible !important;
-    opacity: 1 !important;
-    display: block !important;
 }

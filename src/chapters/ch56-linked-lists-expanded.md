@@ -1,6 +1,6 @@
 # Expanded Linked Lists
 
-{{#include ../links.md}}
+
 
 ## Prerequisites
 

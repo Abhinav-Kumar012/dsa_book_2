@@ -838,3 +838,25 @@ int main() {
 | Matrix Exponentiation | Repeated matrix squaring | O(k³ log n) | Linear recurrences |
 | Lucas Theorem | Digit-by-digit combination | O(log_p n) | nCr mod p |
 | Miller-Rabin | Witness-based primality | O(k log n) | Primality testing |
+
+### When NOT to Use Number Theory
+
+| Situation | Why Not | Better Alternative |
+|---|---|---|
+| Simple divisibility | Overkill | Direct modulo check |
+| Small primes only | Sieve is simpler | Sieve of Eratosthenes |
+| No modular arithmetic needed | Unnecessary complexity | Basic math |
+| Floating-point sufficient | Exact arithmetic is slower | Standard math library |
+| Non-prime modulus | Fermat's little theorem doesn't apply | Extended GCD for inverse |
+
+### Number Theory Trade-offs
+
+| Technique | Pro | Con |
+|---|---|---|
+| Binary exponentiation | O(log n), simple | Overflow risk with large mod |
+| Extended GCD | Works for non-prime mod | More complex than Fermat |
+| CRT | Combines modular equations | Requires pairwise coprime moduli |
+| Sieve totient | O(n) for all φ values | O(n) space |
+| Matrix exponentiation | Solves linear recurrences | O(k³) per multiplication |
+| Miller-Rabin | Fast primality test | Probabilistic (error negligible) |
+| Lucas Theorem | Handles huge n | Only works for prime modulus |
