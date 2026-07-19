@@ -1,0 +1,28 @@
+name: CI - Build and Test
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup mdBook
+        uses: peaceiris/actions-mdbook@v2
+        with:
+          mdbook-version: '0.4.40'
+
+      - name: Build book
+        run: mdbook build
+
+      - name: Check for warnings
+        run: |
+          mdbook build 2>&1 | tee build.log
+          if grep -qi "warning\|error" build.log; then
+            echo "::warning::Build produced warnings — check the log above."
+          fi

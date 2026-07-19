@@ -1,0 +1,16 @@
+[book]
+authors = ["DSA Interview Preparation"]
+language = "en"
+multilingual = false
+src = "src"
+title = "The Definitive DSA Interview Book"
+description = "A comprehensive Data Structures & Algorithms textbook for coding interview preparation"
+
+[output.html]
+default-theme = "light"
+preferred-dark-theme = "navy"
+git-repository-url = ""
+edit-url-template = ""
+additional-css = ["custom.css"]
+additional-js = ["custom.js"]
+mathjax-support = true
