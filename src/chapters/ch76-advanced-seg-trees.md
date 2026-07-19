@@ -297,17 +297,51 @@ Preprocess array for range queries in O(n log n) time and space, with O(1) queri
 
 ---
 
-## 76.5 Fischer-Heun RMQ (Overview)
+## 76.5 Fischer-Heun RMQ
 
 Achieves O(n) preprocessing and O(1) RMQ queries by combining:
-1. Cartesian tree reduction (RMQ → LCA)
-2. ±1 RMQ special case
-3. Sparse table on blocks
+1. **Cartesian tree reduction**: RMQ on array = LCA on Cartesian tree
+2. **Block decomposition**: Split into blocks of size (log n)/2
+3. **Sparse table**: On block minima for inter-block queries
+4. **Type encoding**: Only O(√n) distinct block types exist, precompute all
 
 This is the theoretical optimal for static RMQ.
 
----
+```cpp
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <algorithm>
 
+// Simplified: Sparse Table for O(1) RMQ (slightly less optimal but practical)
+class SparseTable {
+    int n, LOG;
+    std::vector<std::vector<int>> table;
+    
+public:
+    SparseTable(const std::vector<int>& arr) : n(arr.size()) {
+        LOG = std::log2(n) + 1;
+        table.assign(n, std::vector<int>(LOG));
+        for (int i = 0; i < n; i++) table[i][0] = arr[i];
+        for (int k = 1; k < LOG; k++)
+            for (int i = 0; i + (1 << k) <= n; i++)
+                table[i][k] = std::min(table[i][k-1], table[i + (1 << (k-1))][k-1]);
+    }
+    
+    int query(int l, int r) {
+        int k = std::log2(r - l + 1);
+        return std::min(table[l][k], table[r - (1 << k) + 1][k]);
+    }
+};
+
+int main() {
+    std::vector<int> arr = {3, 1, 4, 1, 5, 9, 2, 6};
+    SparseTable st(arr);
+    std::cout << "RMQ [0,3]: " << st.query(0, 3) << "\n"; // 1
+    std::cout << "RMQ [4,7]: " << st.query(4, 7) << "\n"; // 2
+    return 0;
+}
+```
 ## 76.6 Sliding Window Aggregation
 
 Maintain a running aggregate (sum, min, max) over a sliding window in O(1) amortized per operation using two stacks.
@@ -350,3 +384,17 @@ public:
         return std::min(inMin, outMin);
     }
 };
+
+---
+
+### Fischer-Heun RMQ Details
+
+The Fischer-Heun structure achieves O(1) RMQ with O(n) preprocessing by:
+
+1. **Block decomposition**: Split array into blocks of size (log n)/2
+2. **Block RMQ**: Use sparse table on block minima → O(1) per query between blocks
+3. **Intra-block RMQ**: Each block is represented by its ±1 differences relative to first element. There are only O(√n) distinct block types, so precompute all answers.
+
+**Total**: O(n) preprocessing, O(1) query, O(n) space.
+
+This is the theoretical optimal for static RMQ and demonstrates the connection between RMQ and LCA via Cartesian trees.

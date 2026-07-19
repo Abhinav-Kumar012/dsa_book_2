@@ -214,19 +214,36 @@ int main() {
 
 ---
 
-## 86.4 Monge Arrays (Overview)
+## 86.4 Monge Arrays
 
-An array A is Monge if for all i < j, k < l:
+An array A is Monge if for all i < j, k < l: A[i][k] + A[j][l] <= A[i][l] + A[j][k].
+
+**Key property**: The row-minimum positions are non-decreasing. This enables the SMAWK algorithm to find all row minima in O(n+m).
+
+```cpp
+#include <iostream>
+#include <vector>
+
+bool isMonge(const std::vector<std::vector<int>>& A) {
+    int n = A.size(), m = A[0].size();
+    for (int i = 0; i < n; i++)
+        for (int j = i + 1; j < n; j++)
+            for (int k = 0; k < m; k++)
+                for (int l = k + 1; l < m; l++)
+                    if (A[i][k] + A[j][l] > A[i][l] + A[j][k])
+                        return false;
+    return true;
+}
+
+int main() {
+    std::vector<std::vector<int>> A(5, std::vector<int>(5));
+    for (int i = 0; i < 5; i++)
+        for (int j = 0; j < 5; j++)
+            A[i][j] = (i - j) * (i - j);
+    std::cout << "Squared distance is Monge: " << isMonge(A) << "\n";
+    return 0;
+}
 ```
-A[i][k] + A[j][l] ≤ A[i][l] + A[j][k]
-```
-
-**Key property**: The row-minimum positions are non-decreasing. This enables faster DP and SMAWK algorithm.
-
-**Applications**: Optimal partitioning, certain DP optimizations.
-
----
-
 ## 86.5 Memory Compression for DP
 
 When DP table is too large, techniques to reduce memory:
@@ -237,3 +254,47 @@ When DP table is too large, techniques to reduce memory:
 | Hirschberg | O(m) from O(nm) | Need full reconstruction |
 | Bitset | 64x reduction | Boolean states |
 | In-place | O(1) extra | Can overwrite input |
+
+---
+
+### Monge Array Example
+
+```cpp
+#include <iostream>
+#include <vector>
+
+// Check if array is Monge: A[i][k] + A[j][l] <= A[i][l] + A[j][k]
+// for all i < j, k < l
+bool isMonge(const std::vector<std::vector<int>>& A) {
+    int n = A.size(), m = A[0].size();
+    for (int i = 0; i < n; i++)
+        for (int j = i + 1; j < n; j++)
+            for (int k = 0; k < m; k++)
+                for (int l = k + 1; l < m; l++)
+                    if (A[i][k] + A[j][l] > A[i][l] + A[j][k])
+                        return false;
+    return true;
+}
+
+// SMAWK algorithm finds row minima in O(n+m) for Monge arrays
+// Key insight: Odd rows can be pruned without losing the minimum
+
+int main() {
+    // Distance matrix is Monge: A[i][j] = |i - j|
+    std::vector<std::vector<int>> A(5, std::vector<int>(5));
+    for (int i = 0; i < 5; i++)
+        for (int j = 0; j < 5; j++)
+            A[i][j] = std::abs(i - j);
+    
+    std::cout << "Distance matrix is Monge: " << isMonge(A) << "\\n";
+    
+    // Squared distance is also Monge
+    for (int i = 0; i < 5; i++)
+        for (int j = 0; j < 5; j++)
+            A[i][j] = (i - j) * (i - j);
+    
+    std::cout << "Squared distance matrix is Monge: " << isMonge(A) << "\\n";
+    
+    return 0;
+}
+```

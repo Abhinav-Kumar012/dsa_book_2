@@ -95,11 +95,90 @@ int main() {
 
 ---
 
-## 112.2 Blossom Algorithm (Overview)
+## 112.2 Blossom Algorithm
 
 For general (non-bipartite) graph matching. Uses **blossom contraction** to handle odd cycles.
 
-**Key idea**: When an odd cycle is found, contract it into a single vertex and continue searching.
+**Key idea**: When an odd cycle (blossom) is found during augmenting path search, contract it into a super-vertex and continue. The algorithm achieves O(V^3) time.
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <queue>
+
+class Blossom {
+    int n;
+    std::vector<std::vector<int>> adj;
+    std::vector<int> match, parent, base;
+    std::vector<bool> used, blossom;
+    
+    int lca(int a, int b) {
+        std::vector<bool> visited(n, false);
+        while (true) { a = base[a]; visited[a] = true; if (match[a] == -1) break; a = parent[match[a]]; }
+        while (true) { b = base[b]; if (visited[b]) return b; if (match[b] == -1) break; b = parent[match[b]]; }
+        return -1;
+    }
+    
+    void markPath(int v, int b, int child) {
+        while (base[v] != b) {
+            blossom[base[v]] = blossom[base[match[v]]] = true;
+            parent[v] = child; child = match[v]; v = parent[child];
+        }
+    }
+    
+    int findPath(int root) {
+        std::fill(used.begin(), used.end(), false);
+        std::fill(parent.begin(), parent.end(), -1);
+        for (int i = 0; i < n; i++) base[i] = i;
+        used[root] = true;
+        std::queue<int> q; q.push(root);
+        while (!q.empty()) {
+            int v = q.front(); q.pop();
+            for (int u : adj[v]) {
+                if (base[v] == base[u] || match[v] == u) continue;
+                if (u == root || (match[u] != -1 && parent[match[u]] != -1)) {
+                    int curbase = lca(v, u);
+                    std::fill(blossom.begin(), blossom.end(), false);
+                    markPath(v, curbase, u); markPath(u, curbase, v);
+                    for (int i = 0; i < n; i++)
+                        if (blossom[base[i]]) { base[i] = curbase; if (!used[i]) { used[i] = true; q.push(i); } }
+                } else if (parent[u] == -1) {
+                    parent[u] = v;
+                    if (match[u] == -1) return u;
+                    u = match[u]; used[u] = true; q.push(u);
+                }
+            }
+        }
+        return -1;
+    }
+    
+public:
+    Blossom(int n) : n(n), adj(n), match(n, -1), parent(n), base(n), used(n), blossom(n) {}
+    void addEdge(int u, int v) { adj[u].push_back(v); adj[v].push_back(u); }
+    int maxMatching() {
+        int result = 0;
+        for (int v = 0; v < n; v++)
+            if (match[v] == -1) {
+                int u = findPath(v);
+                if (u != -1) { result++; while (u != -1) { int pv = parent[u], ppv = match[pv]; match[u] = pv; match[pv] = u; u = ppv; } }
+            }
+        return result;
+    }
+};
+
+int main() {
+    Blossom bs(3);
+    bs.addEdge(0, 1); bs.addEdge(1, 2); bs.addEdge(2, 0);
+    std::cout << "Triangle matching: " << bs.maxMatching() << "
+";
+    
+    Blossom bs2(4);
+    bs2.addEdge(0, 1); bs2.addEdge(1, 2); bs2.addEdge(2, 3);
+    std::cout << "Path matching: " << bs2.maxMatching() << "
+";
+    return 0;
+}
+```
 
 ---
 
@@ -109,3 +188,127 @@ For general (non-bipartite) graph matching. Uses **blossom contraction** to hand
 |---|---|---|---|
 | Hopcroft-Karp | Bipartite | O(E√V) | BFS + DFS layers |
 | Blossom | General | O(V³) | Contract odd cycles |
+
+---
+
+### Blossom Algorithm Implementation Sketch
+
+The Blossom algorithm finds maximum matching in general (non-bipartite) graphs by contracting odd cycles (blossoms).
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <queue>
+
+// Simplified blossom for small graphs
+class BlossomSimple {
+    int n;
+    std::vector<std::vector<int>> adj;
+    std::vector<int> match, parent, base;
+    std::vector<bool> used, blossom;
+    
+    int lca(int a, int b) {
+        std::vector<bool> visited(n, false);
+        while (true) {
+            a = base[a];
+            visited[a] = true;
+            if (match[a] == -1) break;
+            a = parent[match[a]];
+        }
+        while (true) {
+            b = base[b];
+            if (visited[b]) return b;
+            if (match[b] == -1) break;
+            b = parent[match[b]];
+        }
+        return -1;
+    }
+    
+    void markPath(int v, int b, int child) {
+        while (base[v] != b) {
+            blossom[base[v]] = blossom[base[match[v]]] = true;
+            parent[v] = child;
+            child = match[v];
+            v = parent[child];
+        }
+    }
+    
+    int findPath(int root) {
+        std::fill(used.begin(), used.end(), false);
+        std::fill(parent.begin(), parent.end(), -1);
+        for (int i = 0; i < n; i++) base[i] = i;
+        
+        used[root] = true;
+        std::queue<int> q;
+        q.push(root);
+        
+        while (!q.empty()) {
+            int v = q.front(); q.pop();
+            for (int u : adj[v]) {
+                if (base[v] == base[u] || match[v] == u) continue;
+                if (u == root || (match[u] != -1 && parent[match[u]] != -1)) {
+                    int curbase = lca(v, u);
+                    std::fill(blossom.begin(), blossom.end(), false);
+                    markPath(v, curbase, u);
+                    markPath(u, curbase, v);
+                    for (int i = 0; i < n; i++) {
+                        if (blossom[base[i]]) {
+                            base[i] = curbase;
+                            if (!used[i]) {
+                                used[i] = true;
+                                q.push(i);
+                            }
+                        }
+                    }
+                } else if (parent[u] == -1) {
+                    parent[u] = v;
+                    if (match[u] == -1) return u;
+                    u = match[u];
+                    used[u] = true;
+                    q.push(u);
+                }
+            }
+        }
+        return -1;
+    }
+    
+public:
+    BlossomSimple(int n) : n(n), adj(n), match(n, -1), parent(n), 
+                            base(n), used(n), blossom(n) {}
+    
+    void addEdge(int u, int v) { adj[u].push_back(v); adj[v].push_back(u); }
+    
+    int maxMatching() {
+        int result = 0;
+        for (int v = 0; v < n; v++) {
+            if (match[v] == -1) {
+                int u = findPath(v);
+                if (u != -1) {
+                    result++;
+                    while (u != -1) {
+                        int pv = parent[u], ppv = match[pv];
+                        match[u] = pv;
+                        match[pv] = u;
+                        u = ppv;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+};
+
+int main() {
+    // Triangle: 0-1, 1-2, 2-0 (non-bipartite)
+    BlossomSimple bs(3);
+    bs.addEdge(0, 1); bs.addEdge(1, 2); bs.addEdge(2, 0);
+    std::cout << "Max matching in triangle: " << bs.maxMatching() << "\\n"; // 1
+    
+    // Path: 0-1-2-3
+    BlossomSimple bs2(4);
+    bs2.addEdge(0, 1); bs2.addEdge(1, 2); bs2.addEdge(2, 3);
+    std::cout << "Max matching in path: " << bs2.maxMatching() << "\\n"; // 2
+    
+    return 0;
+}
+```

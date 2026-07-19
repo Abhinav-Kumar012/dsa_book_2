@@ -85,17 +85,137 @@ int main() {
 
 ---
 
-## 132.2 Beam Search (Overview)
+## 132.2 Beam Search
 
-Beam search keeps only the top-k states at each level. It's a memory-bounded best-first search.
+Beam search keeps only the top-k states at each level of a search tree. It's a memory-bounded best-first search.
 
-**Key parameter**: beam width k. Larger k = better solutions but more memory.
+**Key parameter**: beam width k. Larger k = better solutions but more memory and time.
 
----
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <functional>
 
+struct State {
+    std::vector<int> choices;
+    double score;
+    bool operator<(const State& other) const { return score < other.score; }
+};
+
+// Beam search for TSP (approximate)
+std::vector<int> beamSearchTSP(const std::vector<std::vector<int>>& dist, int beamWidth = 3) {
+    int n = dist.size();
+    std::vector<State> beam;
+    beam.push_back({std::vector<int>{0}, 0.0});
+    
+    for (int step = 1; step < n; step++) {
+        std::vector<State> candidates;
+        for (auto& state : beam) {
+            for (int next = 0; next < n; next++) {
+                if (std::find(state.choices.begin(), state.choices.end(), next) != state.choices.end()) continue;
+                State newState = state;
+                newState.choices.push_back(next);
+                newState.score += dist[state.choices.back()][next];
+                candidates.push_back(newState);
+            }
+        }
+        std::sort(candidates.begin(), candidates.end());
+        beam.clear();
+        for (int i = 0; i < std::min(beamWidth, (int)candidates.size()); i++)
+            beam.push_back(candidates[i]);
+    }
+    
+    State best = beam[0];
+    best.score += dist[best.choices.back()][0];
+    best.choices.push_back(0);
+    return best.choices;
+}
+
+int main() {
+    std::vector<std::vector<int>> dist = {{0,10,15,20},{10,0,35,25},{15,35,0,30},{20,25,30,0}};
+    auto tour = beamSearchTSP(dist, 2);
+    std::cout << "Beam search tour: ";
+    for (int v : tour) std::cout << v << " ";
+    std::cout << "\n";
+    return 0;
+}
+```
 ## Summary
 
 | Algorithm | Memory | Optimal? | Best For |
 |---|---|---|---|
 | IDA* | O(d) depth | Yes | Memory-constrained A* |
 | Beam Search | O(k) per level | No | Large state spaces |
+
+---
+
+### Beam Search Implementation
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+#include <functional>
+
+// Beam search for optimization problems
+// At each level, keep only the top-k states (beam width)
+struct State {
+    std::vector<int> choices;
+    double score;
+    bool operator<(const State& other) const { return score < other.score; }
+};
+
+// Example: Beam search for TSP (approximate)
+std::vector<int> beamSearchTSP(const std::vector<std::vector<int>>& dist, 
+                                int beamWidth = 3) {
+    int n = dist.size();
+    std::vector<State> beam;
+    beam.push_back({std::vector<int>{0}, 0.0});
+    
+    for (int step = 1; step < n; step++) {
+        std::vector<State> candidates;
+        for (auto& state : beam) {
+            for (int next = 0; next < n; next++) {
+                if (std::find(state.choices.begin(), state.choices.end(), next) 
+                    != state.choices.end()) continue;
+                
+                State newState = state;
+                int last = state.choices.back();
+                newState.choices.push_back(next);
+                newState.score += dist[last][next];
+                candidates.push_back(newState);
+            }
+        }
+        
+        // Keep top beamWidth candidates
+        std::sort(candidates.begin(), candidates.end());
+        beam.clear();
+        for (int i = 0; i < std::min(beamWidth, (int)candidates.size()); i++)
+            beam.push_back(candidates[i]);
+    }
+    
+    // Complete the tour
+    State best = beam[0];
+    best.score += dist[best.choices.back()][0];
+    best.choices.push_back(0);
+    return best.choices;
+}
+
+int main() {
+    std::vector<std::vector<int>> dist = {
+        {0, 10, 15, 20},
+        {10, 0, 35, 25},
+        {15, 35, 0, 30},
+        {20, 25, 30, 0}
+    };
+    
+    auto tour = beamSearchTSP(dist, 2);
+    std::cout << "Beam search TSP tour: ";
+    for (int v : tour) std::cout << v << " ";
+    std::cout << "\\n";
+    
+    return 0;
+}
+```

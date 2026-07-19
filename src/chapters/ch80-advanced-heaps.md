@@ -136,27 +136,269 @@ int main() {
 
 ---
 
-## 80.2 Fibonacci Heap (Overview)
+## 80.2 Fibonacci Heap
 
-Fibonacci heaps achieve:
-- Insert: O(1) amortized
-- Find-min: O(1)
-- Decrease-key: O(1) amortized
-- Merge: O(1)
-- Extract-min: O(log n) amortized
+Fibonacci heaps achieve optimal amortized complexities for priority queue operations. Used in Dijkstra's algorithm for O(E + V log V) time.
 
-**Used in**: Dijkstra's algorithm with Fibonacci heap gives O(E + V log V).
+**Key idea**: Lazy structure — insert and merge just add to root list. Consolidation happens only on extract-min.
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <climits>
+
+struct FibNode {
+    int key, degree;
+    bool marked;
+    FibNode *child, *left, *right, *parent;
+    FibNode(int k) : key(k), degree(0), marked(false), 
+                      child(nullptr), left(this), right(this), parent(nullptr) {}
+};
+
+class FibonacciHeap {
+    FibNode* minNode;
+    int n;
+    
+    void insertIntoList(FibNode*& list, FibNode* node) {
+        if (!list) {
+            list = node;
+            node->left = node->right = node;
+        } else {
+            node->right = list->right;
+            node->left = list;
+            list->right->left = node;
+            list->right = node;
+        }
+    }
+    
+    void removeFromList(FibNode* node) {
+        node->left->right = node->right;
+        node->right->left = node->left;
+    }
+    
+    FibNode* mergeLists(FibNode* a, FibNode* b) {
+        if (!a) return b;
+        if (!b) return a;
+        FibNode* aRight = a->right;
+        a->right = b->right;
+        b->right->left = a;
+        b->right = aRight;
+        aRight->left = b;
+        return a->key < b->key ? a : b;
+    }
+    
+    void link(FibNode* y, FibNode* x) {
+        removeFromList(y);
+        y->left = y->right = y;
+        y->parent = x;
+        insertIntoList(x->child, y);
+        x->degree++;
+        y->marked = false;
+    }
+    
+    void consolidate() {
+        int maxDegree = (int)(log2(n) / log2(1.618)) + 2;
+        std::vector<FibNode*> A(maxDegree, nullptr);
+        
+        std::vector<FibNode*> rootNodes;
+        FibNode* curr = minNode;
+        if (curr) {
+            do {
+                rootNodes.push_back(curr);
+                curr = curr->right;
+            } while (curr != minNode);
+        }
+        
+        for (FibNode* w : rootNodes) {
+            FibNode* x = w;
+            int d = x->degree;
+            while (d < (int)A.size() && A[d]) {
+                FibNode* y = A[d];
+                if (x->key > y->key) std::swap(x, y);
+                link(y, x);
+                A[d] = nullptr;
+                d++;
+            }
+            if (d < (int)A.size()) A[d] = x;
+        }
+        
+        minNode = nullptr;
+        for (FibNode* node : A) {
+            if (node) {
+                node->left = node->right = node;
+                insertIntoList(minNode, node);
+                if (!minNode || node->key < minNode->key) minNode = node;
+            }
+        }
+    }
+    
+public:
+    FibonacciHeap() : minNode(nullptr), n(0) {}
+    
+    void insert(int key) {
+        FibNode* node = new FibNode(key);
+        minNode = mergeLists(minNode, node);
+        if (node->key < minNode->key) minNode = node;
+        n++;
+    }
+    
+    int getMin() { return minNode ? minNode->key : INT_MAX; }
+    
+    int extractMin() {
+        FibNode* z = minNode;
+        if (!z) return INT_MAX;
+        
+        // Add children to root list
+        if (z->child) {
+            FibNode* child = z->child;
+            do {
+                FibNode* next = child->right;
+                child->parent = nullptr;
+                insertIntoList(minNode, child);
+                child = next;
+            } while (child != z->child);
+        }
+        
+        removeFromList(z);
+        if (z == z->right) {
+            minNode = nullptr;
+        } else {
+            minNode = z->right;
+            consolidate();
+        }
+        n--;
+        int result = z->key;
+        delete z;
+        return result;
+    }
+    
+    void merge(FibonacciHeap& other) {
+        minNode = mergeLists(minNode, other.minNode);
+        n += other.n;
+        other.minNode = nullptr;
+        other.n = 0;
+    }
+    
+    int size() { return n; }
+};
+
+int main() {
+    FibonacciHeap fh;
+    for (int x : {10, 3, 7, 1, 15, 5}) fh.insert(x);
+    
+    std::cout << "Min: " << fh.getMin() << "\n"; // 1
+    std::cout << "Extract min: " << fh.extractMin() << "\n"; // 1
+    std::cout << "Min: " << fh.getMin() << "\n"; // 3
+    
+    FibonacciHeap fh2;
+    for (int x : {2, 8, 4}) fh2.insert(x);
+    fh.merge(fh2);
+    std::cout << "After merge, min: " << fh.getMin() << "\n"; // 2
+    
+    return 0;
+}
+```
 
 ---
 
 ## 80.3 Pairing Heap
 
-A simpler alternative to Fibonacci heaps with good practical performance.
+A simpler alternative to Fibonacci heaps with excellent practical performance. The simpler structure makes it faster in practice despite similar or slightly worse theoretical bounds.
 
-- Insert: O(1)
-- Merge: O(1)
-- Decrease-key: O(log log n) amortized (conjectured)
-- Extract-min: O(log n) amortized
+**Key operations**: Merge by linking one tree as child of the other. Decrease-key by cutting subtree and merging back.
+
+```cpp
+#include <iostream>
+#include <climits>
+#include <vector>
+
+struct PairNode {
+    int key;
+    PairNode *child, *sibling, *prev; // prev = left sibling or parent
+    PairNode(int k) : key(k), child(nullptr), sibling(nullptr), prev(nullptr) {}
+};
+
+class PairingHeap {
+    PairNode* root;
+    
+    PairNode* merge(PairNode* a, PairNode* b) {
+        if (!a) return b;
+        if (!b) return a;
+        if (a->key > b->key) std::swap(a, b);
+        // Make b the leftmost child of a
+        b->sibling = a->child;
+        if (a->child) a->child->prev = b;
+        a->child = b;
+        b->prev = a;
+        return a;
+    }
+    
+    // Two-pass merge (merge pairs, then merge results)
+    PairNode* twoPassMerge(PairNode* first) {
+        if (!first || !first->sibling) return first;
+        
+        PairNode *a = first, *b = first->sibling;
+        PairNode* rest = b->sibling;
+        a->sibling = b->sibling = nullptr;
+        a->prev = b->prev = nullptr;
+        
+        return merge(merge(a, b), twoPassMerge(rest));
+    }
+    
+public:
+    PairingHeap() : root(nullptr) {}
+    
+    void insert(int key) {
+        root = merge(root, new PairNode(key));
+    }
+    
+    int getMin() { return root ? root->key : INT_MAX; }
+    
+    int extractMin() {
+        if (!root) return INT_MAX;
+        int result = root->key;
+        PairNode* old = root;
+        root = twoPassMerge(root->child);
+        if (root) root->prev = nullptr;
+        delete old;
+        return result;
+    }
+    
+    // Decrease key: cut subtree and merge back
+    void decreaseKey(PairNode* node, int newKey) {
+        node->key = newKey;
+        if (node == root) return;
+        
+        // Cut from parent/sibling
+        if (node->prev->child == node) {
+            node->prev->child = node->sibling;
+        } else {
+            node->prev->sibling = node->sibling;
+        }
+        if (node->sibling) node->sibling->prev = node->prev;
+        node->sibling = nullptr;
+        node->prev = nullptr;
+        
+        root = merge(root, node);
+    }
+    
+    bool empty() { return root == nullptr; }
+};
+
+int main() {
+    PairingHeap ph;
+    for (int x : {10, 3, 7, 1, 15, 5}) ph.insert(x);
+    
+    std::cout << "Min: " << ph.getMin() << "\n"; // 1
+    std::cout << "Extract min: " << ph.extractMin() << "\n"; // 1
+    std::cout << "Min: " << ph.getMin() << "\n"; // 3
+    std::cout << "Extract min: " << ph.extractMin() << "\n"; // 3
+    std::cout << "Min: " << ph.getMin() << "\n"; // 5
+    
+    return 0;
+}
+```
 
 ---
 

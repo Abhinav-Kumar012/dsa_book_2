@@ -143,3 +143,65 @@ Systematically isolate the minimal input that causes a bug:
 3. If one half fails, recurse on that half
 4. If both fail, try smaller splits
 5. Continue until minimal reproducing case found
+
+---
+
+### Delta Debugging Implementation
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <functional>
+#include <string>
+
+// Delta Debugging: Find minimal input that triggers a bug
+// 'test' returns true if the bug occurs
+std::vector<int> deltaDebug(std::vector<int> input, 
+                             std::function<bool(const std::vector<int>&)> test) {
+    int n = input.size();
+    
+    // Try removing each element
+    for (int i = 0; i < n; i++) {
+        std::vector<int> reduced;
+        for (int j = 0; j < n; j++)
+            if (j != i) reduced.push_back(input[j]);
+        if (test(reduced)) {
+            return deltaDebug(reduced, test); // Recurse on smaller input
+        }
+    }
+    
+    // Try splitting in half
+    if (n > 2) {
+        int mid = n / 2;
+        std::vector<int> left(input.begin(), input.begin() + mid);
+        std::vector<int> right(input.begin() + mid, input.end());
+        
+        if (test(left)) return deltaDebug(left, test);
+        if (test(right)) return deltaDebug(right, test);
+    }
+    
+    return input; // Can't reduce further
+}
+
+int main() {
+    // Example: Find minimal input that causes a crash
+    std::vector<int> input = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    
+    // Simulated bug: crashes when input contains both 3 and 7
+    auto testBug = [](const std::vector<int>& v) -> bool {
+        bool has3 = false, has7 = false;
+        for (int x : v) {
+            if (x == 3) has3 = true;
+            if (x == 7) has7 = true;
+        }
+        return has3 && has7;
+    };
+    
+    auto minimal = deltaDebug(input, testBug);
+    std::cout << "Minimal reproducing input: ";
+    for (int x : minimal) std::cout << x << " ";
+    std::cout << "\\n"; // Should be {3, 7} or similar
+    
+    return 0;
+}
+```

@@ -221,3 +221,69 @@ LSH maps similar items to the same hash bucket with high probability. Unlike reg
 **Applications**: Near-duplicate detection, similarity search, recommendation systems.
 
 **Technique**: Use multiple hash functions; items are "similar" if they collide in many functions.
+
+---
+
+### Locality-Sensitive Hashing Implementation
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <random>
+#include <set>
+
+// LSH for cosine similarity using random hyperplanes
+class LSH {
+    int dim, numHashes, numBands;
+    std::vector<std::vector<double>> hyperplanes;
+    
+public:
+    LSH(int dim, int numHashes, int numBands) 
+        : dim(dim), numHashes(numHashes), numBands(numBands) {
+        std::mt19937 rng(42);
+        std::normal_distribution<double> dist(0.0, 1.0);
+        for (int i = 0; i < numHashes; i++) {
+            std::vector<double> hp(dim);
+            for (int j = 0; j < dim; j++) hp[j] = dist(rng);
+            hyperplanes.push_back(hp);
+        }
+    }
+    
+    // Hash a vector to a signature (vector of +1/-1)
+    std::vector<int> hash(const std::vector<double>& vec) {
+        std::vector<int> sig(numHashes);
+        for (int i = 0; i < numHashes; i++) {
+            double dot = 0;
+            for (int j = 0; j < dim; j++)
+                dot += vec[j] * hyperplanes[i][j];
+            sig[i] = dot >= 0 ? 1 : 0;
+        }
+        return sig;
+    }
+    
+    // Find candidate pairs using banded signatures
+    std::set<std::pair<int,int>> findCandidates(
+        const std::vector<std::vector<double>>& vectors) {
+        int n = vectors.size();
+        int bandSize = numHashes / numBands;
+        
+        std::set<std::pair<int,int>> candidates;
+        
+        for (int band = 0; band < numBands; band++) {
+            std::map<std::vector<int>, std::vector<int>> buckets;
+            for (int i = 0; i < n; i++) {
+                auto sig = hash(vectors[i]);
+                std::vector<int> bandSig(sig.begin() + band * bandSize, 
+                                         sig.begin() + (band + 1) * bandSize);
+                buckets[bandSig].push_back(i);
+            }
+            for (auto& [key, ids] : buckets) {
+                for (int i = 0; i < (int)ids.size(); i++)
+                    for (int j = i + 1; j < (int)ids.size(); j++)
+                        candidates.insert({std::min(ids[i], ids[j]), 
+                                          std::max(ids[i], ids[j])});
+            }
+        }
+        return candidates;
+    }
+};

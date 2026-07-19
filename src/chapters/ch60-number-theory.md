@@ -930,3 +930,56 @@ A probabilistic algorithm for integer factorization. Expected time O(n^{1/4}) to
 **Key idea**: Use a pseudorandom sequence and Floyd's cycle detection to find a non-trivial factor via GCD.
 
 **Used for**: Factoring large numbers, RSA cryptanalysis.
+
+---
+
+### Pollard's Rho Implementation
+
+```cpp
+#include <iostream>
+#include <random>
+#include <chrono>
+#include <numeric>
+
+long long mulmod(long long a, long long b, long long mod) {
+    return (__int128)a * b % mod;
+}
+
+long long powerMod(long long base, long long exp, long long mod) {
+    long long result = 1;
+    base %= mod;
+    while (exp > 0) {
+        if (exp & 1) result = mulmod(result, base, mod);
+        base = mulmod(base, base, mod);
+        exp >>= 1;
+    }
+    return result;
+}
+
+long long pollardRho(long long n) {
+    if (n % 2 == 0) return 2;
+    
+    std::mt19937_64 rng(std::chrono::steady_clock::now().time_since_epoch().count());
+    long long x = rng() % (n - 2) + 2;
+    long long y = x;
+    long long c = rng() % (n - 1) + 1;
+    long long d = 1;
+    
+    while (d == 1) {
+        x = (mulmod(x, x, n) + c) % n;
+        y = (mulmod(y, y, n) + c) % n;
+        y = (mulmod(y, y, n) + c) % n;
+        d = std::gcd(std::abs(x - y), n);
+    }
+    
+    return d == n ? -1 : d;
+}
+
+int main() {
+    long long n = 1000000007LL * 998244353LL; // Product of two primes
+    long long factor = pollardRho(n);
+    std::cout << "Factor of " << n << ": " << factor << "\\n";
+    std::cout << "Other factor: " << n / factor << "\\n";
+    return 0;
+}
+```
