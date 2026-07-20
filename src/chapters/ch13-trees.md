@@ -94,6 +94,15 @@ Tree traversals visit every node in a specific order. There are two main categor
 
 ### Inorder Traversal (Left → Root → Right)
 
+**Intuition:** For each node, we visit its left subtree first, then the node itself, then its right subtree. For a BST, this produces values in sorted order — think of it as "visit nodes from smallest to largest."
+
+**Why Left → Root → Right?** In a BST, all values smaller than the root are in the left subtree, and all values larger are in the right subtree. So visiting left first, then root, then right gives us ascending order.
+
+**Recursive thinking:** Trust that the recursive calls work. For each node:
+1. Recursively traverse the left subtree (trust it returns sorted left values).
+2. Process the current node.
+3. Recursively traverse the right subtree (trust it returns sorted right values).
+
 ```cpp
 #include <iostream>
 #include <vector>
@@ -138,7 +147,41 @@ std::vector<int> inorderIterative(TreeNode* root) {
 }
 ```
 
+**Dry Run: Iterative Inorder** on this tree:
+```
+      1
+     / \
+    2   3
+   / \
+  4   5
+```
+
+```
+Step  | curr | stack (top→)  | action              | result
+------|------|---------------|----------------------|--------
+  1   |  1   | []            | push 1, go left      | []
+  2   |  2   | [1]           | push 2, go left      | []
+  3   |  4   | [2,1]         | push 4, go left      | []
+  4   | null | [4,2,1]       | pop 4, add to result | [4]
+  5   | null | [2,1]         | pop 2, add to result | [4,2]
+  6   |  5   | [1]           | go right to 5        | [4,2]
+  7   |  5   | [1]           | push 5, go left      | [4,2]
+  8   | null | [5,1]         | pop 5, add to result | [4,2,5]
+  9   | null | [1]           | pop 1, add to result | [4,2,5,1]
+  10  |  3   | []            | go right to 3        | [4,2,5,1]
+  11  |  3   | []            | push 3, go left      | [4,2,5,1]
+  12  | null | [3]           | pop 3, add to result | [4,2,5,1,3]
+  13  | null | []            | done!                | [4,2,5,1,3]
+```
+
+**Key insight:** The stack simulates the recursion. We go as far left as possible (pushing nodes), then pop and process, then go right. This "go left, process, go right" pattern is exactly what the recursive version does.
+
 ### Preorder Traversal (Root → Left → Right)
+
+**Intuition:** Process the current node before its children. Think of it as "report yourself, then your subtrees." This is useful for:
+- **Serializing a tree:** preorder gives you the root first, so you can reconstruct the tree.
+- **Copying a tree:** you create the root before its children.
+- **Prefix expressions:** in expression trees, preorder gives prefix notation.
 
 ```cpp
 // Recursive preorder
@@ -171,6 +214,13 @@ std::vector<int> preorderIterative(TreeNode* root) {
 ```
 
 ### Postorder Traversal (Left → Right → Root)
+
+**Intuition:** Process children before the parent. Think of it as "handle the subtrees, then clean up the root." This is useful for:
+- **Deleting a tree:** you must delete children before the parent (otherwise you lose the reference).
+- **Computing directory sizes:** sum up subdirectory sizes before the parent directory.
+- **Postfix expressions:** in expression trees, postfix gives the result of evaluation.
+
+**Key difference from preorder:** In preorder, we push the right child before the left (so left is processed first). In postorder using two stacks, we push left before right to stack1, which reverses the order in stack2.
 
 ```cpp
 // Recursive postorder
@@ -309,6 +359,10 @@ int main() {
 ### BFS Approach
 
 Level-order traversal uses a queue to visit nodes level by level.
+
+**Intuition:** Imagine dropping a stone in a pond — the ripples expand outward in concentric circles. Level-order traversal does the same: start at the root (level 0), visit all nodes at distance 1 (level 1), then distance 2 (level 2), and so on. The queue ensures we process nodes in the order we discover them (FIFO).
+
+**Why a queue?** We need to process nodes in the order we find them. A stack would give us DFS (deepest first), but a queue gives us BFS (closest first).
 
 ```cpp
 #include <iostream>
