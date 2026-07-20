@@ -1129,6 +1129,112 @@ This means Merge Sort, Quick Sort, and Heap Sort are **asymptotically optimal** 
 
 ---
 
+## Additional Exercises
+
+### Exercise 1: Sort Array by Parity
+**Difficulty**: Easy
+**Problem**: Given an array of integers, rearrange it so that all even numbers come before all odd numbers. The relative order within even/odd groups does not matter.
+**Hint**: Use two pointers: one at the start (for evens) and one at the end (for odds). Swap when the left pointer finds an odd and the right pointer finds an even.
+**Expected Time Complexity**: O(n), Space: O(1).
+
+### Exercise 2: Find Kth Largest Element
+**Difficulty**: Medium
+**Problem**: Given an unsorted array, find the kth largest element without fully sorting the array.
+**Hint**: Use Quick Select: partition around a pivot like Quick Sort, but only recurse into the side that contains the kth element. Average case is O(n). Alternatively, use a min-heap of size k.
+**Expected Time Complexity**: O(n) average with Quick Select, O(n log k) with heap.
+
+### Exercise 3: Merge K Sorted Arrays
+**Difficulty**: Hard
+**Problem**: Given k sorted arrays, merge them into one sorted array.
+**Hint**: Use a min-heap containing the smallest unprocessed element from each array. Extract the minimum, then insert the next element from the same array. Alternatively, merge pairs of arrays iteratively (like merge sort's merge step applied k-1 times).
+**Expected Time Complexity**: O(N log k) where N is total elements, using a heap.
+
+### Exercise 4: Sort Characters By Frequency
+**Difficulty**: Medium
+**Problem**: Given a string, sort characters by frequency in descending order. Characters with higher frequency appear first.
+**Hint**: Count frequencies with a hash map. Use a bucket sort approach (buckets indexed by frequency) or sort the (char, freq) pairs by frequency. For bucket sort, iterate from highest bucket to lowest.
+**Expected Time Complexity**: O(n) with bucket sort, O(n log n) with comparison sort.
+
+### Exercise 5: Wiggle Sort
+**Difficulty**: Medium
+**Problem**: Given an unsorted array, reorder it such that `nums[0] <= nums[1] >= nums[2] <= nums[3]...`
+**Hint**: Single pass: for each index i, if i is even and nums[i] > nums[i+1], swap. If i is odd and nums[i] < nums[i+1], swap. This works because each swap fixes the current position without breaking previous ones.
+**Expected Time Complexity**: O(n), Space: O(1).
+
+### Exercise 6: Maximum Gap Between Consecutive Sorted Elements
+**Difficulty**: Hard
+**Problem**: Given an unsorted array, find the maximum difference between successive elements in the sorted version. Must run in O(n) time and O(n) space.
+**Hint**: Use bucket sort / pigeonhole principle. With n elements and range [min, max], the max gap must be at least `(max-min)/(n-1)`. Create n-1 buckets of that width. The max gap is between consecutive buckets (not within a bucket).
+**Expected Time Complexity**: O(n), Space: O(n).
+
+### Exercise 7: Sort an Array of 0s, 1s, and 2s (Dutch National Flag)
+**Difficulty**: Easy
+**Problem**: Given an array containing only 0s, 1s, and 2s, sort it in-place in a single pass.
+**Hint**: Use three-way partitioning with pointers low, mid, high. All elements before low are 0, all between low and mid are 1, all after high are 2. Process mid: if 0, swap with low; if 2, swap with high; if 1, advance mid.
+**Expected Time Complexity**: O(n), Space: O(1).
+
+### Exercise 8: Count Inversions in an Array
+**Difficulty**: Medium
+**Problem**: An inversion is a pair (i, j) where i < j but arr[i] > arr[i]. Count the total number of inversions.
+**Hint**: Modify merge sort. During the merge step, when an element from the right half is placed before elements from the left half, it forms inversions with all remaining elements in the left half. Count these and add to the total.
+**Expected Time Complexity**: O(n log n).
+
+### Exercise 9: Find All Duplicate Elements in O(n) Time and O(1) Space
+**Difficulty**: Medium
+**Problem**: Given an array of n integers where each integer is in [1, n] and some appear twice, find all duplicates in O(n) time and O(1) extra space.
+**Hint**: Use the array itself as a hash set. For each element, negate the value at index `abs(arr[i]) - 1`. If it's already negative, `abs(arr[i])` is a duplicate.
+**Expected Time Complexity**: O(n), Space: O(1) excluding output.
+
+### Exercise 10: Minimum Number of Moves to Sort Array (Adjacent Swaps)
+**Difficulty**: Medium
+**Problem**: Given an array, find the minimum number of adjacent swaps needed to sort it.
+**Hint**: This equals the number of inversions. Each adjacent swap reduces the inversion count by exactly 1. Use modified merge sort to count inversions.
+**Expected Time Complexity**: O(n log n).
+
+---
+
+## Additional Interview Questions
+
+### Q1: Why is Quick Sort preferred over Merge Sort in practice despite having O(n²) worst case?
+**Key Insight**: Quick Sort has smaller constant factors (fewer comparisons and swaps per element), better cache locality (operates on contiguous memory in-place), and uses O(log n) auxiliary space vs O(n) for Merge Sort. The randomized version has an astronomically low probability of hitting O(n²). C++'s `std::sort` uses IntroSort (Quick Sort + Heap Sort fallback), which guarantees O(n log n) worst case while keeping Quick Sort's practical speed.
+**Optimal Complexity**: O(n log n) average, O(n²) worst case (but extremely unlikely with randomization).
+
+### Q2: When would you use a non-comparison sort (Counting/Radix/Bucket) over a comparison sort?
+**Key Insight**: Non-comparison sorts beat the Ω(n log n) lower bound by exploiting properties of the data (integers, fixed-width keys). Use Counting Sort when the range k is O(n) — it's O(n+k). Use Radix Sort when elements have a fixed number of digits — it's O(d×n). Use Bucket Sort when input is uniformly distributed over a known range. The constraint: these sorts work on integers or discrete values, not arbitrary comparable objects.
+**Optimal Complexity**: Counting: O(n+k). Radix: O(d(n+b)). Bucket: O(n+k) average.
+
+### Q3: What is stability in sorting and why does it matter?
+**Key Insight**: A stable sort preserves the relative order of equal elements. This is crucial when sorting by multiple criteria: first sort by secondary key, then by primary key with a stable sort. Example: sort students by name (stable), then by grade (stable) — students with the same grade remain alphabetically sorted. Unstable sorts (Quick Sort, Heap Sort) can scramble the previous ordering.
+**Optimal Complexity**: Stability doesn't affect time complexity. Stable sorts include Merge Sort, Counting Sort, Radix Sort, and Insertion Sort.
+
+### Q4: How does the Dutch National Flag algorithm work and where is it used?
+**Key Insight**: It's a three-way partition that divides an array into three sections in a single pass using three pointers (low, mid, high). Elements before low are in group 0, between low and mid in group 1, after high in group 2. Used in: sorting arrays with 3 distinct values, Quick Sort's 3-way partition (handles duplicates efficiently — O(n) when all elements are equal vs O(n²) for standard partition).
+**Optimal Complexity**: O(n) single pass, O(1) space.
+
+### Q5: Explain how to use merge sort to count inversions.
+**Key Insight**: During the merge step, when an element from the right subarray is placed before remaining elements in the left subarray, it forms inversions with all those remaining left elements. Count these and add to the total. The merge sort structure naturally examines all pairs (i, j) where i is in the left half and j is in the right half, covering all inversions exactly once.
+**Optimal Complexity**: O(n log n) — same as merge sort, but with an O(1) counter added per merge step.
+
+### Q6: What is IntroSort and why is it used in `std::sort`?
+**Key Insight**: IntroSort starts with Quick Sort but monitors recursion depth. If depth exceeds 2×log(n), it switches to Heap Sort to avoid O(n²) worst case. For small subarrays (n ≤ 16), it switches to Insertion Sort for its low overhead. This hybrid guarantees O(n log n) worst case while maintaining Quick Sort's practical speed and cache efficiency.
+**Optimal Complexity**: O(n log n) guaranteed worst case.
+
+### Q7: How would you sort a linked list efficiently?
+**Key Insight**: Merge Sort is the best choice for linked lists. Unlike arrays, linked lists can be merged in O(1) extra space (just relink pointers). Quick Sort is problematic because random access is O(n) and partitioning creates overhead. Split the list using the slow/fast pointer technique (find middle in O(n)), recursively sort both halves, then merge.
+**Optimal Complexity**: O(n log n) time, O(1) auxiliary space (excluding recursion stack).
+
+### Q8: How do you sort data that doesn't fit in memory (external sorting)?
+**Key Insight**: External Merge Sort. Divide data into chunks that fit in memory, sort each chunk (in-memory sort), write sorted chunks to disk. Then merge chunks using a k-way merge with a min-heap, reading one block at a time from each chunk. Minimize disk I/O by using large block sizes. This is the same algorithm databases use for sorting large tables.
+**Optimal Complexity**: O(n log n) comparisons, but dominated by I/O: O(n log(n/M) / B) block transfers, where M = memory size, B = block size.
+
+### Q9: When is insertion sort actually the best choice?
+**Key Insight**: Insertion sort excels for: (1) small arrays (n < 50) — low overhead beats asymptotic advantage of O(n log n) sorts, (2) nearly sorted data — O(n) adaptive performance, (3) online sorting — elements arrive one at a time, (4) as a subroutine in hybrid sorts (IntroSort, Timsort use it for small chunks). It's also stable and in-place.
+**Optimal Complexity**: O(n) for nearly sorted, O(n²) worst case. Best for small or nearly sorted data.
+
+### Q10: How would you sort an array of objects by multiple criteria?
+**Key Insight**: Use a custom comparator that checks criteria in priority order. For example, sort students by grade (descending), then by name (ascending): `if (a.grade != b.grade) return a.grade > b.grade; return a.name < b.name;`. For a stable multi-key sort, sort by least important key first using a stable sort, then by more important keys. `std::stable_sort` is ideal for this.
+**Optimal Complexity**: O(n log n) per sort pass. With stable sorting and k criteria, you can do k passes of O(n log n) each, or one pass with a compound comparator.
+
 ## See Also
 
 - [Chapter 6: Searching](ch06-searching.md) — Binary search and its variants; searching is the natural complement to sorting.

@@ -1070,7 +1070,59 @@ int main() {
 | Not checking for negative cycle | Infinite improvement loop | Run $V$-th iteration check |
 | Wrong edge direction | Reversed shortest path | Clarify directed vs undirected |
 
-## Practice Problems
+## 26.8 Algorithm Comparison: Choosing the Right Shortest Path Algorithm
+
+With multiple shortest-path algorithms available, choosing the right one is critical. Here's a unified comparison:
+
+### Quick Comparison Table
+
+| Feature | Dijkstra | Bellman-Ford | Floyd-Warshall | Johnson's | DAG Shortest |
+|---------|----------|-------------|----------------|-----------|-------------|
+| **Type** | Single-source | Single-source | All-pairs | All-pairs | Single-source |
+| **Time** | O((V+E) log V) | O(VE) | O(V³) | O(VE log V) | O(V+E) |
+| **Space** | O(V+E) | O(V+E) | O(V²) | O(V²) | O(V+E) |
+| **Negative weights?** | ❌ No | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes |
+| **Negative cycles?** | ❌ | ✅ Detects | ✅ Detects | ✅ Detects | N/A (DAG) |
+| **Graph type** | Any (non-neg) | Any | Any | Sparse | DAG only |
+| **Best for** | Most common | Negative edges | Small dense graphs | Large sparse + neg | DAGs |
+
+### Decision Flowchart
+
+```
+Need shortest paths?
+  │
+  ├─ Unweighted graph? → BFS: O(V+E)
+  │
+  ├─ Single source?
+  │   ├─ DAG? → Topological sort + relax: O(V+E)
+  │   ├─ All weights ≥ 0? → Dijkstra: O((V+E) log V)
+  │   └─ Negative weights? → Bellman-Ford: O(VE)
+  │
+  └─ All pairs?
+      ├─ V ≤ 400? → Floyd-Warshall: O(V³)
+      ├─ Sparse + negative? → Johnson's: O(VE log V)
+      └─ Sparse + non-negative? → Dijkstra from each: O(VE log V)
+```
+
+### Key Differences Explained
+
+**Dijkstra vs Bellman-Ford:**
+- Dijkstra is faster but only works with non-negative weights.
+- Bellman-Ford is slower but handles negative edges and detects negative cycles.
+- *Rule:* If you know weights are non-negative, always use Dijkstra.
+
+**Floyd-Warshall vs Johnson's:**
+- Both solve all-pairs shortest paths.
+- Floyd-Warshall is simpler to code and works well for V ≤ 400.
+- Johnson's is faster for sparse graphs (O(VE log V) vs O(V³)).
+- *Rule:* Small dense graph → Floyd-Warshall. Large sparse graph → Johnson's.
+
+**DAG Shortest Path vs Dijkstra:**
+- DAG shortest path is O(V+E) — faster than Dijkstra.
+- It also handles negative weights (since no cycles exist in a DAG).
+- *Rule:* If the graph is a DAG, always use topological sort + relaxation.
+
+### Practice Problems
 
 ### Network Delay Time (LeetCode 743)
 
