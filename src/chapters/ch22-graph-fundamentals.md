@@ -719,6 +719,112 @@ int main() {
 
 ---
 
+## Additional Exercises
+
+### Exercise 1: Count Connected Components
+**Difficulty**: Easy
+**Problem**: Given an undirected graph with V vertices and E edges, count the number of connected components.
+**Hint**: Iterate over all vertices. For each unvisited vertex, run BFS or DFS to mark all vertices in its component. Each BFS/DFS call corresponds to one connected component.
+**Expected Time Complexity**: O(V + E).
+
+### Exercise 2: Detect Cycle in Directed Graph
+**Difficulty**: Medium
+**Problem**: Given a directed graph, determine if it contains a cycle.
+**Hint**: Use DFS with three states: WHITE (unvisited), GRAY (in current DFS path), BLACK (fully processed). If you encounter a GRAY node during DFS, you've found a back edge — which means a cycle exists.
+**Expected Time Complexity**: O(V + E).
+
+### Exercise 3: Find All Bridges in a Graph
+**Difficulty**: Hard
+**Problem**: Given an undirected graph, find all bridges — edges whose removal disconnects the graph.
+**Hint**: Use Tarjan's algorithm with DFS. Track `disc[u]` (discovery time) and `low[u]` (lowest discovery time reachable from subtree of u). An edge (u, v) is a bridge if `low[v] > disc[u]` — meaning v's subtree cannot reach u or anything above u without using edge (u, v).
+**Expected Time Complexity**: O(V + E).
+
+### Exercise 4: Shortest Path in Unweighted Graph
+**Difficulty**: Easy
+**Problem**: Given an unweighted graph and a source vertex, find the shortest distance from the source to all other vertices.
+**Hint**: BFS from the source. The first time you reach a vertex, you've found the shortest path to it. Initialize all distances to -1 (unreachable), set source distance to 0.
+**Expected Time Complexity**: O(V + E).
+
+### Exercise 5: Topological Sort (Kahn's Algorithm)
+**Difficulty**: Medium
+**Problem**: Given a DAG, find a topological ordering of the vertices.
+**Hint**: Compute in-degrees for all vertices. Start with all vertices having in-degree 0. Use a queue: dequeue a vertex, add it to the result, decrement in-degrees of its neighbors. If a neighbor's in-degree becomes 0, enqueue it. If the result has fewer than V vertices, the graph has a cycle.
+**Expected Time Complexity**: O(V + E).
+
+### Exercise 6: Check if Graph is Bipartite
+**Difficulty**: Medium
+**Problem**: Given an undirected graph, determine if it is bipartite (2-colorable).
+**Hint**: Use BFS to assign colors (0 or 1) alternately. Start from any uncolored vertex, assign color 0, then assign the opposite color to all neighbors. If you ever try to assign a color to an already-colored vertex and it conflicts, the graph is not bipartite.
+**Expected Time Complexity**: O(V + E).
+
+### Exercise 7: Find the Number of Islands (Grid Graph)
+**Difficulty**: Medium
+**Problem**: Given a 2D grid of '1's (land) and '0's (water), count the number of islands. An island is surrounded by water and formed by connecting adjacent lands horizontally or vertically.
+**Hint**: Iterate through every cell. When you find an unvisited '1', run BFS/DFS to mark all connected '1's as visited. Increment island count. Each BFS/DFS discovers one complete island.
+**Expected Time Complexity**: O(R × C) where R = rows, C = columns.
+
+### Exercise 8: Clone Graph
+**Difficulty**: Medium
+**Problem**: Given a reference to a node in a connected undirected graph, return a deep copy of the graph. Each node contains a value and a list of neighbors.
+**Hint**: Use BFS or DFS with a hash map from original node to cloned node. When you encounter a node not in the map, create its clone. When processing neighbors, use the map to connect to already-cloned nodes.
+**Expected Time Complexity**: O(V + E).
+
+### Exercise 9: Find Articulation Points (Cut Vertices)
+**Difficulty**: Hard
+**Problem**: Given an undirected graph, find all articulation points — vertices whose removal disconnects the graph.
+**Hint**: Similar to bridge finding. Use DFS with `disc[u]` and `low[u]`. Vertex u is an articulation point if: (1) u is the root of DFS tree and has 2+ children, or (2) u is not the root and has a child v with `low[v] >= disc[u]`.
+**Expected Time Complexity**: O(V + E).
+
+### Exercise 10: Find Minimum Number of Edges to Make Graph Connected
+**Difficulty**: Medium
+**Problem**: Given an undirected graph with n vertices and some edges, find the minimum number of edges to add to make the graph connected. Return -1 if impossible.
+**Hint**: Count the number of connected components using BFS/DFS. You need at least (components - 1) edges to connect them. Also check if there are enough total edges: a connected graph needs at least n-1 edges.
+**Expected Time Complexity**: O(V + E).
+
+---
+
+## Additional Interview Questions
+
+### Q1: What's the difference between adjacency matrix and adjacency list? When would you use each?
+**Key Insight**: An adjacency matrix uses O(V²) space and gives O(1) edge queries. An adjacency list uses O(V+E) space and gives O(degree) edge queries. Use an adjacency matrix when V is small (≤ 2000) and you need frequent O(1) edge lookups or dense graphs where E ≈ V². Use an adjacency list for sparse graphs (the common case) and when iterating over neighbors efficiently matters.
+**Optimal Complexity**: Adjacency list is O(V+E) space, O(degree) neighbor iteration. Matrix is O(V²) space, O(1) edge check.
+
+### Q2: How do you detect a cycle in a directed graph vs an undirected graph?
+**Key Insight**: For directed graphs, use DFS with three colors (white/gray/black) — a back edge to a GRAY node means cycle. For undirected graphs, use DFS and check if you reach a visited node that isn't the parent. The three-color approach also works for directed graphs because directed edges can't be "backtracked" the same way. Union-Find (DSU) can detect cycles in undirected graphs by checking if an edge connects two vertices already in the same set.
+**Optimal Complexity**: Both are O(V + E) with DFS. Union-Find is O(E α(V)) for undirected graphs.
+
+### Q3: Explain the difference between BFS and DFS. When would you use each?
+**Key Insight**: BFS explores level-by-level using a queue; it finds shortest paths in unweighted graphs. DFS goes deep-first using a stack (or recursion); it's better for exhaustive search, cycle detection, topological sort, and finding connected components. BFS uses O(V) space for the queue; DFS uses O(V) space for the recursion stack. In practice, BFS is preferred when you need shortest distances; DFS when you need to explore all possibilities.
+**Optimal Complexity**: Both are O(V + E) time. BFS space is O(width), DFS space is O(depth).
+
+### Q4: What is a topological sort and when does it exist?
+**Key Insight**: A topological sort is a linear ordering of vertices in a DAG such that for every edge (u, v), u comes before v. It exists if and only if the graph is a DAG (no cycles). Two algorithms: Kahn's (BFS-based, uses in-degrees) and DFS-based (reverse post-order). Kahn's naturally detects cycles (if the result has fewer than V vertices, a cycle exists).
+**Optimal Complexity**: O(V + E) for both algorithms.
+
+### Q5: How would you determine if a graph is bipartite?
+**Key Insight**: A graph is bipartite if and only if it has no odd-length cycles. Use BFS/DFS to 2-color the graph: assign alternating colors to neighbors. If you find a conflict (neighbor has same color), it's not bipartite. This works because a valid 2-coloring is equivalent to a bipartition. The test must run on all connected components.
+**Optimal Complexity**: O(V + E).
+
+### Q6: How do you handle graphs with multiple connected components?
+**Key Insight**: Many graph algorithms (BFS, DFS, shortest paths) assume a connected graph. For disconnected graphs, iterate over all vertices and start a new traversal from each unvisited vertex. This naturally discovers each component. For algorithms like Dijkstra's, you must run it from every source or check connectivity first.
+**Optimal Complexity**: O(V + E) — each vertex and edge is processed exactly once across all components.
+
+### Q7: What is the handshaking lemma and how is it useful?
+**Key Insight**: The handshaking lemma states that the sum of all vertex degrees equals 2|E| in an undirected graph (each edge contributes to two vertices' degrees). Consequences: the number of odd-degree vertices is always even. In directed graphs, sum of in-degrees = sum of out-degrees = |E|. Useful for verifying graph data, computing edge counts from degree sequences, and reasoning about graph properties.
+**Optimal Complexity**: Not an algorithm, but a mathematical property used in proofs and analysis.
+
+### Q8: How do you represent a grid-based problem as a graph problem?
+**Key Insight**: Each cell (i, j) is a vertex. Edges connect adjacent cells (4-directional: up/down/left/right, or 8-directional including diagonals). The grid dimensions give V = R×C, and edges are implicit from the grid structure. You don't need to build an explicit adjacency list — just compute neighbors on the fly using direction arrays. Walls/blocked cells are vertices with no outgoing edges.
+**Optimal Complexity**: O(R × C) time and space, where R = rows, C = columns.
+
+### Q9: When should you use Union-Find vs DFS for connectivity queries?
+**Key Insight**: Union-Find excels at **incremental connectivity** — adding edges one by one and checking if two vertices are connected. It also handles dynamic connectivity well. DFS is better for **one-shot** connectivity checks, finding connected components, and when you need traversal order information (pre/post-order). Union-Find cannot easily answer questions about paths or distances.
+**Optimal Complexity**: Union-Find: O(α(V)) per query/union (near-constant). DFS: O(V+E) for full traversal.
+
+### Q10: What's the relationship between graph density and algorithm choice?
+**Key Insight**: For sparse graphs (E ≈ V), adjacency list + BFS/DFS is optimal. For dense graphs (E ≈ V²), adjacency matrix may be simpler and equally fast since you touch V² entries anyway. Floyd-Warshall (O(V³)) is designed for dense graphs. Dijkstra with a binary heap (O((V+E) log V)) is better for sparse graphs. Prim's with adjacency matrix (O(V²)) beats the heap version for dense MST.
+**Optimal Complexity**: Depends on graph density. Sparse: O(V+E) algorithms. Dense: O(V²) or O(V³) algorithms.
+
 ## Summary
 
 Graphs are the universal language of relationships in computer science. In this chapter, we covered:
