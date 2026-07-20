@@ -745,6 +745,114 @@ Answer: 2 (coins 5 + 6).
 
 ---
 
+## Additional Exercises
+
+### Exercise 1: Minimum Cost to Reach End with Variable Steps
+**Difficulty**: Medium
+**Problem**: Given an array `cost` of size n, you start at index 0 and can jump 1, 2, or 3 steps at a time. Each step to index i costs `cost[i]`. Find the minimum cost to reach index n-1 (or beyond). You may start from index 0 or index 1.
+**Hint**: Define `dp[i]` as the minimum cost to reach index i. Recurrence: `dp[i] = cost[i] + min(dp[i-1], dp[i-2], dp[i-3])`. Base cases: `dp[0] = cost[0]`, `dp[1] = cost[1]`.
+**Expected Time Complexity**: O(n), Space: O(1) with rolling variables.
+
+### Exercise 2: Longest Increasing Subsequence (LIS)
+**Difficulty**: Medium
+**Problem**: Given an array of integers, find the length of the longest strictly increasing subsequence.
+**Hint**: Define `dp[i]` = length of LIS ending at index i. Recurrence: `dp[i] = max(dp[j] + 1)` for all `j < i` where `arr[j] < arr[i]`. For O(n log n), maintain a sorted array of the smallest tail element for each LIS length.
+**Expected Time Complexity**: O(n²) with DP, O(n log n) with binary search optimization.
+
+### Exercise 3: Palindrome Partitioning (Minimum Cuts)
+**Difficulty**: Hard
+**Problem**: Given a string, find the minimum number of cuts needed to partition it such that every substring in the partition is a palindrome.
+**Hint**: Precompute `isPalin[i][j]` (whether s[i..j] is a palindrome) in O(n²). Then define `dp[i]` = minimum cuts for s[0..i]. Recurrence: `dp[i] = min(dp[j-1] + 1)` for all `j <= i` where s[j..i] is a palindrome. Base case: `dp[i] = 0` if s[0..i] is already a palindrome.
+**Expected Time Complexity**: O(n²).
+
+### Exercise 4: Decode Ways
+**Difficulty**: Medium
+**Problem**: A message containing letters A-Z is encoded as numbers: 'A'→1, 'B'→2, ... 'Z'→26. Given a string of digits, count the number of ways to decode it.
+**Hint**: Define `dp[i]` = number of ways to decode s[0..i-1]. If s[i-1] != '0', `dp[i] += dp[i-1]`. If s[i-2..i-1] forms a number between 10 and 26, `dp[i] += dp[i-2]`. Watch for leading zeros.
+**Expected Time Complexity**: O(n), Space: O(1).
+
+### Exercise 5: Maximum Profit from Stock Trading (At Most K Transactions)
+**Difficulty**: Hard
+**Problem**: Given stock prices for n days and an integer k, find the maximum profit from at most k buy-sell transactions. You cannot hold more than one share at a time.
+**Hint**: Define `dp[t][d]` = max profit using at most t transactions up to day d. Recurrence: `dp[t][d] = max(dp[t][d-1], max(price[d] - price[j] + dp[t-1][j])` for all `j < d`. Optimize the inner max with a running variable.
+**Expected Time Complexity**: O(nk) with optimization (O(n²k) naive).
+
+### Exercise 6: Minimum Edit Distance
+**Difficulty**: Medium
+**Problem**: Given two strings, find the minimum number of operations (insert, delete, replace) to transform one into the other.
+**Hint**: Define `dp[i][j]` = edit distance between s1[0..i-1] and s2[0..j-1]. If `s1[i-1] == s2[j-1]`, `dp[i][j] = dp[i-1][j-1]`. Otherwise, `dp[i][j] = 1 + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])`.
+**Expected Time Complexity**: O(m × n).
+
+### Exercise 7: Partition Equal Subset Sum
+**Difficulty**: Medium
+**Problem**: Given a non-empty array of positive integers, determine if it can be partitioned into two subsets with equal sum.
+**Hint**: If total sum is odd, return false. Otherwise, this is a 0/1 knapsack problem: can we select elements that sum to `total/2`? Define `dp[j]` = true if sum j is achievable. Iterate items, then iterate j backwards from target.
+**Expected Time Complexity**: O(n × sum/2).
+
+### Exercise 8: Maximum Length of Repeated Subarray
+**Difficulty**: Medium
+**Problem**: Given two integer arrays, find the maximum length of a subarray that appears in both arrays.
+**Hint**: Define `dp[i][j]` = length of the longest common subarray ending at nums1[i-1] and nums2[j-1]. If `nums1[i-1] == nums2[j-1]`, `dp[i][j] = dp[i-1][j-1] + 1`. Track the global maximum.
+**Expected Time Complexity**: O(m × n).
+
+### Exercise 9: Unique Paths with Obstacles
+**Difficulty**: Medium
+**Problem**: Given an m×n grid where some cells are blocked (marked 1), count the number of unique paths from top-left to bottom-right, moving only right or down.
+**Hint**: `dp[i][j] = 0` if `grid[i][j] == 1`, else `dp[i][j] = dp[i-1][j] + dp[i][j-1]`. Handle the first row and first column carefully — once you hit an obstacle, all cells after it are 0.
+**Expected Time Complexity**: O(m × n).
+
+### Exercise 10: Burst Balloons
+**Difficulty**: Hard
+**Problem**: Given n balloons with numbers on them, bursting balloon i yields `nums[i-1] × nums[i] × nums[i+1]` coins (with virtual balloons of value 1 at boundaries). Find the maximum coins by bursting all balloons.
+**Hint**: Instead of thinking "which balloon to burst first," think "which balloon to burst last in range [l, r]." Define `dp[l][r]` = max coins from bursting all balloons in (l, r). Recurrence: `dp[l][r] = max(dp[l][k] + dp[k][r] + nums[l] × nums[k] × nums[r])` for all `k` in (l, r). Process by increasing interval length.
+**Expected Time Complexity**: O(n³).
+
+---
+
+## Additional Interview Questions
+
+### Q1: When should you use memoization vs tabulation in an interview?
+**Key Insight**: Start with memoization to get the recurrence right — it's more intuitive because it mirrors the natural recursive thought process. Once you have a correct recurrence, convert to tabulation if you need space optimization (e.g., reducing from O(n²) to O(n) by keeping only the previous row). In interviews, memoization is often faster to code and less error-prone for complex state spaces.
+**Optimal Complexity**: Both have the same time complexity. Tabulation often allows easier space optimization.
+
+### Q2: How do you identify the state space for a DP problem?
+**Key Insight**: Ask yourself: "What information do I need to know to solve the remaining subproblem?" The state variables are exactly those pieces of information. For example, in knapsack: (item index, remaining capacity). In LCS: (position in string 1, position in string 2). The state should be **minimal** — every variable must affect the answer. If removing a variable doesn't change correctness, remove it.
+**Optimal Complexity**: The number of states determines the time complexity. Minimize state variables to minimize complexity.
+
+### Q3: How do you detect if a problem is solvable by DP vs greedy?
+**Key Insight**: DP is needed when you face a **choice** where the locally optimal choice isn't guaranteed to be globally optimal (greedy-choice property fails). Test: can you construct a counterexample where picking the greedy option leads to a worse overall result? If yes, use DP. Also, if the problem asks for a count or a specific combination (not just the optimal value), DP is almost always the answer.
+**Optimal Complexity**: If greedy works, it's typically O(n log n) or O(n). DP solutions are typically O(n²) or O(nk).
+
+### Q4: What is the significance of computing DP values in the correct order?
+**Key Insight**: In bottom-up tabulation, you must fill the DP table such that when you compute `dp[i]`, all values it depends on are already computed. Drawing the dependency graph (which states depend on which) reveals the correct order. For example, in 2D DP on strings, you fill row by row (or column by column). For interval DP, you fill by increasing interval length. Wrong order = using uninitialized values = wrong answer.
+**Optimal Complexity**: The order doesn't change time complexity, but getting it wrong causes incorrect results.
+
+### Q5: How do you optimize space in 2D DP problems?
+**Key Insight**: If `dp[i][j]` only depends on `dp[i-1][...]` (the previous row), you only need two rows — `prev` and `curr`. After computing `curr`, swap them. For 1D recurrence (like Fibonacci), you only need the last 1-2 values. The backward iteration trick in 0/1 knapsack (`for w = W down to weight[i]`) reduces 2D to 1D because it prevents using an item twice.
+**Optimal Complexity**: Space reduces from O(n × m) to O(m), time remains unchanged.
+
+### Q6: How do you handle DP problems with very large state spaces (e.g., n up to 10^9)?
+**Key Insight**: When n is too large for a DP table, look for **patterns** in the recurrence. Linear recurrences (like Fibonacci) can be computed in O(log n) using matrix exponentiation. Alternatively, look for **cycle detection** in the state transitions. Some problems have **mathematical closed-form** solutions that bypass DP entirely.
+**Optimal Complexity**: Matrix exponentiation gives O(k³ log n) for k×k matrices, where k is the recurrence order.
+
+### Q7: What is the difference between counting problems and optimization problems in DP?
+**Key Insight**: In optimization (min/max), the recurrence uses `min()` or `max()`. In counting problems, the recurrence uses `+`. The key difference is in handling overlapping choices: optimization picks the best, counting sums all possibilities. A common mistake is using `max` in a counting problem or `+` in an optimization problem. Also, counting problems often require careful handling of double-counting.
+**Optimal Complexity**: Counting and optimization DP have the same time complexity structure; the difference is in the combine operation.
+
+### Q8: How do you approach a DP problem you've never seen before?
+**Key Insight**: Follow the 5-step framework: (1) Define the state — what uniquely identifies a subproblem? (2) Write the recurrence — how does the current state relate to smaller states? (3) Identify base cases — what are the smallest subproblems? (4) Determine computation order — bottom-up order. (5) Extract the answer. Always start with a small example and fill in a DP table by hand before coding.
+**Optimal Complexity**: The framework itself doesn't determine complexity, but it systematically leads you to the correct recurrence, which then determines complexity.
+
+### Q9: Can DP problems have multiple valid state definitions? How do you choose?
+**Key Insight**: Yes, often multiple state definitions work, but they lead to different complexities. For example, the stock trading problem can be defined as `dp[i][k][holding]` (day, transactions remaining, holding or not) or `dp[i][k]` (day, transactions used). The key criterion: the state must capture **all** information needed to make future decisions, and the recurrence must express the current state in terms of **smaller** states (no cycles). Prefer the state definition that leads to the simplest recurrence.
+**Optimal Complexity**: Different state definitions can yield O(n), O(n²), or O(nk) for the same problem. Choose wisely.
+
+### Q10: Explain the "interval DP" pattern and when it applies.
+**Key Insight**: Interval DP applies when you need to solve a problem on a contiguous subarray and the solution depends on splitting that subarray at some point. Define `dp[l][r]` = answer for the subarray [l, r]. Recurrence: try all split points k, `dp[l][r] = optimize(dp[l][k] + dp[k+1][r] + cost(l, r, k))`. Process by increasing interval length. Classic examples: matrix chain multiplication, burst balloons, optimal BST.
+**Optimal Complexity**: Typically O(n³) due to three nested loops (left, right, split point).
+
+---
+
 ## See Also
 
 - [Chapter 31: DP Patterns](ch31-dp-patterns.md) — A catalog of common DP patterns (knapsack, LIS, interval DP, bitmask DP) that build on the fundamentals here.
