@@ -998,3 +998,119 @@ int main() {
 ---
 
 *In the next chapter, we'll study sorting algorithms — a rich source of interview questions and algorithmic techniques.*
+
+---
+
+## Additional Exercises
+
+### Exercise 1: Find the Majority Element
+**Difficulty**: Easy
+**Problem**: Given an array of size n, find the element that appears more than ⌊n/2⌋ times. The element is guaranteed to exist.
+**Hint**: Boyer-Moore Voting Algorithm: maintain a candidate and a counter. If counter is 0, set current element as candidate. If element matches candidate, increment counter; otherwise decrement. The candidate at the end is the majority element.
+**Expected Time Complexity**: O(n), Space: O(1).
+
+### Exercise 2: Trapping Rain Water
+**Difficulty**: Hard
+**Problem**: Given n non-negative integers representing elevation heights, compute how much water can be trapped after rain.
+**Hint**: For each position, water trapped = min(max_left, max_right) - height[i]. Precompute max_left and max_right arrays, or use two pointers from both ends to compute in O(1) space.
+**Expected Time Complexity**: O(n), Space: O(1) with two pointers.
+
+### Exercise 3: Find All Anagrams in a String
+**Difficulty**: Medium
+**Problem**: Given strings s and p, find all starting indices of p's anagrams in s.
+**Hint**: Use a sliding window of size |p|. Maintain a frequency count of characters in the window. Compare with p's frequency count. Slide the window by adding the new character and removing the old one.
+**Expected Time Complexity**: O(n) where n = |s|.
+
+### Exercise 4: Longest Substring Without Repeating Characters
+**Difficulty**: Medium
+**Problem**: Given a string, find the length of the longest substring without repeating characters.
+**Hint**: Sliding window with a hash map tracking the last index of each character. When you see a repeat, move the left pointer to one past the previous occurrence. Track the maximum window size.
+**Expected Time Complexity**: O(n).
+
+### Exercise 5: Product of Array Except Self Without Division
+**Difficulty**: Medium
+**Problem**: Given an integer array, return an array where each element is the product of all other elements. Cannot use division.
+**Hint**: Build prefix products (product of all elements before i) and suffix products (product of all elements after i) in two passes. Result[i] = prefix[i] × suffix[i]. Can be done in O(1) extra space by using the output array for prefix, then multiplying by suffix in a reverse pass.
+**Expected Time Complexity**: O(n), Space: O(1) excluding output.
+
+### Exercise 6: Minimum Window Substring
+**Difficulty**: Hard
+**Problem**: Given strings s and t, find the minimum window in s that contains all characters of t.
+**Hint**: Sliding window: expand right to include all required characters, then shrink left to minimize the window. Track how many characters are still needed. When all are satisfied, update the minimum. Use a frequency map for t.
+**Expected Time Complexity**: O(|s| + |t|).
+
+### Exercise 7: Spiral Matrix Traversal
+**Difficulty**: Medium
+**Problem**: Given an m×n matrix, return all elements in spiral order.
+**Hint**: Use four boundaries: top, bottom, left, right. Traverse right along top row, then down along right column, then left along bottom row, then up along left column. After each traversal, shrink the corresponding boundary. Stop when boundaries cross.
+**Expected Time Complexity**: O(m × n).
+
+### Exercise 8: Find First Missing Positive Integer
+**Difficulty**: Hard
+**Problem**: Given an unsorted integer array (may contain negatives and zeros), find the smallest missing positive integer. Must run in O(n) time and O(1) space.
+**Hint**: Use the array as a hash set. For each value v in [1, n], place it at index v-1 by swapping. Then scan: the first index i where arr[i] != i+1 gives the answer i+1.
+**Expected Time Complexity**: O(n), Space: O(1).
+
+### Exercise 9: Group Anagrams Together
+**Difficulty**: Medium
+**Problem**: Given an array of strings, group anagrams together.
+**Hint**: Sort each string to get its "anagram key." Use a hash map from sorted string to list of original strings. All anagrams share the same sorted form.
+**Expected Time Complexity**: O(n × k log k) where k is the max string length.
+
+### Exercise 10: Container With Most Water
+**Difficulty**: Medium
+**Problem**: Given n non-negative integers representing vertical lines, find two lines that together with the x-axis form a container holding the most water.
+**Hint**: Two pointers at both ends. Area = min(height[left], height[right]) × (right - left). Move the pointer with the shorter height inward, because moving the taller one can never increase the area.
+**Expected Time Complexity**: O(n), Space: O(1).
+
+---
+
+## Additional Interview Questions
+
+### Q1: Why are arrays the most cache-friendly data structure?
+**Key Insight**: Arrays store elements in contiguous memory. When the CPU accesses `arr[i]`, it loads an entire cache line (typically 64 bytes) containing `arr[i]` through `arr[i+15]` (for 4-byte ints). Subsequent accesses to nearby elements hit the cache. This "spatial locality" makes array iteration 2-10x faster than linked list traversal, even for the same number of elements. This is why `std::vector` is preferred over `std::list` for most use cases.
+**Optimal Complexity**: Array access is O(1) with near-zero latency on cache hits.
+
+### Q2: Explain the two-pointer technique. When does it apply?
+**Key Insight**: Two pointers work when the array has some **monotonic property** (sorted, or partitioned). Common patterns: (1) Converging pointers from both ends — find pair with target sum in sorted array. (2) Fast/slow pointers — detect cycles or find middle. (3) Same-direction pointers — remove duplicates, partition arrays. The key insight: moving a pointer in a predictable direction eliminates the need to check all pairs, reducing O(n²) to O(n).
+**Optimal Complexity**: Typically O(n) time, O(1) space.
+
+### Q3: How do prefix sums help with range query problems?
+**Key Insight**: A prefix sum array `prefix[i]` stores the sum of elements from index 0 to i-1. Range sum from l to r is `prefix[r+1] - prefix[l]` in O(1). Build the prefix array in O(n). This transforms any number of range sum queries from O(n) each to O(1) each. Extended to 2D for submatrix sums. Also useful for counting subarrays with target sum: for each index, count how many previous prefix sums equal `current_prefix - target`.
+**Optimal Complexity**: O(n) build, O(1) per query.
+
+### Q4: What is the sliding window technique and when should you use it?
+**Key Insight**: Sliding window maintains a "window" [left, right] over the array that satisfies some invariant. As right expands, update the window state. When the invariant is violated, shrink from the left. Use when: (1) looking for a contiguous subarray/substring, (2) the window state can be updated incrementally in O(1) when adding/removing elements. Common problems: longest substring without repeats, minimum window substring, maximum sum subarray of size k.
+**Optimal Complexity**: O(n) — each element enters and leaves the window at most once.
+
+### Q5: How would you handle integer overflow when computing sums over large arrays?
+**Key Insight**: An array of 10^5 integers each up to 10^9 can sum to 10^14, which overflows a 32-bit int (max ~2×10^9). Use `long long` (64-bit) for accumulations. In Java, use `long`. Watch for overflow in intermediate computations too — e.g., `mid = (lo + hi) / 2` can overflow; use `mid = lo + (hi - lo) / 2` instead. Always consider the maximum possible value of your accumulator.
+**Optimal Complexity**: No performance impact — just use wider types.
+
+### Q6: How do you efficiently rotate a matrix 90 degrees clockwise in-place?
+**Key Insight**: Two-step process: (1) Transpose the matrix (swap `mat[i][j]` with `mat[j][i]` for all i < j). (2) Reverse each row. This rotates 90° clockwise. For 90° counterclockwise: transpose then reverse each column. For 180°: reverse each row then reverse each column. All are O(n²) with O(1) space.
+**Optimal Complexity**: O(n²) time, O(1) space.
+
+### Q7: What is Kadane's algorithm and what's the key insight behind it?
+**Key Insight**: Kadane's algorithm finds the maximum subarray sum in O(n). At each position, decide: extend the current subarray (`current_sum + arr[i]`) or start a new one (`arr[i]`). Take the max. The key insight: if the running sum becomes negative, it can never contribute to a maximum subarray starting at a later position, so reset it. Track the global maximum separately.
+**Optimal Complexity**: O(n) time, O(1) space.
+
+### Q8: How do you solve the "two sum" problem optimally?
+**Key Insight**: For unsorted arrays: use a hash map. For each element, check if `target - element` exists in the map. O(n) time, O(n) space. For sorted arrays: use two pointers from both ends. If sum < target, move left pointer right; if sum > target, move left pointer left. O(n) time, O(1) space. The hash map approach works for unsorted data; the two-pointer approach works only for sorted data but uses no extra space.
+**Optimal Complexity**: O(n) time with hash map or O(n log n) if sorting is needed first.
+
+### Q9: When should you use a hash set vs a boolean array for tracking seen elements?
+**Key Insight**: Use a boolean array when the value range is small and known (e.g., values in [0, 10^6]) — O(1) access with no hashing overhead. Use a hash set when values can be large, sparse, or non-integer (strings, objects). Hash sets have O(1) amortized but higher constant factors and potential collisions. Boolean arrays have O(1) guaranteed with minimal overhead.
+**Optimal Complexity**: Both O(1) per operation. Boolean arrays are faster in practice for bounded ranges.
+
+### Q10: How do you handle problems that ask for "all subarrays" — isn't that O(n²)?
+**Key Insight**: Enumerating all subarrays is indeed O(n²). But many problems have O(n) or O(n log n) solutions using clever techniques: (1) Kadane's for max sum subarray, (2) prefix sums + hash map for count of subarrays with target sum, (3) sliding window for subarrays satisfying a monotonic property, (4) divide and conquer for counting special subarrays. The key is to avoid explicitly enumerating every subarray — instead, compute the answer incrementally.
+**Optimal Complexity**: Depends on the specific problem, but often O(n) with the right technique.
+
+---
+
+## See Also
+
+- [Chapter 5: Sorting](ch05-sorting.md) — Sorting is a building block for many array problems.
+- [Chapter 34: Two Pointers](ch34-two-pointers.md) — A deep dive into the two-pointer technique.
+- [Chapter 35: Sliding Window](ch35-sliding-window.md) — The sliding window technique in depth.
