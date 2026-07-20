@@ -328,6 +328,155 @@ int main() {
 
 **Why $O(VE)$ augmentations?** Each augmentation increases the shortest path length. The distance from $s$ to $t$ can increase at most $V-1$ times. Each vertex's distance increases at most $V$ times. So the total number of augmentations is $O(VE)$.
 
+### Python — Edmonds-Karp Algorithm
+
+```python
+from collections import deque
+
+class EdmondsKarp:
+    def __init__(self, V):
+        self.V = V
+        self.adj = [[] for _ in range(V)]
+
+    def add_edge(self, u, v, cap):
+        self.adj[u].append([v, cap, len(self.adj[v])])
+        self.adj[v].append([u, 0, len(self.adj[u]) - 1])
+
+    def _bfs(self, s, t, parent, parent_edge):
+        parent[:] = [-1] * self.V
+        parent[s] = s
+        q = deque()
+        q.append((s, float('inf')))
+
+        while q:
+            u, flow = q.popleft()
+            for i, (v, cap, rev) in enumerate(self.adj[u]):
+                if parent[v] == -1 and cap > 0:
+                    parent[v] = u
+                    parent_edge[v] = i
+                    new_flow = min(flow, cap)
+                    if v == t:
+                        return new_flow
+                    q.append((v, new_flow))
+        return 0
+
+    def max_flow(self, s, t):
+        total_flow = 0
+        parent = [-1] * self.V
+        parent_edge = [0] * self.V
+
+        while True:
+            pushed = self._bfs(s, t, parent, parent_edge)
+            if pushed == 0:
+                break
+            total_flow += pushed
+            cur = t
+            while cur != s:
+                prev = parent[cur]
+                idx = parent_edge[cur]
+                self.adj[prev][idx][1] -= pushed
+                self.adj[cur][self.adj[prev][idx][2]][1] += pushed
+                cur = prev
+        return total_flow
+
+
+if __name__ == "__main__":
+    g = EdmondsKarp(6)
+    g.add_edge(0, 1, 16)
+    g.add_edge(0, 2, 13)
+    g.add_edge(1, 2, 10)
+    g.add_edge(1, 3, 12)
+    g.add_edge(2, 1, 4)
+    g.add_edge(2, 4, 14)
+    g.add_edge(3, 2, 9)
+    g.add_edge(3, 5, 20)
+    g.add_edge(4, 3, 7)
+    g.add_edge(4, 5, 4)
+
+    print(f"Maximum flow: {g.max_flow(0, 5)}")
+```
+
+### Java — Edmonds-Karp Algorithm
+
+```java
+import java.util.*;
+
+public class EdmondsKarp {
+    static class Edge {
+        int v, rev;
+        long cap;
+        Edge(int v, long cap, int rev) { this.v = v; this.cap = cap; this.rev = rev; }
+    }
+
+    int V;
+    List<List<Edge>> adj;
+
+    public EdmondsKarp(int V) {
+        this.V = V;
+        this.adj = new ArrayList<>();
+        for (int i = 0; i < V; i++) adj.add(new ArrayList<>());
+    }
+
+    public void addEdge(int u, int v, long cap) {
+        adj.get(u).add(new Edge(v, cap, adj.get(v).size()));
+        adj.get(v).add(new Edge(u, 0, adj.get(u).size() - 1));
+    }
+
+    private long bfs(int s, int t, int[] parent, int[] parentEdge) {
+        Arrays.fill(parent, -1);
+        parent[s] = s;
+        Queue<long[]> q = new ArrayDeque<>();
+        q.offer(new long[]{s, Long.MAX_VALUE});
+
+        while (!q.isEmpty()) {
+            long[] front = q.poll();
+            int u = (int) front[0];
+            long flow = front[1];
+            for (int i = 0; i < adj.get(u).size(); i++) {
+                Edge e = adj.get(u).get(i);
+                if (parent[e.v] == -1 && e.cap > 0) {
+                    parent[e.v] = u;
+                    parentEdge[e.v] = i;
+                    long newFlow = Math.min(flow, e.cap);
+                    if (e.v == t) return newFlow;
+                    q.offer(new long[]{e.v, newFlow});
+                }
+            }
+        }
+        return 0;
+    }
+
+    public long maxFlow(int s, int t) {
+        long totalFlow = 0;
+        int[] parent = new int[V], parentEdge = new int[V];
+        long pushed;
+        while ((pushed = bfs(s, t, parent, parentEdge)) > 0) {
+            totalFlow += pushed;
+            int cur = t;
+            while (cur != s) {
+                int prev = parent[cur];
+                int idx = parentEdge[cur];
+                adj.get(prev).get(idx).cap -= pushed;
+                adj.get(cur).get(adj.get(prev).get(idx).rev).cap += pushed;
+                cur = prev;
+            }
+        }
+        return totalFlow;
+    }
+
+    public static void main(String[] args) {
+        EdmondsKarp g = new EdmondsKarp(6);
+        g.addEdge(0, 1, 16); g.addEdge(0, 2, 13);
+        g.addEdge(1, 2, 10); g.addEdge(1, 3, 12);
+        g.addEdge(2, 1, 4);  g.addEdge(2, 4, 14);
+        g.addEdge(3, 2, 9);  g.addEdge(3, 5, 20);
+        g.addEdge(4, 3, 7);  g.addEdge(4, 5, 4);
+
+        System.out.println("Maximum flow: " + g.maxFlow(0, 5));
+    }
+}
+```
+
 ---
 
 ## 29.5 Dinic's Algorithm
@@ -447,6 +596,161 @@ int main() {
 ### Current-Arc Optimization
 
 The `ptr[u]` array remembers which edge to try next for vertex $u`. Without it, DFS would repeatedly try edges that are already saturated, wasting time. With it, each edge is examined at most once per phase.
+
+### Python — Dinic's Algorithm
+
+```python
+from collections import deque
+
+class Dinic:
+    def __init__(self, V):
+        self.V = V
+        self.adj = [[] for _ in range(V)]
+
+    def add_edge(self, u, v, cap):
+        self.adj[u].append([v, cap, len(self.adj[v])])
+        self.adj[v].append([u, 0, len(self.adj[u]) - 1])
+
+    def _bfs(self, s, t):
+        self.level = [-1] * self.V
+        self.level[s] = 0
+        q = deque([s])
+        while q:
+            u = q.popleft()
+            for v, cap, rev in self.adj[u]:
+                if self.level[v] == -1 and cap > 0:
+                    self.level[v] = self.level[u] + 1
+                    q.append(v)
+        return self.level[t] != -1
+
+    def _dfs(self, u, t, pushed):
+        if u == t:
+            return pushed
+        while self.ptr[u] < len(self.adj[u]):
+            v, cap, rev = self.adj[u][self.ptr[u]]
+            if self.level[v] == self.level[u] + 1 and cap > 0:
+                tr = self._dfs(v, t, min(pushed, cap))
+                if tr > 0:
+                    self.adj[u][self.ptr[u]][1] -= tr
+                    self.adj[v][rev][1] += tr
+                    return tr
+            self.ptr[u] += 1
+        return 0
+
+    def max_flow(self, s, t):
+        total_flow = 0
+        while self._bfs(s, t):
+            self.ptr = [0] * self.V
+            while True:
+                pushed = self._dfs(s, t, float('inf'))
+                if pushed == 0:
+                    break
+                total_flow += pushed
+        return total_flow
+
+
+if __name__ == "__main__":
+    g = Dinic(6)
+    g.add_edge(0, 1, 16)
+    g.add_edge(0, 2, 13)
+    g.add_edge(1, 2, 10)
+    g.add_edge(1, 3, 12)
+    g.add_edge(2, 1, 4)
+    g.add_edge(2, 4, 14)
+    g.add_edge(3, 2, 9)
+    g.add_edge(3, 5, 20)
+    g.add_edge(4, 3, 7)
+    g.add_edge(4, 5, 4)
+
+    print(f"Maximum flow (Dinic): {g.max_flow(0, 5)}")
+```
+
+### Java — Dinic's Algorithm
+
+```java
+import java.util.*;
+
+public class Dinic {
+    static class Edge {
+        int v, rev;
+        long cap;
+        Edge(int v, long cap, int rev) { this.v = v; this.cap = cap; this.rev = rev; }
+    }
+
+    int V;
+    List<List<Edge>> adj;
+    int[] level, ptr;
+
+    public Dinic(int V) {
+        this.V = V;
+        this.adj = new ArrayList<>();
+        for (int i = 0; i < V; i++) adj.add(new ArrayList<>());
+        this.level = new int[V];
+        this.ptr = new int[V];
+    }
+
+    public void addEdge(int u, int v, long cap) {
+        adj.get(u).add(new Edge(v, cap, adj.get(v).size()));
+        adj.get(v).add(new Edge(u, 0, adj.get(u).size() - 1));
+    }
+
+    private boolean bfs(int s, int t) {
+        Arrays.fill(level, -1);
+        level[s] = 0;
+        Queue<Integer> q = new ArrayDeque<>();
+        q.offer(s);
+        while (!q.isEmpty()) {
+            int u = q.poll();
+            for (Edge e : adj.get(u)) {
+                if (level[e.v] == -1 && e.cap > 0) {
+                    level[e.v] = level[u] + 1;
+                    q.offer(e.v);
+                }
+            }
+        }
+        return level[t] != -1;
+    }
+
+    private long dfs(int u, int t, long pushed) {
+        if (u == t) return pushed;
+        for (; ptr[u] < adj.get(u).size(); ptr[u]++) {
+            Edge e = adj.get(u).get(ptr[u]);
+            if (level[e.v] == level[u] + 1 && e.cap > 0) {
+                long tr = dfs(e.v, t, Math.min(pushed, e.cap));
+                if (tr > 0) {
+                    adj.get(u).get(ptr[u]).cap -= tr;
+                    adj.get(e.v).get(e.rev).cap += tr;
+                    return tr;
+                }
+            }
+        }
+        return 0;
+    }
+
+    public long maxFlow(int s, int t) {
+        long totalFlow = 0;
+        while (bfs(s, t)) {
+            Arrays.fill(ptr, 0);
+            long pushed;
+            while ((pushed = dfs(s, t, Long.MAX_VALUE)) > 0) {
+                totalFlow += pushed;
+            }
+        }
+        return totalFlow;
+    }
+
+    public static void main(String[] args) {
+        Dinic g = new Dinic(6);
+        g.addEdge(0, 1, 16); g.addEdge(0, 2, 13);
+        g.addEdge(1, 2, 10); g.addEdge(1, 3, 12);
+        g.addEdge(2, 1, 4);  g.addEdge(2, 4, 14);
+        g.addEdge(3, 2, 9);  g.addEdge(3, 5, 20);
+        g.addEdge(4, 3, 7);  g.addEdge(4, 5, 4);
+
+        System.out.println("Maximum flow (Dinic): " + g.maxFlow(0, 5));
+    }
+}
+```
 
 ---
 
