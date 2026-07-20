@@ -253,6 +253,9 @@
 - [Chapter 167: FFT and NTT](./chapters/ch167-fft-ntt.md)
 - [Chapter 168: 2-SAT](./chapters/ch168-2sat.md)
 - [Chapter 169: Min-Cost Max-Flow](./chapters/ch169-min-cost-max-flow.md)
+- [Chapter 176: Chinese Remainder Theorem](./chapters/ch176-chinese-remainder.md)
+- [Chapter 177: Lucas Theorem](./chapters/ch177-lucas-theorem.md)
+- [Chapter 178: Burnside's Lemma & Pólya Enumeration](./chapters/ch178-burnsides-lemma.md)
 
 # Appendices
 
