@@ -1,10 +1,10 @@
 # Chapter 149: Exact Exponential Algorithms
 
 ## Prerequisites
-- NP-completeness and computational hardness ([Chapter 143](ch143-np-completeness.md))
-- Bitmask DP ([Chapter 113](ch113-bitmask-dp.md))
-- Dynamic programming fundamentals ([Chapter 109](ch109-dynamic-programming.md))
-- Graph algorithms ([Chapter 120](ch120-graph-algorithms.md))
+- NP-completeness and computational hardness ([Chapter 143](ch143-knowledge-aids.md))
+- Bitmask DP ([Chapter 113](ch113-profile-dp.md))
+- Dynamic programming fundamentals ([Chapter 109](ch109-bridge-trees-treewidth.md))
+- Graph algorithms ([Chapter 120](ch120-bwt-fmindex.md))
 
 ## Interview Frequency: ★
 
@@ -448,9 +448,9 @@ for each subset mask of {0, 1, ..., n-1}:
 
 ## 149.10 Cross-References
 
-- **Bitmask DP**: [Chapter 113](ch113-bitmask-dp.md) — the foundation for subset DP techniques
-- **NP-Completeness**: [Chapter 143](ch143-np-completeness.md) — why these problems are hard
-- **Approximation Algorithms**: [Chapter 150](ch150-approximation-algorithms.md) — when exact is too slow
-- **Branch and Bound**: [Chapter 148](ch148-branch-and-bound.md) — systematic search with pruning
-- **Meet in the Middle**: [Chapter 114](ch114-meet-in-the-middle.md) — O(2^{n/2}) technique
-- **Dynamic Programming**: [Chapter 109](ch109-dynamic-programming.md) — general DP principles
+- **Bitmask DP**: [Chapter 113](ch113-profile-dp.md) — the foundation for subset DP techniques
+- **NP-Completeness**: [Chapter 143](ch143-knowledge-aids.md) — why these problems are hard
+- **Approximation Algorithms**: [Chapter 150](ch150-advanced-randomized.md) — when exact is too slow
+- **Branch and Bound**: [Chapter 148](ch148-parameterized-algorithms.md) — systematic search with pruning
+- **Meet in the Middle**: [Chapter 114](ch114-probability-dp.md) — O(2^{n/2}) technique
+- **Dynamic Programming**: [Chapter 109](ch109-bridge-trees-treewidth.md) — general DP principles

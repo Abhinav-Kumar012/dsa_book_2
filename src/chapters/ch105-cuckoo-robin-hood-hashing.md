@@ -1,8 +1,8 @@
 # Chapter 105: Cuckoo Hashing and Robin Hood Hashing
 
 ## Prerequisites
-- Hash tables ([Chapter 101](ch101-hash-tables.md))
-- Hash functions ([Chapter 102](ch102-hash-functions.md))
+- Hash tables ([Chapter 101](ch101-rope-gap-buffer.md))
+- Hash functions ([Chapter 102](ch102-wavelet-trees.md))
 - Amortized analysis
 
 ## Interview Frequency: ★

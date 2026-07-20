@@ -26,15 +26,22 @@ Before diving into code, let's establish precise terminology:
 
 ### Example Tree
 
+```mermaid
+graph TD
+    A["A<br/><i>depth=0, height=3</i>"] --> B["B<br/><i>depth=1</i>"]
+    A --> C["C<br/><i>depth=1</i>"]
+    B --> D["D<br/><i>depth=2</i>"]
+    B --> E["E<br/><i>depth=2</i>"]
+    C --> F["F<br/><i>depth=2</i>"]
+    D --> G["G<br/><i>depth=3</i>"]
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style G fill:#9ff,stroke:#333
+    style E fill:#9ff,stroke:#333
+    style F fill:#9ff,stroke:#333
 ```
-            A           ← Level 0 (depth 0, height 3)
-           / \
-          B   C         ← Level 1 (depth 1)
-         / \   \
-        D   E   F       ← Level 2 (depth 2)
-       /               ← Level 3 (depth 3)
-      G
-```
+
+*Leaves (G, E, F) highlighted in cyan. Root (A) highlighted in pink.*
 
 - **Height of tree** = 3 (longest path from root to leaf: A→B→D→G)
 - **Depth of E** = 2 (path from root: A→B→E)
@@ -91,6 +98,32 @@ struct TreeNode {
 ## 13.3 Tree Traversals
 
 Tree traversals visit every node in a specific order. There are two main categories: **depth-first** (inorder, preorder, postorder) and **breadth-first** (level-order).
+
+### Traversal Visualization
+
+The following diagram shows how each traversal order visits the same tree differently:
+
+```mermaid
+graph TD
+    1["1"] --> 2["2"]
+    1 --> 3["3"]
+    2 --> 4["4"]
+    2 --> 5["5"]
+    3 --> 6["6"]
+
+    style 1 fill:#ff9999,stroke:#333,stroke-width:2px
+    style 2 fill:#ffcc99,stroke:#333
+    style 3 fill:#99ccff,stroke:#333
+    style 4 fill:#99ff99,stroke:#333
+    style 5 fill:#99ff99,stroke:#333
+    style 6 fill:#99ff99,stroke:#333
+```
+
+| Traversal | Visit Order | Result on Above Tree |
+|-----------|-------------|----------------------|
+| **Inorder** (L→Root→R) | 4, **2**, 5, **1**, 3, 6 | `4 2 5 1 3 6` |
+| **Preorder** (Root→L→R) | **1**, **2**, 4, 5, **3**, 6 | `1 2 4 5 3 6` |
+| **Postorder** (L→R→Root) | 4, 5, **2**, 6, **3**, **1** | `4 5 2 6 3 1` |
 
 ### Inorder Traversal (Left → Root → Right)
 
@@ -279,6 +312,23 @@ std::vector<int> postorderOneStack(TreeNode* root) {
     }
     return result;
 }
+```
+
+### Traversal Flow Diagrams
+
+Each traversal follows a distinct recursive pattern:
+
+```mermaid
+graph LR
+    subgraph Inorder
+        I1["Visit Left"] --> I2["Process Root"] --> I3["Visit Right"]
+    end
+    subgraph Preorder
+        P1["Process Root"] --> P2["Visit Left"] --> P3["Visit Right"]
+    end
+    subgraph Postorder
+        O1["Visit Left"] --> O2["Visit Right"] --> O3["Process Root"]
+    end
 ```
 
 ### Comparison of Traversals

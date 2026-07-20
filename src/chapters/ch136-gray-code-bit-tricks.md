@@ -1,7 +1,7 @@
 # Chapter 136: Gray Code and Advanced Bit Tricks
 
 ## Prerequisites
-- Bit manipulation basics ([Chapter 112](ch112-bit-manipulation.md))
+- Bit manipulation basics ([Chapter 112](ch112-hopcroft-karp-blossom.md))
 - Number systems and binary representation
 
 ## Interview Frequency: ★★
@@ -462,8 +462,8 @@ Notice: consecutive subsets differ by exactly one element. This is the Gray code
 
 ## 136.12 Cross-References
 
-- **Bit Manipulation Basics**: [Chapter 112](ch112-bit-manipulation.md) — fundamental bit operations
-- **Bitmask DP**: [Chapter 113](ch113-bitmask-dp.md) — using bits for state representation
-- **Subset Enumeration**: [Chapter 114](ch114-subset-enumeration.md) — systematic subset generation
-- **Graph Theory**: [Chapter 120](ch120-graph-algorithms.md) — hypercube and Hamiltonian paths
-- **Error Correcting Codes**: [Chapter 155](ch155-error-correcting-codes.md) — Gray code in coding theory
+- **Bit Manipulation Basics**: [Chapter 112](ch112-hopcroft-karp-blossom.md) — fundamental bit operations
+- **Bitmask DP**: [Chapter 113](ch113-profile-dp.md) — using bits for state representation
+- **Subset Enumeration**: [Chapter 114](ch114-probability-dp.md) — systematic subset generation
+- **Graph Theory**: [Chapter 120](ch120-bwt-fmindex.md) — hypercube and Hamiltonian paths
+- **Error Correcting Codes**: [Chapter 155](ch155-advanced-graph-theory.md) — Gray code in coding theory

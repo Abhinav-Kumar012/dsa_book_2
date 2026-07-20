@@ -332,6 +332,8 @@ int main() {
 
 **Why the iterative version is faster**: No recursion overhead, better cache locality (sequential array access patterns), and simpler control flow.
 
+> **Important**: The iterative implementation requires `n` to be a power of 2. If your array size is not a power of 2, pad it with identity elements (0 for sum, INT_MAX for min, INT_MIN for max) up to the next power of 2. Alternatively, use `1 << (32 - __builtin_clz(n - 1))` to compute the padded size in C++.
+
 ### Generic Segment Tree (Template for Any Monoid Operation)
 
 ```cpp
@@ -1172,6 +1174,98 @@ int main() {
 **Problem**: Implement a segment tree that supports: (1) set all elements in [l, r] to value v, and (2) query the sum of [l, r]. This requires lazy propagation where the lazy value represents a "set" operation rather than an "add" operation.
 **Hint**: Use a sentinel value (e.g., -1 or LLONG_MIN) to indicate "no pending assignment." When pushing down, the assignment overrides any previous lazy values in children.
 **Expected Time Complexity**: O(log n) per update/query.
+
+### Exercise 9: Range Assignment Lazy Propagation — Full Implementation
+**Difficulty**: Hard
+**Problem**: Implement a segment tree supporting range assignment (`set [l,r] = v`) and range sum query. The lazy tag uses a sentinel (e.g., `LLONG_MIN`) to mean "no pending assignment."
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <climits>
+
+class RangeAssignSegmentTree {
+private:
+    int n;
+    std::vector<long long> tree;
+    std::vector<long long> lazy;   // LLONG_MIN = no pending assignment
+    std::vector<bool> hasLazy;
+
+    void build(const std::vector<int>& arr, int node, int start, int end) {
+        if (start == end) { tree[node] = arr[start]; return; }
+        int mid = (start + end) / 2;
+        build(arr, 2*node, start, mid);
+        build(arr, 2*node+1, mid+1, end);
+        tree[node] = tree[2*node] + tree[2*node+1];
+    }
+
+    void pushDown(int node, int start, int end) {
+        if (!hasLazy[node]) return;
+        int mid = (start + end) / 2;
+        // Apply to left child
+        tree[2*node] = lazy[node] * (mid - start + 1);
+        lazy[2*node] = lazy[node];
+        hasLazy[2*node] = true;
+        // Apply to right child
+        tree[2*node+1] = lazy[node] * (end - mid);
+        lazy[2*node+1] = lazy[node];
+        hasLazy[2*node+1] = true;
+        // Clear
+        hasLazy[node] = false;
+    }
+
+    void rangeAssign(int node, int start, int end, int l, int r, long long val) {
+        if (r < start || end < l) return;
+        if (l <= start && end <= r) {
+            tree[node] = val * (end - start + 1);
+            lazy[node] = val;
+            hasLazy[node] = true;
+            return;
+        }
+        pushDown(node, start, end);
+        int mid = (start + end) / 2;
+        rangeAssign(2*node, start, mid, l, r, val);
+        rangeAssign(2*node+1, mid+1, end, l, r, val);
+        tree[node] = tree[2*node] + tree[2*node+1];
+    }
+
+    long long rangeQuery(int node, int start, int end, int l, int r) {
+        if (r < start || end < l) return 0;
+        if (l <= start && end <= r) return tree[node];
+        pushDown(node, start, end);
+        int mid = (start + end) / 2;
+        return rangeQuery(2*node, start, mid, l, r) +
+               rangeQuery(2*node+1, mid+1, end, l, r);
+    }
+
+public:
+    RangeAssignSegmentTree(const std::vector<int>& arr) : n((int)arr.size()) {
+        tree.resize(4*n);
+        lazy.resize(4*n, LLONG_MIN);
+        hasLazy.resize(4*n, false);
+        build(arr, 1, 0, n-1);
+    }
+
+    void rangeAssign(int l, int r, long long val) { rangeAssign(1, 0, n-1, l, r, val); }
+    long long rangeQuery(int l, int r) { return rangeQuery(1, 0, n-1, l, r); }
+};
+
+int main() {
+    std::vector<int> arr = {1, 3, 5, 7, 9, 11};
+    RangeAssignSegmentTree st(arr);
+
+    std::cout << "Sum [0,5]: " << st.rangeQuery(0, 5) << "\n";  // 36
+
+    st.rangeAssign(1, 3, 10);  // set [1,3] = 10
+    // Array: [1, 10, 10, 10, 9, 11]
+    std::cout << "Sum [0,5] after assign: " << st.rangeQuery(0, 5) << "\n";  // 51
+    std::cout << "Sum [1,3] after assign: " << st.rangeQuery(1, 3) << "\n";  // 30
+
+    return 0;
+}
+```
+
+**Key difference from additive lazy**: The assignment *replaces* any previous pending value (additive or assignment) rather than composing with it. This is why we use `hasLazy[]` — a boolean flag is cleaner than checking for a sentinel value, and avoids ambiguity when the assignment value happens to equal the sentinel.
 
 ### Exercise 3: Count Elements Greater Than K in Range
 **Difficulty**: Medium

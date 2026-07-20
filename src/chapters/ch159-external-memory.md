@@ -1,10 +1,10 @@
 # Chapter 159: External Memory Algorithms
 
 ## Prerequisites
-- Sorting algorithms ([Chapter 108](ch108-sorting.md))
-- B-Trees ([Chapter 104](ch104-b-trees.md))
+- Sorting algorithms ([Chapter 108](ch108-dsu-on-tree-rerooting.md))
+- B-Trees ([Chapter 104](ch104-cartesian-tournament-trees.md))
 - Basic I/O concepts
-- Graph algorithms ([Chapter 120](ch120-graph-algorithms.md))
+- Graph algorithms ([Chapter 120](ch120-bwt-fmindex.md))
 
 ## Interview Frequency: ★
 
@@ -560,9 +560,9 @@ M = 4, B = 1
 
 ## 159.12 Cross-References
 
-- **Sorting**: [Chapter 108](ch108-sorting.md) — internal sorting algorithms used within runs
-- **B-Trees**: [Chapter 104](ch104-b-trees.md) — disk-friendly search trees
-- **Graph Algorithms**: [Chapter 120](ch120-graph-algorithms.md) — BFS, DFS, shortest paths
-- **Hash Tables**: [Chapter 101](ch101-hash-tables.md) — external hashing techniques
-- **Parallel Algorithms**: [Chapter 158](ch158-parallel-algorithms.md) — parallel I/O and concurrent access
-- **Database Indexing**: [Chapter 160](ch160-database-indexing.md) — practical applications of B-Trees
+- **Sorting**: [Chapter 108](ch108-dsu-on-tree-rerooting.md) — internal sorting algorithms used within runs
+- **B-Trees**: [Chapter 104](ch104-cartesian-tournament-trees.md) — disk-friendly search trees
+- **Graph Algorithms**: [Chapter 120](ch120-bwt-fmindex.md) — BFS, DFS, shortest paths
+- **Hash Tables**: [Chapter 101](ch101-rope-gap-buffer.md) — external hashing techniques
+- **Parallel Algorithms**: [Chapter 158](ch158-succinct-ds.md) — parallel I/O and concurrent access
+- **Database Indexing**: [Chapter 160](ch160-parallel-algorithms.md) — practical applications of B-Trees

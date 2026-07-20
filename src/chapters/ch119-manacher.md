@@ -1,8 +1,8 @@
 # Chapter 119: Manacher's Algorithm
 
 ## Prerequisites
-- Palindromes, string basics ([Chapter 102](ch102-strings.md))
-- Two-pointer technique ([Chapter 107](ch107-two-pointers.md))
+- Palindromes, string basics ([Chapter 102](ch102-wavelet-trees.md))
+- Two-pointer technique ([Chapter 107](ch107-hld-centroid-applications.md))
 
 ## Interview Frequency: ★★★
 
@@ -450,9 +450,9 @@ This is equivalent to the dual-array approach but uses a single array and transf
 
 ## 119.11 Cross-References
 
-- **String Basics**: [Chapter 102](ch102-strings.md) — fundamental string operations
-- **Two Pointers**: [Chapter 107](ch107-two-pointers.md) — expand-around-center technique
-- **KMP Algorithm**: [Chapter 103](ch103-kmp.md) — similar amortized analysis
-- **Suffix Arrays**: [Chapter 104](ch104-suffix-arrays.md) — alternative approach for string problems
-- **Dynamic Programming**: [Chapter 109](ch109-dynamic-programming.md) — for subsequence variants
-- **Palindromic Tree**: [Chapter 120](ch120-palindromic-tree.md) — more advanced palindrome data structure
+- **String Basics**: [Chapter 102](ch102-wavelet-trees.md) — fundamental string operations
+- **Two Pointers**: [Chapter 107](ch107-hld-centroid-applications.md) — expand-around-center technique
+- **KMP Algorithm**: [Chapter 103](ch103-interval-order-statistic-trees.md) — similar amortized analysis
+- **Suffix Arrays**: [Chapter 104](ch104-cartesian-tournament-trees.md) — alternative approach for string problems
+- **Dynamic Programming**: [Chapter 109](ch109-bridge-trees-treewidth.md) — for subsequence variants
+- **Palindromic Tree**: [Chapter 120](ch120-bwt-fmindex.md) — more advanced palindrome data structure
