@@ -6,6 +6,9 @@ src = "src"
 title = "The Definitive DSA Interview Book"
 description = "A comprehensive Data Structures & Algorithms textbook for coding interview preparation"
 
+[preprocessor.mermaid]
+command = "mdbook-mermaid"
+
 [output.html]
 default-theme = "light"
 preferred-dark-theme = "navy"
