@@ -246,24 +246,18 @@ int main() {
 
 States: 0(root), 1(a), 2(ab/bb), 3(abb), 4(clone of 2), 5(abbc/bbc/bc/c)
 
+Suffix links: link[1]=0, link[2]=4, link[3]=4, link[4]=0, link[5]=0
+
 Distinct substrings = sum of (len[v] - len[link[v]]) for v=1..5:
-- v=1: 1-0 = 1
-- v=2: 2-0 = 2
-- v=3: 3-1 = 2
-- v=4: 1-0 = 1
-- v=5: 4-0 = 4
-Total = 10. For "abbc": a, b, ab, bb, bc, abb, bbc, abbc, abbc (check: a,b,c,ab,bb,bc,abb,bbc,abbc = 9... let me recount)
+- v=1: len=1, link=0 → 1-0 = 1 (substrings: "a")
+- v=2: len=2, link=4 → 2-1 = 1 (substrings: "ab")
+- v=3: len=3, link=4 → 3-1 = 2 (substrings: "abb", "bb")
+- v=4: len=1, link=0 → 1-0 = 1 (substrings: "b")
+- v=5: len=4, link=0 → 4-0 = 4 (substrings: "abbc", "bbc", "bc", "c")
 
-Actually: a, b, c, ab, bb, bc, abb, bbc, abbc = 9 distinct substrings. Let me recheck... The formula counts the number of distinct substrings correctly as 1+2+2+1+4 = 10. Hmm, let me enumerate: a, b, c, ab, bb, bc, abb, bbc, abbc. That's 9. 
+Total = 1+1+2+1+4 = **9** distinct substrings: {a, b, c, ab, bb, bc, abb, bbc, abbc} ✓
 
-Wait, I need to also count: "abb" has substrings: a, b, c, ab, bb, bc, abb, bbc, abbc, abbc... Let me list all substrings of "abbc":
-- Length 1: a, b, b, c → {a, b, c} = 3
-- Length 2: ab, bb, bc → {ab, bb, bc} = 3
-- Length 3: abb, bbc → {abb, bbc} = 2
-- Length 4: abbc → {abbc} = 1
-Total distinct = 3+3+2+1 = 9.
-
-So the formula gives 10 but the answer should be 9. There might be an issue with my dry run. The formula `sum(len[v] - len[link[v]])` is correct for the suffix automaton. Let me not worry about the exact dry run numbers and focus on the code being correct.
+Note that state 2 (link=4, len=2) only contributes 1 new substring ("ab"), not 2. The substring "bb" of length 2 is contributed by state 3 (which has link=4, so it covers lengths 2 and 3). This is the subtle part: a state `v` contributes substrings of lengths `(len[link[v]]+1)` through `len[v]`, and some of these may overlap with what adjacent states contribute. The formula handles this correctly.
 
 ### Python — Suffix Automaton
 
