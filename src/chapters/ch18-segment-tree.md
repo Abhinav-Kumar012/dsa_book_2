@@ -43,15 +43,33 @@ A segment tree is a **binary tree** where each node represents an interval (segm
 
 For array `[1, 3, 5, 7, 9, 11]` (range sum):
 
+```mermaid
+graph TD
+    root["[0,5] = 36"] --> L["[0,2] = 9"]
+    root --> R["[3,5] = 27"]
+    L --> L01["[0,1] = 4"]
+    L --> L2["[2] = 5"]
+    R --> R34["[3,4] = 16"]
+    R --> R5["[5] = 11"]
+    L01 --> L0["[0] = 1"]
+    L01 --> L1["[1] = 3"]
+    R34 --> R3["[3] = 7"]
+    R34 --> R4["[4] = 9"]
+
+    style root fill:#f96,stroke:#333,stroke-width:2px
+    style L fill:#9cf,stroke:#333
+    style R fill:#9cf,stroke:#333
+    style L01 fill:#9f9,stroke:#333
+    style L2 fill:#9f9,stroke:#333
+    style R34 fill:#9f9,stroke:#333
+    style R5 fill:#9f9,stroke:#333
+    style L0 fill:#ff9,stroke:#333
+    style L1 fill:#ff9,stroke:#333
+    style R3 fill:#ff9,stroke:#333
+    style R4 fill:#ff9,stroke:#333
 ```
-                    [0,5] = 36
-                   /         \
-            [0,2] = 9       [3,5] = 27
-            /       \       /       \
-        [0,1]=4   [2]=5  [3,4]=16  [5]=11
-        /     \          /     \
-    [0]=1   [1]=3    [3]=7   [4]=9
-```
+
+*Root (orange) spans the entire array. Internal nodes (blue/green) store merged sums. Leaves (yellow) store individual elements.*
 
 Each node stores the sum of its interval. The leaf nodes store individual array elements.
 
@@ -179,6 +197,30 @@ int main() {
 }
 ```
 
+### Point Update Visualization: `update(2, 10)`
+
+When updating a single element, the change propagates up through O(log n) ancestors:
+
+```mermaid
+graph TD
+    root["[0,5]=41"] --> L["[0,2]=14"]
+    root --> R["[3,5]=27"]
+    L --> L01["[0,1]=4"]
+    L --> L2["[2]=10 ⬆️"]
+    R --> R34["[3,4]=16"]
+    R --> R5["[5]=11"]
+    L01 --> L0["[0]=1"]
+    L01 --> L1["[1]=3"]
+    R34 --> R3["[3]=7"]
+    R34 --> R4["[4]=9"]
+
+    style root fill:#f96,stroke:#333,stroke-width:3px
+    style L fill:#fc9,stroke:#333,stroke-width:3px
+    style L2 fill:#f66,stroke:#333,stroke-width:3px
+```
+
+*Red ⬆️ = updated leaf. Orange = ancestors recomputed on the way up. Only the path from leaf to root is touched — O(log n) nodes.*
+
 ### Dry Run: Point Update
 
 Array: `[1, 3, 5, 7, 9, 11]`. Update index 2 to value 10.
@@ -220,6 +262,35 @@ Segment tree after:
 The range query works by combining results from O(log n) nodes that together cover the query range [l, r].
 
 **Key insight**: At each level of the tree, at most 2 nodes contribute to the answer. This is because the query range [l, r] can overlap with at most 2 nodes at each level (the left boundary node and the right boundary node).
+
+### Range Query Visualization: `query(1, 4)` = 24
+
+The diagram below shows which nodes are visited (highlighted) when querying the sum of [1, 4]. Only **4 leaf-equivalent nodes** contribute to the answer:
+
+```mermaid
+graph TD
+    root["[0,5]=36"] --> L["[0,2]=9"]
+    root --> R["[3,5]=27"]
+    L --> L01["[0,1]=4"]
+    L --> L2["[2]=5 ✅"]
+    R --> R34["[3,4]=16 ✅"]
+    R --> R5["[5]=11"]
+    L01 --> L0["[0]=1 ❌"]
+    L01 --> L1["[1]=3 ✅"]
+    R34 --> R3["[3]=7"]
+    R34 --> R4["[4]=9"]
+
+    style root fill:#f96,stroke:#333,stroke-width:2px
+    style L fill:#9cf,stroke:#333
+    style R fill:#9cf,stroke:#333
+    style L2 fill:#9f9,stroke:#333,stroke-width:3px
+    style R34 fill:#9f9,stroke:#333,stroke-width:3px
+    style L1 fill:#9f9,stroke:#333,stroke-width:3px
+    style L0 fill:#ddd,stroke:#999
+    style R5 fill:#ddd,stroke:#999
+```
+
+*Green ✅ nodes contribute to the answer. Gray ❌ nodes are pruned (completely outside [1,4]). The query decomposes into: `L1(3) + L2(5) + R34(16) = 24`.*
 
 ### Dry Run: Range Query [1, 4]
 
