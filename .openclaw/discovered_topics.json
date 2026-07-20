@@ -1,0 +1,309 @@
+{
+  "meta": {
+    "generated": "2026-07-20",
+    "totalChapters": 166,
+    "analysisMethod": "Scanned SUMMARY.md structure + keyword/content analysis of chapter files"
+  },
+  "summary": {
+    "wellCoveredTopics": [
+      "Segment Trees (ch18, ch76)",
+      "Fenwick Trees / BIT (ch19, including 2D)",
+      "Suffix Array (ch44)",
+      "Suffix Automaton (ch45)",
+      "Aho-Corasick (ch46)",
+      "Suffix Tree (ch87 — overview level, ~121 lines)",
+      "Palindromic Tree / Eertree (ch88 — overview level, ~136 lines)",
+      "Manacher's Algorithm (ch119)",
+      "Treaps (ch57 — includes implicit treaps)",
+      "HLD + Centroid Decomposition (ch107)",
+      "Link-Cut Trees (ch157)",
+      "Articulation Points & Bridges (ch81)",
+      "SCC (ch81 — Kosaraju + Tarjan)",
+      "Euler Tour / Tree Flattening (ch106)",
+      "Mo's Algorithm (ch62, ch54)",
+      "Sqrt Decomposition (ch54, ch76, ch102)",
+      "Miller-Rabin (ch60)",
+      "Pollard's Rho (ch60 — overview)",
+      "Extended Euclidean (ch60)",
+      "Modular Inverse (ch60)",
+      "Chinese Remainder Theorem (ch60)",
+      "Lucas Theorem (ch60)",
+      "Matrix Exponentiation (ch60)",
+      "Euler's Totient (ch60)",
+      "Segmented Sieve (ch60)",
+      "Game Theory / Sprague-Grundy (ch61)",
+      "Persistent Data Structures (ch75, ch57)",
+      "Convex Hull Trick / DP Optimizations (ch86)",
+      "Knuth Optimization (ch86)",
+      "Divide & Conquer DP (ch86)",
+      "Li Chao Tree (ch86)",
+      "Gaussian Elimination (ch73)",
+      "Coordinate Compression (ch130)",
+      "Parallel Binary Search (ch131)",
+      "Bitset DP (ch118)",
+      "Profile DP (ch113)",
+      "Digit DP (ch85)",
+      "Alien Trick / Parametric Search (ch116)",
+      "Wavelet Trees (ch102)",
+      "Skip Lists (ch74)",
+      "B-Trees (ch77)",
+      "KD-Trees (ch78)",
+      "Probabilistic Data Structures (ch79)",
+      "Splay Trees (ch98, ch57)",
+      "Van Emde Boas (ch100)",
+      "Rope (ch101)",
+      "SVD, Markov Chains, Martingales (ch163 — brief)"
+    ],
+    "missingTopics": [
+      {
+        "topic": "FFT / NTT (Fast Fourier Transform / Number Theoretic Transform)",
+        "importance": "critical",
+        "suggestedPart": "Part XVII: Advanced Techniques or new Part: Polynomial Algorithms",
+        "reason": "Fundamental for polynomial multiplication, convolution, string matching with wildcards, counting problems. No dedicated chapter exists. Only oblique references in ch104/ch118 (false positives from 'printTree' matching). Must-have for competitive programming.",
+        "relatedExisting": ["ch60-number-theory.md", "ch73-linear-algebra.md"],
+        "estimatedLines": 600
+      },
+      {
+        "topic": "Berlekamp-Massey Algorithm",
+        "importance": "high",
+        "suggestedPart": "Part XVII: Advanced Techniques",
+        "reason": "Finds minimal linear recurrence from sequence terms. Combined with matrix exponentiation, solves many counting problems. Not mentioned anywhere in the book.",
+        "relatedExisting": ["ch60-number-theory.md", "ch115-matrix-dp.md"],
+        "estimatedLines": 300
+      },
+      {
+        "topic": "2-SAT (2-Satisfiability)",
+        "importance": "high",
+        "suggestedPart": "Part XIII: Advanced Graph Algorithms",
+        "reason": "Only mentioned in passing in ch47 and ch51 as a decision tree item. No implementation, no dedicated section. Important graph algorithm reducible to SCC.",
+        "relatedExisting": ["ch81-scc-bridges.md", "ch28-advanced-graphs.md"],
+        "estimatedLines": 350
+      },
+      {
+        "topic": "Hungarian Algorithm (Weighted Bipartite Matching / Assignment Problem)",
+        "importance": "high",
+        "suggestedPart": "Part XIII: Advanced Graph Algorithms",
+        "reason": "Only a brief overview in ch58 (~2 lines). No implementation. Classic O(n³) algorithm for weighted assignment. Should have full implementation.",
+        "relatedExisting": ["ch58-graphs-expanded.md", "ch112-hopcroft-karp-blossom.md"],
+        "estimatedLines": 400
+      },
+      {
+        "topic": "Min-Cost Max-Flow (MCMF)",
+        "importance": "high",
+        "suggestedPart": "Part XIII: Advanced Graph Algorithms",
+        "reason": "Only mentioned as a reduction target in ch29 (assignment problems). No implementation of Successive Shortest Path or Cycle Canceling. ch83 covers Dinic's but not MCMF.",
+        "relatedExisting": ["ch29-network-flow.md", "ch83-advanced-flow.md"],
+        "estimatedLines": 450
+      },
+      {
+        "topic": "Burnside's Lemma / Polya Enumeration",
+        "importance": "medium",
+        "suggestedPart": "Part XI: Mathematics Handbook",
+        "reason": "Not mentioned anywhere. Key tool for counting under symmetry (necklace problems, colorings). Belongs alongside combinatorics (ch71).",
+        "relatedExisting": ["ch71-combinatorics.md", "ch60-number-theory.md"],
+        "estimatedLines": 250
+      },
+      {
+        "topic": "Möbius Function / Möbius Inversion",
+        "importance": "medium",
+        "suggestedPart": "Part XI: Mathematics Handbook",
+        "reason": "Only a passing mention in ch149 (one line) and ch166 (index entry). No implementation or dedicated section. Critical for number-theoretic counting, GCD-related problems.",
+        "relatedExisting": ["ch60-number-theory.md", "ch71-combinatorics.md"],
+        "estimatedLines": 350
+      },
+      {
+        "topic": "XOR Basis / Linear Basis",
+        "importance": "medium",
+        "suggestedPart": "Part XVII: Advanced Techniques",
+        "reason": "Not mentioned anywhere. Key technique for XOR maximization problems, subset XOR counting. Common in competitive programming.",
+        "relatedExisting": ["ch33-bit-manipulation.md", "ch95-bit-advanced.md"],
+        "estimatedLines": 250
+      },
+      {
+        "topic": "Generating Functions / Formal Power Series",
+        "importance": "medium",
+        "suggestedPart": "Part XI: Mathematics Handbook",
+        "reason": "Only a brief mention in ch163 (probability generating functions, ~10 lines). No combinatorial generating functions, no FPS operations (inverse, sqrt, log, exp).",
+        "relatedExisting": ["ch163-advanced-math.md", "ch71-combinatorics.md"],
+        "estimatedLines": 400
+      },
+      {
+        "topic": "Lagrange Interpolation",
+        "importance": "medium",
+        "suggestedPart": "Part XI: Mathematics Handbook",
+        "reason": "Not covered. Used to evaluate polynomial at any point given n+1 values. Combined with FPS/NTT for polynomial operations.",
+        "relatedExisting": ["ch73-linear-algebra.md", "ch163-advanced-math.md"],
+        "estimatedLines": 250
+      },
+      {
+        "topic": "Euler Path / Euler Circuit (Graph Theory)",
+        "importance": "medium",
+        "suggestedPart": "Part IV: Graphs",
+        "reason": "Only mentioned in ch27 (MST context) and ch28/ch96 (NP-approximation). No dedicated coverage of Hierholzer's algorithm for finding Euler paths/circuits.",
+        "relatedExisting": ["ch22-graph-fundamentals.md", "ch28-advanced-graphs.md"],
+        "estimatedLines": 300
+      },
+      {
+        "topic": "Centroid of Tree (Standalone)",
+        "importance": "low",
+        "suggestedPart": "Part XIII: Advanced Graph Algorithms",
+        "reason": "Covered within ch107 (HLD and Centroid Decomposition Applications). However, the basic concept of finding tree centroid could be in the foundational tree chapters.",
+        "relatedExisting": ["ch107-hld-centroid-applications.md", "ch57-trees-expanded.md"],
+        "estimatedLines": 0
+      },
+      {
+        "topic": "Suffix Tree (Full Ukkonen's Implementation)",
+        "importance": "low",
+        "suggestedPart": "Part XV: Advanced String Algorithms",
+        "reason": "ch87 exists but is only 121 lines — mostly overview + suffix array alternative. No Ukkonen's construction. Could be expanded.",
+        "relatedExisting": ["ch87-suffix-tree.md"],
+        "estimatedLines": 300
+      },
+      {
+        "topic": "Palindromic Tree / Eertree (Expanded)",
+        "importance": "low",
+        "suggestedPart": "Part XV: Advanced String Algorithms",
+        "reason": "ch88 exists but is only 136 lines. Could include more applications (count palindromic substrings by length, longest palindromic factorization, etc.)",
+        "relatedExisting": ["ch88-palindromic-tree.md"],
+        "estimatedLines": 200
+      },
+      {
+        "topic": "Gaussian Elimination over Finite Fields (XOR systems)",
+        "importance": "medium",
+        "suggestedPart": "Part XI: Mathematics Handbook",
+        "reason": "ch73 covers Gaussian elimination for real numbers. XOR-based Gaussian elimination (for linear basis, GF(2)) is a distinct and important variant.",
+        "relatedExisting": ["ch73-linear-algebra.md"],
+        "estimatedLines": 200
+      },
+      {
+        "topic": "Sqrt Decomposition (Standalone Chapter)",
+        "importance": "low",
+        "suggestedPart": "Part III: Advanced Data Structures",
+        "reason": "Concept is used in Mo's algorithm (ch62) and mentioned in ch54/ch76/ch102, but no standalone chapter explaining the general technique of block decomposition for arrays.",
+        "relatedExisting": ["ch62-offline-algorithms.md", "ch54-arrays-expanded.md"],
+        "estimatedLines": 0
+      },
+      {
+        "topic": "Discrete Logarithm (Baby-Step Giant-Step)",
+        "importance": "medium",
+        "suggestedPart": "Part XI: Mathematics Handbook",
+        "reason": "Mentioned in ch60 table of contents but no dedicated section with implementation. Important for modular equation solving.",
+        "relatedExisting": ["ch60-number-theory.md"],
+        "estimatedLines": 200
+      },
+      {
+        "topic": "Floor Sum / Sum of Divisors / Divisor Counting",
+        "importance": "low",
+        "suggestedPart": "Part XI: Mathematics Handbook",
+        "reason": "Not covered. Common in competitive programming (e.g., counting lattice points, divisor summatory function).",
+        "relatedExisting": ["ch60-number-theory.md"],
+        "estimatedLines": 200
+      },
+      {
+        "topic": "Persistent Segment Tree (Expanded with more variants)",
+        "importance": "low",
+        "suggestedPart": "Part XII: Advanced Data Structures",
+        "reason": "Covered in ch57 (section 57.6) and ch75. Already adequate, but could mention merge sort tree, segment tree with vectors at nodes.",
+        "relatedExisting": ["ch57-trees-expanded.md", "ch75-persistent-ds.md", "ch76-advanced-seg-trees.md"],
+        "estimatedLines": 0
+      },
+      {
+        "topic": "Suffix Automaton (Expanded Applications)",
+        "importance": "low",
+        "suggestedPart": "Part XV: Advanced String Algorithms",
+        "reason": "ch45 has 474 lines with solid coverage. Could add more applications (number of distinct substrings of each length, LCS of multiple strings).",
+        "relatedExisting": ["ch45-suffix-automaton.md"],
+        "estimatedLines": 0
+      }
+    ],
+    "coverageGaps": {
+      "polynomialAlgorithms": {
+        "status": "MISSING",
+        "details": "No FFT, NTT, polynomial multiplication, FPS operations, or Berlekamp-Massey. This is a major gap for competitive programming coverage.",
+        "suggestedChapters": ["FFT/NTT", "Formal Power Series", "Berlekamp-Massey"]
+      },
+      "advancedNumberTheory": {
+        "status": "PARTIAL",
+        "details": "ch60 covers basics well (CRT, Lucas, Miller-Rabin, Pollard Rho overview). Missing: Möbius function/inversion, discrete logarithm, floor sum, generating functions.",
+        "suggestedChapters": ["Möbius Function", "Discrete Logarithm", "Number Theory Applications"]
+      },
+      "graphAlgorithms": {
+        "status": "PARTIAL",
+        "details": "SCC, bridges, articulation points covered. Missing: 2-SAT, Hungarian, Min-Cost Max-Flow, Euler path/circuit.",
+        "suggestedChapters": ["2-SAT", "Hungarian Algorithm", "Min-Cost Max-Flow", "Euler Paths"]
+      },
+      "combinatorics": {
+        "status": "PARTIAL",
+        "details": "ch71 covers permutations, combinations, Catalan, inclusion-exclusion, derangements, Stirling, Bell. Missing: Burnside's lemma, generating functions.",
+        "suggestedChapters": ["Burnside's Lemma / Pólya Enumeration", "Generating Functions"]
+      },
+      "linearAlgebra": {
+        "status": "PARTIAL",
+        "details": "ch73 covers matrix ops and Gaussian elimination. Missing: XOR-basis/GF(2) systems, matrix rank applications.",
+        "suggestedChapters": ["XOR Basis / Linear Basis", "Linear Algebra over Finite Fields"]
+      }
+    }
+  },
+  "recommendedNewChapters": [
+    {
+      "proposedTitle": "FFT, NTT, and Polynomial Multiplication",
+      "part": "Part XVII: Advanced Techniques",
+      "priority": 1,
+      "topics": ["Cooley-Tukey FFT", "NTT with mod 998244353", "Polynomial multiplication", "Convolution", "String matching with wildcards via FFT"]
+    },
+    {
+      "proposedTitle": "2-SAT",
+      "part": "Part XIII: Advanced Graph Algorithms",
+      "priority": 2,
+      "topics": ["Implication graph construction", "SCC-based solution", "Finding valid assignment", "Extensions: at-most-one constraints"]
+    },
+    {
+      "proposedTitle": "Min-Cost Max-Flow",
+      "part": "Part XIII: Advanced Graph Algorithms",
+      "priority": 3,
+      "topics": ["Successive Shortest Path (SPFA/Dijkstra potentials)", "Cycle Canceling", "Applications: assignment, transportation, circulation"]
+    },
+    {
+      "proposedTitle": "Hungarian Algorithm and Weighted Matching",
+      "part": "Part XIII: Advanced Graph Algorithms",
+      "priority": 4,
+      "topics": ["O(n³) Hungarian algorithm", "Assignment problem", "Reduction to min-cost flow"]
+    },
+    {
+      "proposedTitle": "Berlekamp-Massey and Linear Recurrences",
+      "part": "Part XVII: Advanced Techniques",
+      "priority": 5,
+      "topics": ["Finding minimal polynomial from terms", "Kitamasa method", "Combining with matrix exponentiation"]
+    },
+    {
+      "proposedTitle": "Möbius Function and Inversion",
+      "part": "Part XI: Mathematics Handbook",
+      "priority": 6,
+      "topics": ["Möbius function definition and sieve", "Möbius inversion formula", "GCD-related counting", "Application: coprime pairs, LCM-sum"]
+    },
+    {
+      "proposedTitle": "Euler Paths and Circuits",
+      "part": "Part IV: Graphs",
+      "priority": 7,
+      "topics": ["Eulerian path/circuit conditions", "Hierholzer's algorithm", "Directed and undirected cases", "De Bruijn sequences connection"]
+    },
+    {
+      "proposedTitle": "XOR Basis / Linear Basis",
+      "part": "Part XVII: Advanced Techniques",
+      "priority": 8,
+      "topics": ["Gaussian elimination over GF(2)", "Maximum XOR subset", "Count of distinct XOR values", "Applications in range queries"]
+    },
+    {
+      "proposedTitle": "Burnside's Lemma and Pólya Enumeration",
+      "part": "Part XI: Mathematics Handbook",
+      "priority": 9,
+      "topics": ["Group actions and orbits", "Burnside's lemma", "Necklace coloring", "Pólya enumeration theorem"]
+    },
+    {
+      "proposedTitle": "Generating Functions and Formal Power Series",
+      "part": "Part XI: Mathematics Handbook",
+      "priority": 10,
+      "topics": ["Ordinary/exponential generating functions", "FPS operations (add, multiply, inverse, sqrt, log, exp)", "Applications to counting problems"]
+    }
+  ]
+}
