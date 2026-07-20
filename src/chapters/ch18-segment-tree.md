@@ -1164,6 +1164,30 @@ int main() {
 
 ---
 
+## Segment Tree Operations Summary
+
+| Operation | Time Complexity | Space Complexity | Notes |
+|-----------|----------------|-----------------|-------|
+| **Build** | $O(n)$ | $O(n)$ | Bottom-up construction; 4n array allocation |
+| **Point Update** | $O(\log n)$ | $O(1)$ | Update single element; propagate up to root |
+| **Range Query** | $O(\log n)$ | $O(1)$ | Sum/min/max over [l, r]; visits $O(\log n)$ nodes |
+| **Range Update (Lazy)** | $O(\log n)$ | $O(n)$ | Add/set value to all elements in [l, r] |
+| **Range Query + Lazy** | $O(\log n)$ | $O(1)$ | Query with pending lazy propagations |
+| **2D Segment Tree Query** | $O(\log n \cdot \log m)$ | $O(nm)$ | Segment tree of segment trees |
+| **Persistent (k-th smallest)** | $O(\log n)$ | $O(n \log n)$ | Each update creates $O(\log n)$ new nodes |
+
+### Comparison with Other Range Query Structures
+
+| Data Structure | Build | Point Update | Range Query | Range Update | Space |
+|---------------|-------|-------------|-------------|-------------|-------|
+| **Brute Force** | $O(1)$ | $O(1)$ | $O(n)$ | $O(n)$ | $O(n)$ |
+| **Prefix Sums** | $O(n)$ | $O(n)$ | $O(1)$ | $O(n)$ | $O(n)$ |
+| **Segment Tree** | $O(n)$ | $O(\log n)$ | $O(\log n)$ | $O(\log n)$ (lazy) | $O(n)$ |
+| **Fenwick Tree (BIT)** | $O(n)$ | $O(\log n)$ | $O(\log n)$ | $O(\log n)$ | $O(n)$ |
+| **Sparse Table** | $O(n \log n)$ | N/A (static) | $O(1)$ | N/A | $O(n \log n)$ |
+
+---
+
 ## Interview Tips
 
 1. **Recognize segment tree problems by keywords**: "range query", "range update", "sum/min/max of range", "count of smaller elements", "inversions".
