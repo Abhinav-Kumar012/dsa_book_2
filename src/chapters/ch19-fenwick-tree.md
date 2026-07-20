@@ -641,4 +641,11 @@ int main() {
 
 ---
 
+## See Also
+
+- [Chapter 18: Segment Tree](ch18-segment-tree.md) — The more powerful sibling; supports arbitrary range operations (lazy propagation, range updates) that BIT cannot.
+- [Chapter 20: Sparse Table](ch20-sparse-table.md) — O(1) static RMQ; compare the trade-offs: BIT supports updates but O(log n) queries, Sparse Table has O(1) queries but no updates.
+- [Chapter 76: Advanced Segment Trees](ch76-advanced-seg-trees.md) — When BIT and basic segment trees aren't enough: 2D, persistent, and lazy variants.
+- [Chapter 36: Prefix Sum and Difference Array](ch36-prefix-sum-diff-array.md) — BIT is essentially a dynamic prefix sum; understanding prefix sums is prerequisite.
+
 *Next chapter: [Chapter 20: Sparse Table](ch20-sparse-table.md)*

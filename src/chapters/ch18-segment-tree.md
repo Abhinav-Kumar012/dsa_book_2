@@ -999,4 +999,11 @@ int main() {
 
 ---
 
+## See Also
+
+- [Chapter 19: Fenwick Tree (Binary Indexed Tree)](ch19-fenwick-tree.md) — A simpler and more cache-friendly alternative for prefix-based range queries; uses O(n) space vs O(4n) for segment trees.
+- [Chapter 20: Sparse Table](ch20-sparse-table.md) — O(1) static range queries via precomputation; ideal when the array never changes.
+- [Chapter 76: Advanced Segment Trees](ch76-advanced-seg-trees.md) — 2D segment trees, persistent segment trees, and other advanced variants.
+- [Chapter 17: Disjoint Set Union](ch17-dsu.md) — Another union-based structure; DSU and segment trees are often combined in offline algorithms.
+
 *Next chapter: [Chapter 19: Fenwick Tree (Binary Indexed Tree)](ch19-fenwick-tree.md)*

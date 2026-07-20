@@ -642,4 +642,11 @@ int main() {
 
 ---
 
+## See Also
+
+- [Chapter 18: Segment Tree](ch18-segment-tree.md) — Supports dynamic updates; use when the array changes between queries.
+- [Chapter 19: Fenwick Tree (Binary Indexed Tree)](ch19-fenwick-tree.md) — Another range query structure; BIT supports point updates with O(log n) queries.
+- [Chapter 21: Binary Lifting and LCA](ch21-binary-lifting-lca.md) — Sparse table is the foundation for the O(1) LCA reduction via Euler tours.
+- [Chapter 76: Advanced Segment Trees](ch76-advanced-seg-trees.md) — The RMQ ↔ LCA reduction and theoretical optimal static RMQ.
+
 *Next chapter: [Chapter 21: Binary Lifting and Lowest Common Ancestor](ch21-binary-lifting-lca.md)*

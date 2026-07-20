@@ -398,3 +398,12 @@ The Fischer-Heun structure achieves O(1) RMQ with O(n) preprocessing by:
 **Total**: O(n) preprocessing, O(1) query, O(n) space.
 
 This is the theoretical optimal for static RMQ and demonstrates the connection between RMQ and LCA via Cartesian trees.
+
+## See Also
+
+- [Chapter 18: Segment Tree](ch18-segment-tree.md) — The foundation; master lazy propagation and basic range queries before tackling advanced variants.
+- [Chapter 19: Fenwick Tree (Binary Indexed Tree)](ch19-fenwick-tree.md) — When you only need prefix sums/counts, BIT is simpler and faster in practice.
+- [Chapter 20: Sparse Table](ch20-sparse-table.md) — O(1) static RMQ; the theoretical building block for many advanced techniques here.
+- [Chapter 75: Persistent Data Structures](ch75-persistent-ds.md) — Persistent segment trees are one of the most important applications of persistence.
+- [Chapter 102: Wavelet Trees](ch102-wavelet-trees.md) — Another powerful structure for range queries on arrays.
+- [Chapter 106: Euler Tour and Tree Flattening](ch106-euler-tour-tree-flattening.md) — Converting tree problems to array problems for segment tree processing.
