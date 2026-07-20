@@ -1015,6 +1015,28 @@ Schedule flights to maximize profit. Each flight has a departure city, arrival c
 
 ---
 
+## 29.8 Algorithm Comparison: Choosing the Right Max-Flow Algorithm
+
+| Algorithm | Time Complexity | Space | Best For | Notes |
+|-----------|----------------|-------|----------|-------|
+| **Ford-Fulkerson (DFS)** | $O(E \cdot |f^*|)$ | $O(V + E)$ | Educational; small capacities | Not polynomial; can loop on irrational capacities |
+| **Edmonds-Karp (BFS)** | $O(VE^2)$ | $O(V + E)$ | Interviews; moderate constraints | BFS finds shortest augmenting path; simple to implement |
+| **Dinic's** | $O(V^2 E)$ | $O(V + E)$ | Competitive programming; large graphs | Blocking flow + level graph; $O(E\sqrt{V})$ for unit capacities |
+| **Min-Cost Max-Flow** | $O(VE \log V \cdot F)$ | $O(V + E)$ | Cost optimization problems | Dijkstra + potentials; $F$ = max flow value |
+
+### Decision Guide
+
+```
+Need max-flow?
+├─ Small graph / interview? → Edmonds-Karp (BFS): O(VE²)
+├─ Large graph / competitive? → Dinic's: O(V²E)
+├─ Unit capacities? → Dinic's: O(E√V)
+├─ Need min-cost flow? → Successive shortest paths: O(VE log V · F)
+└─ Bipartite matching? → Hopcroft-Karp: O(E√V) or Dinic's on unit graph
+```
+
+---
+
 ## Interview Tips
 
 1. **Recognize flow problems.** If the problem involves matching, assignment, connectivity constraints, or "bottleneck" reasoning, consider max-flow.
