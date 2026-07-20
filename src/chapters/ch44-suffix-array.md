@@ -505,3 +505,14 @@ int main() {
 4. **Codeforces 128B** — Find the k-th smallest substring. (Hint: Enumerate suffixes and count how many substrings each contributes, subtracting LCP overlaps.)
 
 5. **UVa 11107** — Life Forms. Find strings that appear in more than half the input strings. (Hint: Concatenate with unique sentinels, binary search on answer length, sliding window on LCP.)
+
+---
+
+## See Also
+
+- [Chapter 45: Suffix Automaton](ch45-suffix-automaton.md) — A compressed automaton of all substrings; supports many of the same queries as suffix arrays but with different trade-offs.
+- [Chapter 41: KMP](ch41-kmp.md) — Single-pattern matching; suffix arrays generalize to multiple patterns and substring queries.
+- [Chapter 42: Z Algorithm](ch42-z-algorithm.md) — Used to compute LCP arrays efficiently; the Z-array is closely related to suffix array construction.
+- [Chapter 46: Aho-Corasick](ch46-aho-corasick.md) — Multi-pattern matching on a fixed set of patterns; suffix arrays handle arbitrary substring queries.
+- [Chapter 87: Suffix Tree](ch87-suffix-tree.md) — The suffix tree is the compressed trie of all suffixes; related to suffix arrays via the suffix array ↔ LCP ↔ suffix tree equivalence.
+- [Chapter 119: Manacher's Algorithm](ch119-manacher.md) — Another string algorithm for finding all palindromic substrings; often combined with suffix structures.

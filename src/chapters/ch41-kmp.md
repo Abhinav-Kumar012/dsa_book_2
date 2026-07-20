@@ -507,3 +507,14 @@ int main() {
 3. **Period of a String** — Find the smallest period. *Hint: If `lps[n-1] > 0` and `n % (n - lps[n-1]) == 0`, the period is `n - lps[n-1]`.*
 4. **Count and Say** (LeetCode 38) — While not directly KMP, understanding pattern matching helps.
 5. **Rotate String** (LeetCode 796) — Check if one string is a rotation of another. *Hint: Check if `s` is a substring of `goal + goal`.*
+
+---
+
+## See Also
+
+- [Chapter 42: Z Algorithm](ch42-z-algorithm.md) — An alternative to KMP for pattern matching; Z-array computes the same information as the failure function but from a different perspective.
+- [Chapter 44: Suffix Array](ch44-suffix-array.md) — For multiple pattern searches and substring queries; suffix arrays generalize single-pattern matching.
+- [Chapter 45: Suffix Automaton](ch45-suffix-automaton.md) — A compressed automaton of all substrings; enables O(n) construction and O(m) pattern matching.
+- [Chapter 46: Aho-Corasick](ch46-aho-corasick.md) — Multi-pattern matching; extends KMP's failure function to a trie of patterns.
+- [Chapter 40: Rolling Hash](ch40-rolling-hash.md) — Hash-based pattern matching as an alternative to KMP; simpler but probabilistic.
+- [Chapter 16: Trie](ch16-trie.md) — Aho-Corasick is built on tries; understanding trie structure is prerequisite.

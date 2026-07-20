@@ -472,3 +472,14 @@ int countPattern(SuffixAutomaton& sa, const string& p,
 4. **SPOJ SUBLEX** — Lexicographical substrings. Find the k-th lexicographically smallest distinct substring. (Hint: DP on the automaton to count paths, then walk greedily.)
 
 5. **AtCoder ABC279F** — BOX. (Hint: Use suffix automaton with union-find for merging operations.)
+
+---
+
+## See Also
+
+- [Chapter 44: Suffix Array](ch44-suffix-array.md) — An alternative for substring queries; suffix arrays are simpler to implement but suffix automata support online construction.
+- [Chapter 41: KMP](ch41-kmp.md) — Single-pattern matching; the suffix automaton generalizes to matching any substring of the text.
+- [Chapter 42: Z Algorithm](ch42-z-algorithm.md) — Related string matching technique; Z-array and suffix automaton both process string structure.
+- [Chapter 46: Aho-Corasick](ch46-aho-corasick.md) — Multi-pattern matching on a fixed set; suffix automaton handles all substrings of a single string.
+- [Chapter 87: Suffix Tree](ch87-suffix-tree.md) — The suffix tree is the suffix automaton's tree-based cousin; both represent all substrings but with different structures.
+- [Chapter 16: Trie](ch16-trie.md) — Suffix automata generalize tries to handle all substrings with state compression.

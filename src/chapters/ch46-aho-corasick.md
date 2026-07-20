@@ -404,3 +404,14 @@ The dictionary suffix link approach is cleaner and more efficient for reporting.
 5. **SPOJ WPUZZLES** — Word Puzzles. Find words in a grid in all 8 directions. (Hint: Extract all strings from the grid, run Aho-Corasick. Store direction and starting position.)
 
 6. **Codeforces 547E** — Mike and Friends. Count how many times pattern `k` appears in strings `l..r`. (Hint: Build Aho-Corasick, use DFS order on failure tree + prefix sums / BIT.)
+
+---
+
+## See Also
+
+- [Chapter 41: KMP](ch41-kmp.md) — Single-pattern matching; Aho-Corasick generalizes KMP's failure function to a trie of multiple patterns.
+- [Chapter 42: Z Algorithm](ch42-z-algorithm.md) — Another string matching technique; Z-algorithm handles single patterns, Aho-Corasick handles multiple.
+- [Chapter 44: Suffix Array](ch44-suffix-array.md) — For substring queries on a text; suffix arrays handle arbitrary queries while Aho-Corasick excels at matching a fixed pattern set.
+- [Chapter 45: Suffix Automaton](ch45-suffix-automaton.md) — Represents all substrings of a single string; Aho-Corasick matches multiple patterns against a text.
+- [Chapter 16: Trie](ch16-trie.md) — Aho-Corasick is built on a trie; understanding trie structure is essential.
+- [Chapter 24: Breadth-First Search](ch24-bfs.md) — The failure links in Aho-Corasick are computed via BFS on the trie.

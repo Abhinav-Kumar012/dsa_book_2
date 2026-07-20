@@ -512,3 +512,13 @@ This confirms that "abcabcabc" is built by repeating "abc" three times. The Z va
 3. **Longest Common Prefix** — Given two strings, find their longest common prefix. *Hint: Concatenate with `$` and check Z[m+1].*
 4. **Distinct Substrings** — Count distinct substrings using Z array. *Hint: For each suffix, Z values tell you how many prefixes are shared with earlier positions.*
 5. **Periodic String** — Find all periods of a string. *Hint: A value `d` is a period iff Z[d] >= n - d.*
+
+---
+
+## See Also
+
+- [Chapter 41: KMP](ch41-kmp.md) — The classic single-pattern matching algorithm; KMP's failure function and Z-array capture similar information.
+- [Chapter 44: Suffix Array](ch44-suffix-array.md) — LCP arrays (computed via Z-algorithm or Kasai's algorithm) are essential for suffix array applications.
+- [Chapter 45: Suffix Automaton](ch45-suffix-automaton.md) — A compressed automaton of all substrings; complements Z-algorithm for more complex string queries.
+- [Chapter 46: Aho-Corasick](ch46-aho-corasick.md) — Multi-pattern matching; the failure function generalizes the Z/KMP concept to multiple patterns.
+- [Chapter 40: Rolling Hash](ch40-rolling-hash.md) — Another approach to string matching; simpler but probabilistic.
