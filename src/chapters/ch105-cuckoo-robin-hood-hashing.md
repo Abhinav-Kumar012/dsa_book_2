@@ -678,10 +678,9 @@ The Robin Hood benefit: if we had a collision where the new element had traveled
 
 ---
 
-## 105.10 Cross-References
+## 105.10 See Also
 
-- **Hash Tables**: [Chapter 101](ch101-hash-tables.md) — fundamental hash table operations
-- **Hash Functions**: [Chapter 102](ch102-hash-functions.md) — designing good hash functions
-- **Open Addressing**: [Chapter 103](ch103-open-addressing.md) — linear probing, quadratic probing
-- **Bloom Filters**: [Chapter 106](ch106-bloom-filters.md) — probabilistic set membership
-- **Consistent Hashing**: [Chapter 107](ch107-consistent-hashing.md) — distributed hash tables
+- [Chapter 7: Hashing](ch07-hashing.md) — Hash table fundamentals: collision handling, load factors, and basic hash map operations.
+- [Chapter 94: Hashing Deep Dive](ch94-hashing-deep-dive.md) — Universal hashing, perfect hashing, locality-sensitive hashing, and consistent hashing.
+- [Chapter 134: Consistent Hashing](ch134-consistent-hashing.md) — Distributed hash tables and load balancing across servers.
+- [Chapter 79: Probabilistic Data Structures](ch79-probabilistic-ds.md) — Bloom filters and other hash-based probabilistic structures.

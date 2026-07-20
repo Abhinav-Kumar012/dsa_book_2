@@ -1126,3 +1126,13 @@ int main() {
 ---
 
 *In the next chapter, we'll study linked lists — a fundamental data structure that teaches pointer manipulation and appears frequently in interviews.*
+
+---
+
+## See Also
+
+- [Chapter 94: Hashing Deep Dive](ch94-hashing-deep-dive.md) — Advanced topics: universal hashing, perfect hashing, locality-sensitive hashing, and consistent hashing.
+- [Chapter 105: Cuckoo and Robin Hood Hashing](ch105-cuckoo-robin-hood-hashing.md) — Alternative open-addressing strategies with better worst-case guarantees.
+- [Chapter 40: Rolling Hash](ch40-rolling-hash.md) — Hash-based string matching; enables efficient substring comparison in O(1).
+- [Chapter 16: Trie](ch16-trie.md) — When you need prefix-based lookups, tries complement hash maps.
+- [Chapter 79: Probabilistic Data Structures](ch79-probabilistic-ds.md) — Bloom filters and other hash-based structures for approximate set membership.

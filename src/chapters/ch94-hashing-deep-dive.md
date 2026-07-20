@@ -287,3 +287,13 @@ public:
         return candidates;
     }
 };
+
+---
+
+## See Also
+
+- [Chapter 7: Hashing](ch07-hashing.md) — The fundamentals: hash maps, hash sets, collision handling, and basic applications.
+- [Chapter 105: Cuckoo and Robin Hood Hashing](ch105-cuckoo-robin-hood-hashing.md) — Advanced open-addressing strategies that guarantee O(1) worst-case lookup or equalize probe lengths.
+- [Chapter 40: Rolling Hash](ch40-rolling-hash.md) — Hash-based string matching; rolling hash enables O(1) substring hash computation.
+- [Chapter 134: Consistent Hashing](ch134-consistent-hashing.md) — Distributed systems use consistent hashing for load balancing across servers.
+- [Chapter 79: Probabilistic Data Structures](ch79-probabilistic-ds.md) — Bloom filters, count-min sketches, and other hash-based probabilistic structures.
