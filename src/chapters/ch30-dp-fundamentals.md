@@ -742,3 +742,13 @@ Answer: 2 (coins 5 + 6).
 8. **Longest Palindromic Subsequence** (LeetCode 516) — LCS variant
 9. **Edit Distance** (LeetCode 72) — Classic 2D DP
 10. **Word Break** (LeetCode 139) — DP + dictionary lookup
+
+---
+
+## See Also
+
+- [Chapter 31: DP Patterns](ch31-dp-patterns.md) — A catalog of common DP patterns (knapsack, LIS, interval DP, bitmask DP) that build on the fundamentals here.
+- [Chapter 85: Digit DP](ch85-digit-dp.md) — A specialized DP technique for counting problems with digit constraints; processes numbers digit by digit.
+- [Chapter 86: DP Optimization](ch86-dp-optimization.md) — Knuth's optimization, divide-and-conquer DP, and convex hull trick for speeding up naive DP transitions.
+- [Chapter 32: Greedy](ch32-greedy.md) — When greedy works, it's simpler than DP; understanding the greedy-choice property helps identify when DP is necessary.
+- [Chapter 59: DP Expanded](ch59-dp-expanded.md) — Additional DP topics and advanced patterns for deeper study.

@@ -1008,3 +1008,13 @@ int main() {
 8. **Domino and Tromino Tiling** (LeetCode 790) — Profile DP
 9. **Edit Distance** (LeetCode 72) — Classic 2D DP
 10. **Palindrome Partitioning II** (LeetCode 132) — Interval DP
+
+---
+
+## See Also
+
+- [Chapter 30: DP Fundamentals](ch30-dp-fundamentals.md) — The foundation: state design, transitions, memoization vs tabulation, and the DP thinking process.
+- [Chapter 85: Digit DP](ch85-digit-dp.md) — When the problem involves counting numbers with digit constraints, digit DP is the go-to pattern.
+- [Chapter 86: DP Optimization](ch86-dp-optimization.md) — Speed up O(n³) DP to O(n²) with Knuth's optimization, or use convex hull trick for O(n log n).
+- [Chapter 33: Bit Manipulation](ch33-bit-manipulation.md) — Bitmask DP relies on bitwise operations; mastering bit manipulation is essential for subset DP.
+- [Chapter 113: Profile DP](ch113-profile-dp.md) — Advanced profile DP for tiling, domino, and grid constraint problems.

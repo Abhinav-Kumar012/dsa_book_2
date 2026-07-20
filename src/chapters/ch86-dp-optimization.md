@@ -298,3 +298,14 @@ int main() {
     return 0;
 }
 ```
+
+---
+
+## See Also
+
+- [Chapter 30: DP Fundamentals](ch30-dp-fundamentals.md) — Prerequisite: understand basic DP state design and transitions before applying optimizations.
+- [Chapter 31: DP Patterns](ch31-dp-patterns.md) — Know the patterns first; optimizations apply to specific pattern families (e.g., Knuth for interval DP).
+- [Chapter 85: Digit DP](ch85-digit-dp.md) — Digit DP has its own optimization techniques; matrix exponentiation can speed up linear digit DP transitions.
+- [Chapter 2: Math Foundations](ch02-math-foundations.md) — Convex hull trick and Monge array properties require mathematical background.
+- [Chapter 116: Alien Trick and Parametric Search](ch116-alien-trick-parametric.md) — Another powerful DP optimization technique for problems with monotonicity.
+- [Chapter 117: Monotone Queue Optimization](ch117-monotone-queue-optimization.md) — Sliding window optimization for DP transitions with monotone properties.

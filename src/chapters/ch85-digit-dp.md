@@ -137,3 +137,12 @@ int main() {
 | Space | O(digits × state) |
 | Key insight | Process digit by digit |
 | Common states | sum, remainder, last digit, bitmask |
+
+---
+
+## See Also
+
+- [Chapter 30: DP Fundamentals](ch30-dp-fundamentals.md) — Prerequisite: understand state design, transitions, and memoization before tackling digit DP.
+- [Chapter 31: DP Patterns](ch31-dp-patterns.md) — Digit DP is one of many DP patterns; see also bitmask DP, interval DP, and tree DP.
+- [Chapter 86: DP Optimization](ch86-dp-optimization.md) — Digit DP states can sometimes be optimized using matrix exponentiation or other techniques.
+- [Chapter 33: Bit Manipulation](ch33-bit-manipulation.md) — When tracking which digits have been used, bitmask states are common in digit DP.
