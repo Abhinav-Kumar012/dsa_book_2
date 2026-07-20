@@ -206,6 +206,169 @@ Sorted: `[5, 3, 1, 0, 4, 2]` → ranks unchanged → **terminate early**.
 
 **Note**: Using radix sort instead of `std::sort` reduces this to O(n log n).
 
+### Python — Suffix Array Construction + LCP
+
+```python
+def build_suffix_array(s):
+    """Build suffix array in O(n log^2 n)."""
+    n = len(s)
+    if n == 0:
+        return []
+
+    sa = list(range(n))
+    rank_ = [ord(c) for c in s]
+    tmp = [0] * n
+    k = 1
+
+    while k < n:
+        sa.sort(key=lambda a: (rank_[a],
+                               rank_[a + k] if a + k < n else -1))
+
+        tmp[sa[0]] = 0
+        for i in range(1, n):
+            prev = (rank_[sa[i - 1]],
+                    rank_[sa[i - 1] + k] if sa[i - 1] + k < n else -1)
+            curr = (rank_[sa[i]],
+                    rank_[sa[i] + k] if sa[i] + k < n else -1)
+            tmp[sa[i]] = tmp[sa[i - 1]] + (1 if prev < curr else 0)
+        rank_ = tmp[:]
+
+        if rank_[sa[-1]] == n - 1:
+            break
+        k *= 2
+
+    return sa
+
+
+def build_lcp_array(s, sa):
+    """Build LCP array using Kasai's algorithm in O(n)."""
+    n = len(s)
+    rank_ = [0] * n
+    for i in range(n):
+        rank_[sa[i]] = i
+
+    lcp = [0] * n
+    h = 0
+    for i in range(n):
+        if rank_[i] == 0:
+            continue
+        j = sa[rank_[i] - 1]
+        while i + h < n and j + h < n and s[i + h] == s[j + h]:
+            h += 1
+        lcp[rank_[i]] = h
+        if h > 0:
+            h -= 1
+    return lcp
+
+
+if __name__ == "__main__":
+    s = "banana"
+    sa = build_suffix_array(s)
+    lcp = build_lcp_array(s, sa)
+
+    print(f"String: {s}\n")
+    print("Suffix Array:")
+    for i in range(len(sa)):
+        print(f"  SA[{i}] = {sa[i]}  ->  \"{s[sa[i]:]}\"")
+    print("\nLCP Array:")
+    for i in range(len(lcp)):
+        extra = ""
+        if i > 0:
+            extra = f"  (LCP of \"{s[sa[i]:]}\" and \"{s[sa[i-1]:]}\")"
+        print(f"  LCP[{i}] = {lcp[i]}{extra}")
+```
+
+### Java — Suffix Array Construction + LCP
+
+```java
+import java.util.*;
+
+public class SuffixArray {
+    public static int[] buildSuffixArray(String s) {
+        int n = s.length();
+        if (n == 0) return new int[0];
+
+        int[] sa = new int[n];
+        int[] rank_ = new int[n];
+        int[] tmp = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            sa[i] = i;
+            rank_[i] = s.charAt(i);
+        }
+
+        for (int k = 1; k < n; k *= 2) {
+            final int[] r = rank_;
+            final int N = n;
+            final int K = k;
+            Integer[] boxed = new Integer[n];
+            for (int i = 0; i < n; i++) boxed[i] = sa[i];
+            Arrays.sort(boxed, (a, b) -> {
+                if (r[a] != r[b]) return r[a] - r[b];
+                int ra = (a + K < N) ? r[a + K] : -1;
+                int rb = (b + K < N) ? r[b + K] : -1;
+                return ra - rb;
+            });
+            for (int i = 0; i < n; i++) sa[i] = boxed[i];
+
+            tmp[sa[0]] = 0;
+            for (int i = 1; i < n; i++) {
+                int prevA = sa[i - 1], prevB = sa[i];
+                boolean less = false;
+                if (r[prevA] != r[prevB]) less = r[prevA] < r[prevB];
+                else {
+                    int ra = (prevA + k < n) ? r[prevA + k] : -1;
+                    int rb = (prevB + k < n) ? r[prevB + k] : -1;
+                    less = ra < rb;
+                }
+                tmp[sa[i]] = tmp[sa[i - 1]] + (less ? 1 : 0);
+            }
+            System.arraycopy(tmp, 0, rank_, 0, n);
+            if (rank_[sa[n - 1]] == n - 1) break;
+        }
+        return sa;
+    }
+
+    public static int[] buildLCPArray(String s, int[] sa) {
+        int n = s.length();
+        int[] rank_ = new int[n];
+        for (int i = 0; i < n; i++) rank_[sa[i]] = i;
+
+        int[] lcp = new int[n];
+        int h = 0;
+        for (int i = 0; i < n; i++) {
+            if (rank_[i] == 0) continue;
+            int j = sa[rank_[i] - 1];
+            while (i + h < n && j + h < n && s.charAt(i + h) == s.charAt(j + h)) h++;
+            lcp[rank_[i]] = h;
+            if (h > 0) h--;
+        }
+        return lcp;
+    }
+
+    public static void main(String[] args) {
+        String s = "banana";
+        int[] sa = buildSuffixArray(s);
+        int[] lcp = buildLCPArray(s, sa);
+
+        System.out.println("String: " + s + "\n");
+        System.out.println("Suffix Array:");
+        for (int i = 0; i < sa.length; i++) {
+            System.out.printf("  SA[%d] = %d  ->  \"%s\"%n", i, sa[i], s.substring(sa[i]));
+        }
+        System.out.println("\nLCP Array:");
+        for (int i = 0; i < lcp.length; i++) {
+            String extra = "";
+            if (i > 0) {
+                extra = String.format("  (LCP of \"%s\" and \"%s\")",
+                    s.substring(sa[i]), s.substring(sa[i - 1]));
+            }
+            System.out.printf("  LCP[%d] = %d%s%n", i, lcp[i], extra);
+        }
+    }
+}
+```
+
 ---
 
 ## 44.3 LCP Array: Kasai's Algorithm
