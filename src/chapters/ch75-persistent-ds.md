@@ -274,7 +274,7 @@ public class PersistentSegmentTree {
     }
 
     static int query(Node node, int lo, int hi, int ql, int qr) {
-        if (node == null \|\| qr < lo \|\| hi < ql) return 0;
+        if (node == null || qr < lo || hi < ql) return 0;
         if (ql <= lo && hi <= qr) return node.val;
         int mid = (lo + hi) / 2;
         return query(node.left, lo, mid, ql, qr) +
@@ -312,7 +312,9 @@ public class PersistentSegmentTree {
 
 ## 75.4 K-th Smallest in Range
 
-Classic application: find the k-th smallest element in arr[l..r].
+Classic application: find the k-th smallest element in arr[l..r]. This is a beautiful example of how persistent data structures enable queries that would otherwise require complex data structures.
+
+**Key Idea**: Build a persistent segment tree where each version `roots[i]` represents the prefix `arr[0..i-1]`. The tree is built on **value coordinates** (coordinate-compressed values), not array indices. Each leaf stores the count of that value in the prefix. To query the k-th smallest in `arr[l..r]`, we compute `roots[r+1] - roots[l]` (subtracting counts) and walk down the tree.
 
 ```cpp
 #include <iostream>
@@ -335,6 +337,12 @@ int kthSmallest(PSTNode* rootL, PSTNode* rootR, int lo, int hi, int k) {
 // (Using PSTNode from above)
 ```
 
+**How it works**:
+1. `rootR->left->val - rootL->left->val` = count of values in the left half of the value range that appear in `arr[l..r]`.
+2. If `k <= leftCount`, the k-th smallest is in the left half → recurse left.
+3. Otherwise, skip the left half and search for `(k - leftCount)`-th in the right half.
+4. Time: O(log n) per query (walks one path from root to leaf).
+
 ---
 
 ## Summary
@@ -347,10 +355,58 @@ int kthSmallest(PSTNode* rootL, PSTNode* rootR, int lo, int hi, int k) {
 
 ---
 
-## 75.4 Persistent Trees
+## 75.5 Persistent Trees
 
 Any tree structure can be made persistent using path copying. When modifying a node, create a new copy and recursively copy the path to the root.
 
 **Space**: O(log n) new nodes per update for balanced trees.
 
 **Applications**: Version control systems, undo/redo, historical queries.
+
+### Example: Persistent Binary Search Tree
+
+```cpp
+#include <iostream>
+
+struct PBSTNode {
+    int val;
+    PBSTNode *left, *right;
+    PBSTNode(int v, PBSTNode* l = nullptr, PBSTNode* r = nullptr)
+        : val(v), left(l), right(r) {}
+};
+
+// Insert into persistent BST — returns new root
+PBSTNode* insert(PBSTNode* root, int val) {
+    if (!root) return new PBSTNode(val);
+    if (val < root->val)
+        return new PBSTNode(root->val, insert(root->left, val), root->right);
+    else if (val > root->val)
+        return new PBSTNode(root->val, root->left, insert(root->right, val));
+    else
+        return root; // duplicate, no change
+}
+
+// Search in persistent BST
+bool search(PBSTNode* root, int val) {
+    if (!root) return false;
+    if (val == root->val) return true;
+    if (val < root->val) return search(root->left, val);
+    return search(root->right, val);
+}
+
+int main() {
+    PBSTNode* v0 = nullptr;              // empty tree
+    PBSTNode* v1 = insert(v0, 5);        // {5}
+    PBSTNode* v2 = insert(v1, 3);        // {3, 5}
+    PBSTNode* v3 = insert(v2, 7);        // {3, 5, 7}
+    PBSTNode* v4 = insert(v3, 1);        // {1, 3, 5, 7}
+
+    // v1 still only has {5}
+    std::cout << "v1 has 3: " << search(v1, 3) << "\n";  // 0
+    std::cout << "v4 has 3: " << search(v4, 3) << "\n";  // 1
+
+    return 0;
+}
+```
+
+Each version shares most of its nodes with previous versions. Insertion creates O(log n) new nodes on average (for balanced trees) or O(n) in the worst case (for degenerate trees).
