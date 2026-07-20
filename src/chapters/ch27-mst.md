@@ -258,17 +258,21 @@ Starting from vertex 0.
 
 MST weight: 0 + 3 + 1 + 2 + 2 + 6 = **14** ✓
 
-### Kruskal's vs Prim's
+### Kruskal's vs Prim's vs Borůvka's
 
-| Aspect | Kruskal's | Prim's |
-|--------|----------|--------|
-| Approach | Edge-centric (global greedy) | Vertex-centric (local greedy) |
-| Data structure | DSU / Union-Find | Priority queue |
-| Time | $O(E \log E)$ | $O(E \log V)$ |
-| Best for | Sparse graphs ($E \ll V^2$) | Dense graphs ($E \approx V^2$) |
-| Works on disconnected | Naturally (produces MSF) | Needs modification |
-| Implementation | Requires edge list | Requires adjacency list |
-| Parallel-friendly | Yes (sorting can be parallelized) | Less so |
+| Aspect | Kruskal's | Prim's | Borůvka's |
+|--------|----------|--------|----------|
+| Approach | Edge-centric (global greedy) | Vertex-centric (local greedy) | Component-centric (parallel) |
+| Data structure | DSU / Union-Find | Priority queue | DSU / Union-Find |
+| **Time Complexity** | $O(E \log E)$ | $O(E \log V)$ | $O(E \log V)$ |
+| **Space Complexity** | $O(V + E)$ | $O(V + E)$ | $O(V + E)$ |
+| **Stable?** | N/A (graph algorithm) | N/A (graph algorithm) | N/A (graph algorithm) |
+| **In-place?** | No (needs DSU arrays) | No (needs PQ) | No (needs DSU arrays) |
+| Best for | Sparse graphs ($E \ll V^2$) | Dense graphs ($E \approx V^2$) | Parallel / distributed settings |
+| Works on disconnected | Naturally (produces MSF) | Needs modification | Naturally (produces MSF) |
+| Implementation | Requires edge list | Requires adjacency list | Requires adjacency list |
+| Parallel-friendly | Yes (sorting can be parallelized) | Less so | Yes (components independent) |
+| **Notes** | Easiest to implement; most common in interviews | Faster with Fibonacci heap: $O(E + V \log V)$ | Oldest MST algorithm; halves components each round |
 
 ---
 
