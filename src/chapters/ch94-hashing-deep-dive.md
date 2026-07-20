@@ -297,3 +297,45 @@ public:
 - [Chapter 40: Rolling Hash](ch40-rolling-hash.md) — Hash-based string matching; rolling hash enables O(1) substring hash computation.
 - [Chapter 134: Consistent Hashing](ch134-consistent-hashing.md) — Distributed systems use consistent hashing for load balancing across servers.
 - [Chapter 79: Probabilistic Data Structures](ch79-probabilistic-ds.md) — Bloom filters, count-min sketches, and other hash-based probabilistic structures.
+
+---
+
+## Exercises
+
+1. **Implement FNV-1a**: Write a32-bit FNV-1a hash function. Test it on a set of strings and measure distribution quality.
+
+2. **Rendezvous hashing**: Implement rendezvous (HRW) hashing for a distributed cache with3 servers. Simulate server addition/removal and verify minimal key remapping.
+
+3. **Bloom filter from scratch**: Implement a Bloom filter with configurable false positive rate. Test with1 million elements.
+
+4. **Hash collision analysis**: Generate10 million random64-bit hashes. Count collisions and compare with birthday paradox predictions.
+
+5. **Locality-sensitive hashing**: Implement LSH for cosine similarity on high-dimensional vectors. Test on a dataset of document embeddings.
+
+---
+
+## Interview Questions
+
+1. **Q: What makes a good hash function?**
+   A: Uniform distribution, fast computation, deterministic, avalanche effect (small input change → large hash change). For cryptographic use: also pre-image resistance.
+
+2. **Q: Explain consistent hashing and its advantages.**
+   A: Maps both keys and servers to a ring. Each key is assigned to the next server clockwise. Adding/removing a server only remaps keys in its segment. Minimizes redistribution.
+
+3. **Q: What is the difference between cryptographic and non-cryptographic hash functions?**
+   A: Cryptographic (SHA-256, BLAKE3): pre-image resistant, collision resistant, slower. Non-cryptographic (MurmurHash, xxHash): fast, good distribution, but not security-hardened.
+
+4. **Q: How does a Bloom filter achieve its space efficiency?**
+   A: By accepting false positives in exchange for O(1) membership queries with O(n) space. The false positive rate is (1 - e^(-kn/m))^k, controllable by tuning k and m.
+
+5. **Q: What is double hashing and when is it useful?**
+   A: Using two hash functions h1, h2 to probe: h(k, i) = (h1(k) + i × h2(k)) mod m. It avoids clustering better than linear probing while being cache-friendly.
+
+---
+
+## Cross-References
+
+- [Chapter 7: Hashing](ch07-hashing.md) — Hash table fundamentals
+- [Chapter 79: Probabilistic Data Structures](ch79-probabilistic-ds.md) — Bloom filters, HyperLogLog
+- [Chapter 134: Consistent Hashing](ch134-consistent-hashing.md) — Distributed hashing
+- [Chapter 105: Cuckoo and Robin Hood Hashing](ch105-cuckoo-robin-hood-hashing.md) — Open addressing strategies
