@@ -772,8 +772,14 @@ BFS is the go-to algorithm for shortest paths in unweighted graphs and level-by-
 - **0-1 BFS** with a deque handles 0/1 weighted edges in $O(V + E)$.
 - **BFS on grids** is a common interview pattern — always check bounds.
 
-The choice between BFS and DFS depends on the problem: BFS for shortest paths and levels, DFS for exhaustive search and backtracking.
-
 ---
+
+## See Also
+
+- [Chapter 23: Depth-First Search](ch23-dfs.md) — The complementary traversal; DFS goes deep before backtracking, BFS explores level by level.
+- [Chapter 25: Topological Sort](ch25-topological-sort.md) — BFS (Kahn's algorithm) provides an alternative to DFS for topological ordering of DAGs.
+- [Chapter 26: Shortest Paths](ch26-shortest-paths.md) — BFS is the foundation of shortest path algorithms for unweighted graphs; Dijkstra generalizes this to weighted graphs.
+- [Chapter 34: Two Pointers](ch34-two-pointers.md) — BFS on level-order trees naturally leads to two-pointer and level-processing patterns.
+- [Chapter 17: Disjoint Set Union](ch17-dsu.md) — For pure connectivity queries without path details, DSU is often simpler than BFS.
 
 *Next chapter: Topological Sort — ordering vertices in a DAG so that all edges go forward.*

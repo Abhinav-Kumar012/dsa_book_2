@@ -741,4 +741,12 @@ public:
 
 ---
 
+## See Also
+
+- [Chapter 23: Depth-First Search](ch23-dfs.md) — DFS-based topological sort (post-order reversal) is the classic approach; Kahn's BFS-based algorithm is the alternative.
+- [Chapter 24: Breadth-First Search](ch24-bfs.md) — Kahn's algorithm uses BFS (indegree-based) for topological ordering; also detects cycles.
+- [Chapter 81: SCC, Bridges, and Articulation Points](ch81-scc-bridges.md) — Kosaraju's algorithm uses two-pass DFS; SCC condensation produces a DAG suitable for topological sort.
+- [Chapter 26: Shortest Paths](ch26-shortest-paths.md) — On DAGs, shortest paths can be found in O(V+E) by processing vertices in topological order.
+- [Chapter 22: Graph Fundamentals](ch22-graph-fundamentals.md) — Prerequisite: DAGs, indegree, and graph representations.
+
 *Next chapter: Shortest Paths — from Dijkstra to Bellman-Ford to Floyd-Warshall.*

@@ -741,4 +741,12 @@ public:
 
 ---
 
+## See Also
+
+- [Chapter 24: Breadth-First Search](ch24-bfs.md) — The complementary traversal; BFS finds shortest paths in unweighted graphs, DFS excels at exhaustive search and backtracking.
+- [Chapter 25: Topological Sort](ch25-topological-sort.md) — A direct application of DFS on DAGs; produces a linear ordering respecting edge directions.
+- [Chapter 81: SCC, Bridges, and Articulation Points](ch81-scc-bridges.md) — Tarjan's algorithm uses DFS timestamps and low-link values to find strongly connected components, bridges, and cut vertices.
+- [Chapter 22: Graph Fundamentals](ch22-graph-fundamentals.md) — Prerequisite: adjacency lists, graph representations, and basic terminology.
+- [Chapter 9: Backtracking](ch09-backtracking.md) — DFS with backtracking is the foundation of constraint satisfaction and combinatorial search.
+
 *Next chapter: Breadth-First Search — the level-by-level exploration that finds shortest paths in unweighted graphs.*

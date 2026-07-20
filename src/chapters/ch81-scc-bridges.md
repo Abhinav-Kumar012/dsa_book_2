@@ -243,3 +243,14 @@ int main() {
 | SCC | Maximal strongly connected subgraph | Kosaraju/Tarjan | O(V+E) |
 | Bridge | Edge whose removal disconnects | DFS with low/tin | O(V+E) |
 | Articulation Point | Vertex whose removal disconnects | DFS with low/tin | O(V+E) |
+
+---
+
+## See Also
+
+- [Chapter 23: Depth-First Search](ch23-dfs.md) — SCC and bridge-finding algorithms are built on DFS with timestamps and low-link values.
+- [Chapter 25: Topological Sort](ch25-topological-sort.md) — SCC condensation produces a DAG; topological sort on the condensation graph enables further analysis.
+- [Chapter 22: Graph Fundamentals](ch22-graph-fundamentals.md) — Prerequisite: graph representations, connectivity, and basic DFS.
+- [Chapter 28: Advanced Graphs](ch28-advanced-graphs.md) — Biconnected components, ear decomposition, and other advanced connectivity concepts.
+- [Chapter 109: Bridge Trees and Treewidth](ch109-bridge-trees-treewidth.md) — Bridge trees compress 2-edge-connected components; related to the bridge-finding algorithms here.
+- [Chapter 17: Disjoint Set Union](ch17-dsu.md) — DSU can maintain connectivity information and is sometimes used alongside SCC algorithms.
