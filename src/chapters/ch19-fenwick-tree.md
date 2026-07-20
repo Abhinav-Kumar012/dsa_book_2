@@ -202,6 +202,110 @@ int main() {
 }
 ```
 
+### Python — Fenwick Tree
+
+```python
+class FenwickTree:
+    def __init__(self, arr):
+        self.n = len(arr)
+        self.tree = [0] * (self.n + 1)
+        # O(n) construction
+        for i in range(self.n):
+            self.tree[i + 1] = arr[i]
+        for i in range(1, self.n + 1):
+            parent = i + (i & (-i))
+            if parent <= self.n:
+                self.tree[parent] += self.tree[i]
+
+    def add(self, i, val):
+        """Add val to element at index i (1-indexed)."""
+        while i <= self.n:
+            self.tree[i] += val
+            i += i & (-i)
+
+    def prefix_sum(self, i):
+        """Prefix sum from 1 to i (1-indexed)."""
+        s = 0
+        while i > 0:
+            s += self.tree[i]
+            i -= i & (-i)
+        return s
+
+    def range_sum(self, l, r):
+        """Range sum from l to r (1-indexed, inclusive)."""
+        return self.prefix_sum(r) - self.prefix_sum(l - 1)
+
+
+if __name__ == "__main__":
+    arr = [1, 3, 5, 7, 9, 11]
+    ft = FenwickTree(arr)
+
+    print(f"Prefix sum [1..3]: {ft.prefix_sum(3)}")  # 9
+    print(f"Prefix sum [1..6]: {ft.prefix_sum(6)}")  # 36
+    print(f"Range sum [2..4]: {ft.range_sum(2, 4)}")  # 15
+
+    ft.add(3, 10)
+    print(f"Prefix sum [1..3] after add: {ft.prefix_sum(3)}")  # 19
+    print(f"Range sum [2..4] after add: {ft.range_sum(2, 4)}")  # 25
+```
+
+### Java — Fenwick Tree
+
+```java
+public class FenwickTree {
+    private long[] tree;
+    private int n;
+
+    public FenwickTree(int[] arr) {
+        this.n = arr.length;
+        this.tree = new long[n + 1];
+        // O(n) construction
+        for (int i = 0; i < n; i++) {
+            tree[i + 1] = arr[i];
+        }
+        for (int i = 1; i <= n; i++) {
+            int parent = i + (i & (-i));
+            if (parent <= n) {
+                tree[parent] += tree[i];
+            }
+        }
+    }
+
+    public void add(int i, long val) {
+        while (i <= n) {
+            tree[i] += val;
+            i += i & (-i);
+        }
+    }
+
+    public long prefixSum(int i) {
+        long sum = 0;
+        while (i > 0) {
+            sum += tree[i];
+            i -= i & (-i);
+        }
+        return sum;
+    }
+
+    public long rangeSum(int l, int r) {
+        return prefixSum(r) - prefixSum(l - 1);
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 3, 5, 7, 9, 11};
+        FenwickTree ft = new FenwickTree(arr);
+
+        System.out.println("Prefix sum [1..3]: " + ft.prefixSum(3));  // 9
+        System.out.println("Prefix sum [1..6]: " + ft.prefixSum(6));  // 36
+        System.out.println("Range sum [2..4]: " + ft.rangeSum(2, 4));  // 15
+
+        ft.add(3, 10);
+        System.out.println("Prefix sum [1..3] after add: " + ft.prefixSum(3));  // 19
+        System.out.println("Range sum [2..4] after add: " + ft.rangeSum(2, 4));  // 25
+    }
+}
+```
+
 ### Dry Run: Prefix Query
 
 Array: `[1, 3, 5, 7, 9, 11]` (1-indexed)
@@ -533,6 +637,125 @@ int main() {
 ```
 
 **Complexity**: Each operation is O(log n × log m) for an n × m grid.
+
+### Python — 2D Fenwick Tree
+
+```python
+class FenwickTree2D:
+    def __init__(self, rows, cols):
+        self.rows = rows
+        self.cols = cols
+        self.tree = [[0] * (cols + 1) for _ in range(rows + 1)]
+
+    def _add(self, r, c, val):
+        i = r
+        while i <= self.rows:
+            j = c
+            while j <= self.cols:
+                self.tree[i][j] += val
+                j += j & (-j)
+            i += i & (-i)
+
+    def _prefix_sum(self, r, c):
+        total = 0
+        i = r
+        while i > 0:
+            j = c
+            while j > 0:
+                total += self.tree[i][j]
+                j -= j & (-j)
+            i -= i & (-i)
+        return total
+
+    def update(self, r, c, val):
+        """Add val to cell (r, c), 1-indexed."""
+        self._add(r, c, val)
+
+    def range_sum(self, r1, c1, r2, c2):
+        """Sum of rectangle (r1,c1) to (r2,c2), 1-indexed, inclusive."""
+        return (self._prefix_sum(r2, c2)
+                - self._prefix_sum(r1 - 1, c2)
+                - self._prefix_sum(r2, c1 - 1)
+                + self._prefix_sum(r1 - 1, c1 - 1))
+
+
+if __name__ == "__main__":
+    ft = FenwickTree2D(4, 4)
+    ft.update(1, 1, 1)
+    ft.update(1, 3, 2)
+    ft.update(2, 2, 3)
+    ft.update(3, 1, 4)
+    ft.update(3, 3, 5)
+    ft.update(4, 4, 6)
+
+    print(f"Sum [1,1]-[2,2]: {ft.range_sum(1, 1, 2, 2)}")  # 4
+    print(f"Sum [1,1]-[4,4]: {ft.range_sum(1, 1, 4, 4)}")  # 21
+    print(f"Sum [2,2]-[4,4]: {ft.range_sum(2, 2, 4, 4)}")  # 14
+
+    ft.update(2, 2, 10)
+    print(f"Sum [1,1]-[2,2] after update: {ft.range_sum(1, 1, 2, 2)}")  # 14
+```
+
+### Java — 2D Fenwick Tree
+
+```java
+public class FenwickTree2D {
+    private long[][] tree;
+    private int rows, cols;
+
+    public FenwickTree2D(int rows, int cols) {
+        this.rows = rows;
+        this.cols = cols;
+        this.tree = new long[rows + 1][cols + 1];
+    }
+
+    private void add(int r, int c, long val) {
+        for (int i = r; i <= rows; i += i & (-i)) {
+            for (int j = c; j <= cols; j += j & (-j)) {
+                tree[i][j] += val;
+            }
+        }
+    }
+
+    private long prefixSum(int r, int c) {
+        long sum = 0;
+        for (int i = r; i > 0; i -= i & (-i)) {
+            for (int j = c; j > 0; j -= j & (-j)) {
+                sum += tree[i][j];
+            }
+        }
+        return sum;
+    }
+
+    public void update(int r, int c, long val) {
+        add(r, c, val);
+    }
+
+    public long rangeSum(int r1, int c1, int r2, int c2) {
+        return prefixSum(r2, c2)
+             - prefixSum(r1 - 1, c2)
+             - prefixSum(r2, c1 - 1)
+             + prefixSum(r1 - 1, c1 - 1);
+    }
+
+    public static void main(String[] args) {
+        FenwickTree2D ft = new FenwickTree2D(4, 4);
+        ft.update(1, 1, 1);
+        ft.update(1, 3, 2);
+        ft.update(2, 2, 3);
+        ft.update(3, 1, 4);
+        ft.update(3, 3, 5);
+        ft.update(4, 4, 6);
+
+        System.out.println("Sum [1,1]-[2,2]: " + ft.rangeSum(1, 1, 2, 2));  // 4
+        System.out.println("Sum [1,1]-[4,4]: " + ft.rangeSum(1, 1, 4, 4));  // 21
+        System.out.println("Sum [2,2]-[4,4]: " + ft.rangeSum(2, 2, 4, 4));  // 14
+
+        ft.update(2, 2, 10);
+        System.out.println("Sum [1,1]-[2,2] after update: " + ft.rangeSum(1, 1, 2, 2));  // 14
+    }
+}
+```
 
 ---
 
