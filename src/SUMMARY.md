@@ -244,6 +244,12 @@
 - [Chapter 164: Advanced String Processing](./chapters/ch164-adv-strings.md)
 - [Chapter 165: Modern Research Topics](./chapters/ch165-modern-research.md)
 - [Chapter 166: Master Indexes](./chapters/ch166-master-indexes.md)
+- [Chapter 170: Hungarian Algorithm](./chapters/ch170-hungarian.md)
+- [Chapter 171: Berlekamp-Massey Algorithm](./chapters/ch171-berlekamp-massey.md)
+- [Chapter 172: Möbius Function and Inversion](./chapters/ch172-mobius-inversion.md)
+- [Chapter 167: FFT and NTT](./chapters/ch167-fft-ntt.md)
+- [Chapter 168: 2-SAT](./chapters/ch168-2sat.md)
+- [Chapter 169: Min-Cost Max-Flow](./chapters/ch169-min-cost-max-flow.md)
 
 # Appendices
 
