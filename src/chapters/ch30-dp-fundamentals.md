@@ -433,6 +433,26 @@ Let's work through four classic DP problems, showing the progression from brute 
 
 **Problem**: Given coin denominations and a target amount, find the minimum number of coins needed.
 
+```mermaid
+graph LR
+    A0["dp[0]=0"] -->|"coin 1"| A1["dp[1]=1"]
+    A1 -->|"coin 1"| A2["dp[2]=2"]
+    A2 -->|"coin 1"| A3["dp[3]=3"]
+    A3 -->|"coin 1"| A4["dp[4]=4"]
+    A4 -->|"coin 1"| A5a["dp[5]=..."]
+    A0 -->|"coin 5"| A5b["dp[5]=1"]
+    A0 -->|"coin 6"| A6["dp[6]=1"]
+    A5b -->|"coin 6"| A11["dp[11]=2"]
+    A6 -->|"coin 5"| A11
+
+    style A0 fill:#9f9,stroke:#333,stroke-width:2px
+    style A11 fill:#f96,stroke:#333,stroke-width:2px
+    style A5b fill:#fc9,stroke:#333
+    style A6 fill:#fc9,stroke:#333
+```
+
+*For coins {1,5,6} and amount 11: dp[11] = 2 (coins 5+6). The diagram shows how each state builds on previous states.*
+
 #### Brute Force
 
 Try every combination of coins. For each coin, try using it and recurse on the remaining amount.
