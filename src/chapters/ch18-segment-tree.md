@@ -1159,6 +1159,94 @@ int main() {
 
 ---
 
+## Additional Exercises
+
+### Exercise 1: Range XOR Query with Point Updates
+**Difficulty**: Medium
+**Problem**: Given an array of n integers, support two operations: (1) update a single element, and (2) query the XOR of all elements in range [l, r]. Implement using a segment tree.
+**Hint**: XOR is its own inverse (a ^ a = 0) and is associative, so it works perfectly with segment trees. The identity element for XOR is 0.
+**Expected Time Complexity**: O(log n) per update/query.
+
+### Exercise 2: Range Assignment Update (Set All Values in Range)
+**Difficulty**: Hard
+**Problem**: Implement a segment tree that supports: (1) set all elements in [l, r] to value v, and (2) query the sum of [l, r]. This requires lazy propagation where the lazy value represents a "set" operation rather than an "add" operation.
+**Hint**: Use a sentinel value (e.g., -1 or LLONG_MIN) to indicate "no pending assignment." When pushing down, the assignment overrides any previous lazy values in children.
+**Expected Time Complexity**: O(log n) per update/query.
+
+### Exercise 3: Count Elements Greater Than K in Range
+**Difficulty**: Medium
+**Problem**: Given an array, answer queries of the form "how many elements in [l, r] are strictly greater than k?" Support point updates.
+**Hint**: Use a merge sort tree (segment tree where each node stores a sorted list of its range). Query by binary searching in each relevant node's sorted list. Alternatively, use coordinate compression + segment tree.
+**Expected Time Complexity**: O(log²n) per query.
+
+### Exercise 4: Maximum Subarray Sum in Range (Segment Tree with Kadane's Info)
+**Difficulty**: Hard
+**Problem**: Given an array, support point updates and queries: "what is the maximum subarray sum in range [l, r]?" Each node must store four values: total sum, maximum prefix sum, maximum suffix sum, and maximum subarray sum.
+**Hint**: Each node stores a struct of 4 values. When merging two children, the max subarray sum of the parent is the max of: left's max subarray, right's max subarray, and left's max suffix + right's max prefix.
+**Expected Time Complexity**: O(log n) per update/query.
+
+### Exercise 5: K-th Smallest Element in Range
+**Difficulty**: Hard
+**Problem**: Given an array, answer queries: "what is the k-th smallest element in range [l, r]?" Support point updates.
+**Hint**: Use a persistent segment tree or a merge sort tree. For the merge sort tree approach, binary search on the answer value and count how many elements in [l, r] are ≤ mid.
+**Expected Time Complexity**: O(log²n) per query.
+
+### Exercise 6: Range Update with Addition and Multiplication
+**Difficulty**: Hard
+**Problem**: Support three operations on an array: (1) add v to all elements in [l, r], (2) multiply all elements in [l, r] by v, and (3) query sum of [l, r]. Both update types must compose correctly.
+**Hint**: Each lazy node stores two values: a multiplicative factor (init 1) and an additive term (init 0). When applying a new operation, update these lazily. The key invariant is that the effective value is `value * mul + add`.
+**Expected Time Complexity**: O(log n) per operation.
+
+### Exercise 7: Nearest Smaller Element in Range
+**Difficulty**: Medium
+**Problem**: Given an array and queries (l, r, k), find the index of the nearest element to position k (within [l, r]) that is smaller than arr[k]. If multiple exist at the same distance, return the leftmost.
+**Hint**: Build a segment tree for range minimum. Use the minimum to narrow down the search space, then check both sides of k.
+**Expected Time Complexity**: O(log n) per query.
+
+### Exercise 8: Product of Range Modulo M
+**Difficulty**: Medium
+**Problem**: Given an array of integers and a modulus M, support point updates and range product queries modulo M. Handle the case where elements can be 0.
+**Hint**: Store values modulo M in the tree. When a range contains a 0, the product is 0. Track whether each segment contains a zero to short-circuit queries.
+**Expected Time Complexity**: O(log n) per update/query.
+
+---
+
+## Additional Interview Questions
+
+### Q1: How would you modify a segment tree to support range assignment (set all values) instead of range addition?
+**Key Insight**: The lazy propagation mechanism changes fundamentally. Instead of accumulating lazy values additively, a range assignment **replaces** any pending lazy value. You need a sentinel (like a special flag) to distinguish "no pending update" from "assign to 0." When pushing down, assignment lazies take priority over additive lazies — if a child has a pending assignment, the parent's assignment overrides it.
+**Optimal Complexity**: O(log n) per operation, same as additive lazy propagation.
+
+### Q2: Can a segment tree handle operations that are not commutative (e.g., matrix multiplication)?
+**Key Insight**: Yes, but the **order matters**. For a non-commutative combine operation, you must be careful about which child's result comes first when merging. In the recursive implementation, the left child's result must be combined before the right child's: `combine(left_result, right_result)`. For lazy propagation with non-commutative updates, you must compose lazy values in the correct order as well.
+**Optimal Complexity**: O(log n) per operation, but the combine function may be O(k) for k×k matrices.
+
+### Q3: What is the difference between a segment tree and a Fenwick tree (BIT)? When would you choose one over the other?
+**Key Insight**: A Fenwick tree is simpler, uses O(n) space (vs O(4n)), and has better cache locality. However, it only supports prefix-based queries (sum, XOR) with point updates natively. A segment tree is more versatile: it supports arbitrary range operations (min, max, GCD), range updates with lazy propagation, and can be extended to 2D. Choose Fenwick for prefix sums; choose segment tree for everything else.
+**Optimal Complexity**: Both are O(log n) per operation. Fenwick has a smaller constant factor.
+
+### Q4: How do you handle a segment tree when the array size is not a power of 2?
+**Key Insight**: The recursive implementation handles any size naturally — it splits [l, r] into [l, mid] and [mid+1, r], which works for any range. The iterative implementation requires the base size n to be a power of 2 (pad with identity elements). The 4n space allocation is always sufficient regardless of whether n is a power of 2.
+**Optimal Complexity**: No change — O(log n) per operation.
+
+### Q5: Explain how to use a segment tree to solve the "range inversion count" problem.
+**Key Insight**: Process elements from right to left. For each element arr[i], use the segment tree to count how many elements already inserted (from the right) are smaller than arr[i] — these form inversions with arr[i]. Then insert arr[i] into the segment tree. Coordinate compression maps values to indices [0, m-1]. Each leaf stores the count of that value seen so far.
+**Optimal Complexity**: O(n log n) for n elements, where log n comes from segment tree operations on the compressed coordinate space.
+
+### Q6: How would you build a persistent segment tree and what is it used for?
+**Key Insight**: A persistent segment tree preserves previous versions of the tree after updates. Instead of modifying nodes in-place, each update creates O(log n) new nodes along the path from root to leaf, sharing unchanged subtrees with previous versions. This enables queries on any historical version of the array. Used in problems like "k-th smallest in range" — build a version for each prefix, then query `version[r] - version[l-1]`.
+**Optimal Complexity**: O(log n) per update/query, O(n log n) total space for all versions.
+
+### Q7: Can you use a segment tree to find the first element satisfying a condition in a range?
+**Key Insight**: Yes — this is called a "find-first" or "walk" operation. Start at the root and go down: if the left child's range overlaps the query range and its aggregate suggests a valid element exists there, go left; otherwise go right. This works for monotonic conditions (e.g., "first element > k") where the segment tree's aggregate (max) can prune the search.
+**Optimal Complexity**: O(log n) — you visit at most one node per level.
+
+### Q8: How does a 2D segment tree work and what is its complexity?
+**Key Insight**: A 2D segment tree is a "segment tree of segment trees." The outer tree splits rows, and each node contains an inner segment tree for columns. Building takes O(n·m·log n·log m). Updates modify O(log n) outer nodes, each requiring O(log m) inner updates. Queries combine O(log n) outer nodes, each queried in O(log m).
+**Optimal Complexity**: O(log n · log m) per query/update. Space: O(4n · 4m).
+
+---
+
 ## See Also
 
 - [Chapter 19: Fenwick Tree (Binary Indexed Tree)](ch19-fenwick-tree.md) — A simpler and more cache-friendly alternative for prefix-based range queries; uses O(n) space vs O(4n) for segment trees.
