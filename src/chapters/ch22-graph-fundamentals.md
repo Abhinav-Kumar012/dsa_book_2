@@ -714,4 +714,13 @@ With these foundations, you're ready to dive into the specific algorithms that m
 
 ---
 
+## See Also
+
+- [Chapter 23: Depth-First Search](ch23-dfs.md) — The first fundamental graph traversal; DFS is the foundation for many graph algorithms.
+- [Chapter 24: Breadth-First Search](ch24-bfs.md) — The second fundamental traversal; BFS finds shortest paths in unweighted graphs.
+- [Chapter 26: Shortest Paths](ch26-shortest-paths.md) — Dijkstra, Bellman-Ford, and Floyd-Warshall build on graph fundamentals.
+- [Chapter 27: Minimum Spanning Tree](ch27-mst.md) — Kruskal's and Prim's algorithms for finding minimum cost spanning trees.
+- [Chapter 28: Advanced Graphs](ch28-advanced-graphs.md) — Biconnected components, Euler tours, and other advanced graph concepts.
+- [Chapter 29: Network Flow](ch29-network-flow.md) — Max-flow, min-cut, and their powerful applications.
+
 *Next chapter: We dive into Depth-First Search — the first of the two fundamental graph traversal algorithms.*

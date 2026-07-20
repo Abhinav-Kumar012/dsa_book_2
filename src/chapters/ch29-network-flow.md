@@ -813,4 +813,13 @@ struct Dinic {
 
 ---
 
+## See Also
+
+- [Chapter 22: Graph Fundamentals](ch22-graph-fundamentals.md) — Prerequisite: graph representations and basic traversal algorithms.
+- [Chapter 26: Shortest Paths](ch26-shortest-paths.md) — Dijkstra and Bellman-Ford; flow algorithms build on shortest path concepts.
+- [Chapter 28: Advanced Graphs](ch28-advanced-graphs.md) — Biconnected components, Euler tours, and other advanced graph techniques.
+- [Chapter 81: SCC, Bridges, and Articulation Points](ch81-scc-bridges.md) — Connectivity analysis is essential for understanding flow networks.
+- [Chapter 83: Advanced Flow](ch83-advanced-flow.md) — Min-cost max-flow, circulation, and other advanced flow algorithms.
+- [Chapter 27: Minimum Spanning Tree](ch27-mst.md) — The max-flow min-cut theorem has deep connections to MST algorithms.
+
 *This concludes the graph algorithms section of the book. You now have a comprehensive toolkit for tackling graph problems in interviews and competitive programming. Master these algorithms, practice the patterns, and you'll be well-prepared for any graph question that comes your way.*

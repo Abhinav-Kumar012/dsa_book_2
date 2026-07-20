@@ -254,3 +254,5 @@ int main() {
 - [Chapter 28: Advanced Graphs](ch28-advanced-graphs.md) — Biconnected components, ear decomposition, and other advanced connectivity concepts.
 - [Chapter 109: Bridge Trees and Treewidth](ch109-bridge-trees-treewidth.md) — Bridge trees compress 2-edge-connected components; related to the bridge-finding algorithms here.
 - [Chapter 17: Disjoint Set Union](ch17-dsu.md) — DSU can maintain connectivity information and is sometimes used alongside SCC algorithms.
+- [Chapter 29: Network Flow](ch29-network-flow.md) — Flow algorithms use graph connectivity; SCC decomposition is useful in flow network analysis.
+- [Chapter 24: Breadth-First Search](ch24-bfs.md) — BFS-based approaches for connectivity and bipartiteness testing complement DFS-based SCC methods.

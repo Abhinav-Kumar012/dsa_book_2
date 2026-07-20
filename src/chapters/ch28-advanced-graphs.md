@@ -756,4 +756,13 @@ public:
 
 ---
 
+## See Also
+
+- [Chapter 22: Graph Fundamentals](ch22-graph-fundamentals.md) — Prerequisite: graph representations, adjacency lists, and basic terminology.
+- [Chapter 23: Depth-First Search](ch23-dfs.md) — DFS is the backbone of many advanced graph algorithms covered here.
+- [Chapter 29: Network Flow](ch29-network-flow.md) — Flow algorithms are the natural next step after mastering advanced graph techniques.
+- [Chapter 81: SCC, Bridges, and Articulation Points](ch81-scc-bridges.md) — Strongly connected components and connectivity analysis.
+- [Chapter 82: Advanced Shortest Paths](ch82-advanced-shortest-paths.md) — Johnson's algorithm, A*, and other advanced shortest path techniques.
+- [Chapter 27: Minimum Spanning Tree](ch27-mst.md) — Kruskal's and Prim's algorithms; a foundational graph algorithm.
+
 *Next chapter: Network Flow — the theory of flows, cuts, and their powerful applications.*
