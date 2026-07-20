@@ -187,6 +187,161 @@ START: Read problem carefully
 
 ---
 
+## 97.6 Implementation Templates
+
+### Sliding Window Template
+```cpp
+int slidingWindow(vector<int>& nums, int k) {
+    int n = nums.size();
+    int left = 0, result = 0;
+    int windowState = 0; // track window property
+    
+    for (int right = 0; right < n; right++) {
+        // Expand: add nums[right] to window
+        windowState += nums[right];
+        
+        // Shrink: maintain window constraint
+        while (/* window invalid */) {
+            windowState -= nums[left];
+            left++;
+        }
+        
+        // Update answer
+        result = max(result, right - left + 1);
+    }
+    return result;
+}
+```
+
+### Two Pointers Template
+```cpp
+int twoPointers(vector<int>& nums, int target) {
+    sort(nums.begin(), nums.end());
+    int left = 0, right = nums.size() - 1;
+    int result = 0;
+    
+    while (left < right) {
+        int sum = nums[left] + nums[right];
+        if (sum == target) {
+            result++;
+            left++; right--;
+        } else if (sum < target) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+    return result;
+}
+```
+
+### Binary Search Template
+```cpp
+int binarySearch(vector<int>& nums, int target) {
+    int lo = 0, hi = nums.size() - 1;
+    while (lo <= hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (nums[mid] == target) return mid;
+        else if (nums[mid] < target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return -1;
+}
+
+// Binary search on answer
+int binarySearchOnAnswer(int lo, int hi) {
+    while (lo < hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (isFeasible(mid)) hi = mid;
+        else lo = mid + 1;
+    }
+    return lo;
+}
+```
+
+### DFS/BFS Template
+```cpp
+void dfs(vector<vector<int>>& graph, int node, vector<bool>& visited) {
+    visited[node] = true;
+    for (int neighbor : graph[node]) {
+        if (!visited[neighbor])
+            dfs(graph, neighbor, visited);
+    }
+}
+
+void bfs(vector<vector<int>>& graph, int start) {
+    queue<int> q;
+    vector<bool> visited(graph.size(), false);
+    q.push(start);
+    visited[start] = true;
+    while (!q.empty()) {
+        int node = q.front(); q.pop();
+        for (int neighbor : graph[node]) {
+            if (!visited[neighbor]) {
+                visited[neighbor] = true;
+                q.push(neighbor);
+            }
+        }
+    }
+}
+```
+
+### DP Template
+```cpp
+int dp(vector<int>& nums) {
+    int n = nums.size();
+    vector<int> memo(n, -1);
+    
+    function<int(int)> solve = [&](int i) -> int {
+        if (i >= n) return 0;
+        if (memo[i] != -1) return memo[i];
+        
+        // Choice 1: take nums[i]
+        int take = nums[i] + solve(i + 2);
+        // Choice 2: skip nums[i]
+        int skip = solve(i + 1);
+        
+        return memo[i] = max(take, skip);
+    };
+    return solve(0);
+}
+```
+
+---
+
+## 97.7 Edge Case Checklist
+
+Before submitting, always test these edge cases:
+
+| Category | Edge Cases |
+|---|---|
+| **Empty input** | n=0, empty string, empty array |
+| **Single element** | n=1, array of one element |
+| **All same** | All elements identical |
+| **Already sorted** | Input is sorted (for sort-based) |
+| **Reverse sorted** | Worst case for many algorithms |
+| **Negative numbers** | If problem allows negatives |
+| **Overflow** | Sum/product exceeds int range → use long |
+| **Duplicates** | Array has duplicates (affects two-pointer) |
+| **Large input** | Test with n at upper bound |
+| **Boundary values** | k=0, k=n, target=0, target=MAX |
+
+---
+
+## 97.8 Anti-Patterns: Common Mistakes
+
+| Mistake | Problem | Fix |
+|---|---|---|
+| Using DP when greedy works | Unnecessary complexity | Prove greedy choice property first |
+| Sorting when order matters | Destroys required ordering | Use a different approach (hash map, etc.) |
+| Off-by-one in binary search | Wrong answer on boundaries | Use `lo < hi` with `hi = mid` / `lo = mid + 1` |
+| Forgetting to handle duplicates | Wrong count in two-pointer | Skip duplicates after finding a valid pair |
+| Using O(n²) when O(n log n) exists | TLE on large inputs | Check if sorting enables a better approach |
+| Not considering empty subarray | Wrong answer for all-negative arrays | Clarify: can answer be empty? |
+| Integer overflow | Wrong answer on large sums | Use `long long` / `int64_t` |
+
+---
+
 ## Summary
 
 | Step | Action |
@@ -197,3 +352,4 @@ START: Read problem carefully
 | 4. Verify approach | Walk through example |
 | 5. Implement | Clean code, handle edge cases |
 | 6. Test | Edge cases first |
+| 7. Optimize | Space, constant factors |
