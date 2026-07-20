@@ -246,6 +246,43 @@ int main() {
 
 ---
 
+
+
+---
+
+## Interview Questions
+
+### Q1: What is a Strongly Connected Component?
+**Answer**: An SCC is a maximal subgraph where every vertex is reachable from every other vertex. In other words, for any two vertices u and v in the SCC, there exists a path from u to v and from v to u. Directed graphs can be decomposed into SCCs, forming a DAG when each SCC is contracted to a single node.
+
+### Q2: Compare Kosaraju's and Tarjan's SCC algorithms.
+**Answer**: Both run in O(V+E). Kosaraju does two DFS passes (forward then on transposed graph) and is conceptually simpler. Tarjan does a single DFS pass using a stack and low-link values, making it faster in practice (one pass, better cache behavior). Both produce the same result.
+
+### Q3: How do you find bridges, and what's the key condition?
+**Answer**: Use DFS with `tin[u]` (discovery time) and `low[u]` (lowest discovery time reachable from subtree of u). An edge (u,v) is a bridge if `low[v] > tin[u]` — meaning v's subtree cannot reach u or any ancestor of u without using edge (u,v).
+
+### Q4: What's the difference between a bridge and an articulation point?
+**Answer**: A bridge is an **edge** whose removal disconnects the graph. An articulation point is a **vertex** whose removal disconnects the graph. A vertex u is an articulation point if it has a child v where `low[v] >= tin[u]`, or if u is the root of the DFS tree and has more than one child.
+
+### Q5: How do SCCs relate to 2-SAT?
+**Answer**: In 2-SAT, construct an implication graph. If variable x and ¬x are in the same SCC, the formula is unsatisfiable. Otherwise, a topological order of the SCC condensation graph gives a valid assignment: process SCCs in reverse topological order, assigning false to any unassigned literal. This runs in O(V+E).
+
+---
+
+## Exercises
+
+1. **Tarjan's Algorithm**: Implement Tarjan's SCC algorithm. Compare its performance with Kosaraju's on the same graph instances.
+
+2. **Bridge Count in a Tree**: Prove that every edge in a tree is a bridge. Then write an algorithm that counts bridges in a general graph.
+
+3. **2-Edge-Connected Components**: Modify the bridge-finding algorithm to output the 2-edge-connected components (maximal subgraphs with no bridges).
+
+4. **SCC Condensation DAG**: After finding SCCs, build the condensation DAG (each SCC becomes a node). Implement topological sort on it and verify it matches the expected order.
+
+5. **Network Reliability**: Given an undirected graph representing a network, find all critical connections (bridges). If you could add one edge to the network, which edge would maximize reliability (minimize the number of bridges)?
+
+---
+
 ## See Also
 
 - [Chapter 23: Depth-First Search](ch23-dfs.md) — SCC and bridge-finding algorithms are built on DFS with timestamps and low-link values.
