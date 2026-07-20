@@ -272,3 +272,8 @@
 - [Appendix K: 60-Day Study Plan](./appendices/appendix-k-60-day-plan.md)
 - [Appendix L: 30-Day Crash Course](./appendices/appendix-l-30-day-crash-course.md)
 - [Appendix M: Company-wise Preparation](./appendices/appendix-m-company-wise.md)
+
+# Part XX: Randomized and Game Algorithms
+
+- [Chapter 179: Fisher-Yates Shuffle and Reservoir Sampling](./chapters/ch179-fisher-yates-reservoir.md)
+- [Chapter 180: Minimax and Alpha-Beta Pruning](./chapters/ch180-minimax-alpha-beta.md)
