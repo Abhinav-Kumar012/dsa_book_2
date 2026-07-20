@@ -408,47 +408,34 @@ Since `h` increases at most `n` times total (each character compared at most onc
 
 SA = [5, 3, 1, 0, 4, 2], rank = [3, 2, 5, 1, 4, 0]
 
-The algorithm processes suffixes in original index order (i = 0, 1, 2, ..., 5), not sorted order. We maintain a running `h` that only decreases by at most 1 per step.
+The algorithm processes suffixes in **original index order** (i = 0, 1, 2, ..., 5), not sorted order. We maintain a running `h` that decreases by at most 1 per step.
 
-| i | rank[i] | j = SA[rank[i]-1] | Suffixes compared | h (start) | h (end) | LCP[rank[i]] |
-|---|---------|-------------------|-------------------|-----------|---------|---------------|
-| 0 | 3       | SA[2] = 1         | "banana" vs "anana" | 0 | 0 | LCP[3] = 0 (s[0]='b' ≠ s[1]='a') |
-| 1 | 2       | SA[1] = 3         | "anana" vs "ana"   | 0 | 3 | LCP[2] = 3 ("ana" matches, h→2 after) |
-| 2 | 5       | SA[4] = 4         | "nana" vs "na"     | 2 | 4 | LCP[5] = 4 (resume from h=2, "na"+"na" matches, h→3 after) |
-| 3 | 1       | SA[0] = 5         | "ana" vs "a"       | 3 | 4 | LCP[1] = 4 (resume from h=3, s[3]='a' matches, h→3 after) |
-| 4 | 4       | SA[3] = 0         | "na" vs "banana"   | 3 | 3 | LCP[4] = 3 (bounds check: i+h=7 ≥ n=6, stop immediately, h→2 after) |
-| 5 | 0       | (skip, rank=0)    | —                  | 2 | 2 | LCP[0] = 0 (by definition) |
+| i | rank[i] | j = SA[rank[i]-1] | Suffixes compared | h before | h after while | h after -- | LCP[rank[i]] |
+|---|---------|-------------------|-------------------|----------|---------------|------------|---------------|
+| 0 | 3       | SA[2] = 1         | "banana" vs "anana" | 0 | 0 | 0 | LCP[3] = 0 |
+| 1 | 2       | SA[1] = 3         | "anana" vs "ana"   | 0 | 3 | 2 | LCP[2] = 3 |
+| 2 | 5       | SA[4] = 4         | "nana" vs "na"     | 2 | 2 | 1 | LCP[5] = 2 |
+| 3 | 1       | SA[0] = 5         | "ana" vs "a"       | 1 | 1 | 0 | LCP[1] = 1 |
+| 4 | 4       | SA[3] = 0         | "na" vs "banana"   | 0 | 0 | 0 | LCP[4] = 0 |
+| 5 | 0       | (skip)            | —                  | 0 | — | — | LCP[0] = 0 |
 
-**Result**: LCP = [0, 4, 3, 0, 3, 4]
+**Step-by-step**:
+- **i=0**: s[0]='b' vs s[1]='a' → no match. h stays 0. LCP[3]=0.
+- **i=1**: s[1]='a'=s[3]='a', s[2]='n'=s[4]='n', s[3]='a'=s[5]='a', s[4]→out of bounds. h→3. LCP[2]=3.
+- **i=2**: h starts at 2 (carried). s[2+2]=s[4]='n', s[4+2]=s[6]→out of bounds. Loop body never runs. h stays 2. LCP[5]=2.
+- **i=3**: h starts at 1. s[3+1]=s[4]='n', s[5+1]=s[6]→out of bounds. Loop body never runs. h stays 1. LCP[1]=1.
+- **i=4**: h starts at 0. s[4]='n' vs s[0]='b' → no match. h stays 0. LCP[4]=0.
+
+**Result**: LCP = [0, 1, 3, 0, 0, 2]
 
 **Verification**:
-- LCP[1]: LCP("ana", "a") = 1 ✓
-- LCP[2]: LCP("anana", "ana") = 3 ✓
-- LCP[3]: LCP("banana", "anana") = 0 ✓
-- LCP[4]: LCP("na", "banana") = 0 ✓
-- LCP[5]: LCP("nana", "na") = 2 ✓
+- LCP[1] = LCP("ana", "a") = 1 ✓ (share "a")
+- LCP[2] = LCP("anana", "ana") = 3 ✓ (share "ana")
+- LCP[3] = LCP("banana", "anana") = 0 ✓ (no common prefix)
+- LCP[4] = LCP("na", "banana") = 0 ✓ (no common prefix)
+- LCP[5] = LCP("nana", "na") = 2 ✓ (share "na")
 
-Wait — the table gives LCP[1]=4, but LCP("ana", "a") = 1. Let me recheck: at i=3, h starts at 3 (carried from i=2). We check s[3]='a' vs s[5]='a' → match, h=4. But s[3+1]='n' vs s[5+1] → out of bounds. So LCP[1]=4? That can't be right since "ana" and "a" only share "a".
-
-**Corrected trace** (the key subtlety is that h represents the LCP with the *previous* suffix in sorted order, not just the comparison at index i):
-
-The `h` value at step i represents a lower bound on LCP(rank[i]) from the previous iteration. It doesn't mean suffix i and suffix j share h characters — it means we can skip the first h-1 character comparisons because the LCP property guarantees they match.
-
-Let me re-verify by running the code. The correct output for "banana" is:
-
-```
-LCP = [0, 1, 3, 0, 0, 2]
-```
-
-Where:
-- LCP[0] = 0 (by definition)
-- LCP[1] = LCP("a", "ana") = 1
-- LCP[2] = LCP("anana", "ana") = 3
-- LCP[3] = LCP("banana", "anana") = 0
-- LCP[4] = LCP("na", "banana") = 0
-- LCP[5] = LCP("nana", "na") = 2
-
-The maximum LCP value is 3, confirming that "ana" is the longest repeated substring.
+**Key insight**: At i=2, h=2 from the previous step, but the while loop doesn't execute because i+h=4 and j+h=6 (out of bounds). This is the "free" decrease — we get LCP[5]=2 without any character comparisons at this step. This is why the algorithm is O(n): the total number of successful character comparisons (h increments) is at most n, and h decrements are also bounded by n.
 
 ### Applications of LCP Array
 
