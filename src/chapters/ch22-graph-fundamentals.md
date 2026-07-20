@@ -48,6 +48,8 @@ How we store a graph in memory profoundly affects algorithm performance. There a
 
 A 2D array `adj[V][V]` where `adj[u][v]` indicates the presence (or weight) of edge $(u, v)$.
 
+**Mental model:** Think of a spreadsheet where both rows and columns are vertices. A cell is `1` (or the weight) if there's an edge between the row-vertex and column-vertex.
+
 ```cpp
 #include <iostream>
 #include <vector>
@@ -55,6 +57,8 @@ A 2D array `adj[V][V]` where `adj[u][v]` indicates the presence (or weight) of e
 int main() {
     int V = 5;
     // Initialize V×V matrix with zeros
+    // Each row represents a vertex; each column represents a potential neighbor
+    // adj[u][v] = weight of edge from u to v (0 means no edge)
     std::vector<std::vector<int>> adj(V, std::vector<int>(V, 0));
 
     // Add undirected edges: 0-1, 0-4, 1-2, 1-3, 1-4, 2-3, 3-4
@@ -93,12 +97,16 @@ int main() {
 
 Each vertex stores a list of its neighbors. In C++, we use a vector of vectors.
 
+**Mental model:** Think of a contact list. Each person (vertex) has a list of their friends (neighbors). We only store the connections that actually exist.
+
 ```cpp
 #include <iostream>
 #include <vector>
 
 int main() {
     int V = 5;
+    // adj[u] is a vector containing all neighbors of vertex u
+    // Only stores edges that exist — much more memory-efficient for sparse graphs
     std::vector<std::vector<int>> adj(V);
 
     // For weighted graphs: vector<vector<pair<int,int>>> adj(V);
@@ -204,6 +212,50 @@ int main() {
 | Best for | Dense graphs | Sparse graphs | Kruskal's |
 
 **Rule of thumb:** Use adjacency list for most interview problems. Use adjacency matrix when $V \leq 2000$ and you need $O(1)$ edge queries.
+
+### Concrete Example: Same Graph, Three Representations
+
+Consider this undirected graph with 4 vertices and 5 edges:
+
+```
+    0 --- 1
+    |   / |
+    |  /  |
+    | /   |
+    2 --- 3
+```
+Edges: (0,1), (0,2), (1,2), (1,3), (2,3)
+
+**Adjacency Matrix** (`adj[u][v] = 1` if edge exists):
+```
+     0  1  2  3
+  0 [0, 1, 1, 0]
+  1 [1, 0, 1, 1]
+  2 [1, 1, 0, 1]
+  3 [0, 1, 1, 0]
+```
+- To check if edge (0,3) exists: `adj[0][3]` → 0 → no edge. O(1).
+- To find all neighbors of 0: scan entire row → [1,2]. O(V).
+- Space: 4×4 = 16 cells, even though only 5 edges exist.
+
+**Adjacency List** (`adj[u]` = list of neighbors):
+```
+  0: [1, 2]
+  1: [0, 2, 3]
+  2: [0, 1, 3]
+  3: [1, 2]
+```
+- To check if edge (0,3) exists: scan `adj[0]` → not found. O(deg(0)) = O(2).
+- To find all neighbors of 0: read `adj[0]` directly. O(deg(0)) = O(2).
+- Space: 5 edges × 2 directions = 10 entries (plus vector overhead).
+
+**Edge List** (just the edges):
+```
+  [(0,1), (0,2), (1,2), (1,3), (2,3)]
+```
+- To check if edge (0,3) exists: scan entire list. O(E).
+- To find all neighbors of 0: scan entire list. O(E).
+- Space: 5 entries only — but operations are expensive.
 
 ---
 
