@@ -31,6 +31,21 @@ DP insight: to reach stair 5, I must come from stair 4 or stair 3. So:
 
 By computing from the bottom up (ways(0), ways(1), ways(2), …) and storing each answer, I solve the whole problem in O(n) time instead of O(2^n).
 
+### The Three Questions That Unlock Any DP Problem
+
+Before writing any code, ask yourself:
+
+1. **What are the subproblems?** What smaller versions of the problem do I need to solve?
+   - *Example:* "How many ways to reach stair `i`?" for each `i` from 0 to `n`.
+
+2. **What's the recurrence?** How does the answer to a subproblem relate to answers of smaller subproblems?
+   - *Example:* `ways(i) = ways(i-1) + ways(i-2)` — I can arrive at stair `i` from stair `i-1` or stair `i-2`.
+
+3. **What are the base cases?** What are the smallest subproblems I can answer directly?
+   - *Example:* `ways(0) = 1` (one way to stay on the ground), `ways(1) = 1` (one way: take one step).
+
+If you can answer these three questions, you have a DP solution. Everything else is implementation details.
+
 ---
 
 Dynamic Programming is an optimization technique applied to problems that exhibit two key properties:
@@ -54,6 +69,19 @@ This looks elegant, but it's catastrophically inefficient. Why? Because `F(n-1)`
 **DP's insight**: If we've already computed `F(k)`, store it. When we need `F(k)` again, look it up in O(1) instead of recomputing it.
 
 This simple idea — **compute once, reuse many times** — is the foundation of all dynamic programming.
+
+### DP vs Brute Force: A Mental Model
+
+Think of it this way:
+
+| | Brute Force | DP |
+|---|---|---|
+| **Strategy** | Recompute everything | Compute once, remember |
+| **Analogy** | Re-deriving formulas every time | Using a calculator with memory |
+| **Fibonacci(40)** | ~1 billion operations | ~40 operations |
+| **When it works** | Always (correct but slow) | When subproblems overlap |
+
+The magic of DP is that it trades **space** (storing answers) for **time** (not recomputing them). This is almost always a worthwhile tradeoff.
 
 ---
 
@@ -267,6 +295,8 @@ What information do we need to represent a subproblem? This is the most critical
 - **State variables**: What parameters uniquely identify a subproblem?
 - **State meaning**: What does `dp[i]` (or `dp[i][j]`, etc.) represent?
 
+**Beginner tip:** Write the state meaning as a complete English sentence before coding. For example: "`dp[i]` = the minimum number of coins needed to make amount `i`." If you can't explain what your DP table stores, you're not ready to write the recurrence.
+
 ### Step 2: Write the Recurrence Relation
 
 Express the current state in terms of smaller states.
@@ -275,17 +305,25 @@ Express the current state in terms of smaller states.
 dp[i] = f(dp[i-1], dp[i-2], ...)
 ```
 
+**Beginner tip:** Think about the *last decision* you make. For climbing stairs: "Did I come from stair i-1 or stair i-2?" This "last choice" framing makes recurrences much easier to write.
+
 ### Step 3: Identify Base Cases
 
 What are the smallest subproblems whose answers are known directly?
+
+**Beginner tip:** Base cases are the answers you know *without* any computation. For Fibonacci: F(0)=0, F(1)=1. For climbing stairs: ways(0)=1, ways(1)=1. Always check: does your recurrence handle n=0 and n=1 correctly?
 
 ### Step 4: Determine Computation Order
 
 For bottom-up: In what order should we fill the DP table so that dependencies are satisfied?
 
+**Beginner tip:** Draw the DP table as a grid. Mark which cells each cell depends on. Fill in the order that ensures dependencies are computed first (usually left-to-right, top-to-bottom).
+
 ### Step 5: Extract the Answer
 
 Where is the final answer in the DP table?
+
+**Beginner tip:** Sometimes it's `dp[n]`, sometimes `dp[n][m]`, sometimes `max(dp[i])` over all `i`. Know where to look before you start coding.
 
 ### Example: Climbing Stairs
 
@@ -718,6 +756,27 @@ Answer: 2 (coins 5 + 6).
 6. **Verify base cases carefully**. Off-by-one errors in base cases are the #1 source of bugs.
 
 7. **Trace through a small example** by hand before coding. Fill in a DP table on paper.
+
+### The "DP Table as Spreadsheet" Technique
+
+If you're stuck, literally draw a spreadsheet:
+
+1. Label rows and columns with your state variables.
+2. Fill in the base cases.
+3. For each cell, write the formula (recurrence) that computes it.
+4. Fill cells in order until you reach the answer.
+
+This physical act of filling cells makes the DP structure concrete and often reveals the pattern you need. Many experienced engineers still do this for unfamiliar DP problems.
+
+### From Brute Force to DP: A Step-by-Step Process
+
+1. **Write the brute-force recursive solution first.** Don't optimize — just make it correct.
+2. **Identify the repeated subproblems.** Add print statements or draw the recursion tree.
+3. **Add a memo table.** Cache results of each unique subproblem call.
+4. **Convert to bottom-up.** Replace recursion with iteration and a DP table.
+5. **Optimize space.** If you only need the previous row, use a 1D array.
+
+This process works for 90% of DP problems. Don't try to jump to step 4 — get step 1 right first.
 
 ## Common Mistakes
 
