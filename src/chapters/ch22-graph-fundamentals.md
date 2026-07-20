@@ -178,6 +178,7 @@ Simply a list of all edges. Useful for algorithms like Kruskal's.
 #include <iostream>
 #include <vector>
 #include <tuple>
+#include <algorithm> // for std::sort
 
 int main() {
     int V = 5;
@@ -213,18 +214,37 @@ int main() {
 
 **Rule of thumb:** Use adjacency list for most interview problems. Use adjacency matrix when $V \leq 2000$ and you need $O(1)$ edge queries.
 
+### Choosing a Representation — Decision Flowchart
+
+```
+Start
+  │
+  ├─ Need O(1) edge query AND V ≤ 2000? → Adjacency Matrix
+  │
+  ├─ Algorithm needs edges sorted by weight? → Edge List
+  │   (e.g., Kruskal's MST)
+  │
+  ├─ Sparse graph (E << V²)? → Adjacency List ✓
+  │   (most interview problems)
+  │
+  └─ Dense graph (E ≈ V²)? → Adjacency Matrix
+      (simpler code, same asymptotic space)
+```
+
 ### Concrete Example: Same Graph, Three Representations
 
 Consider this undirected graph with 4 vertices and 5 edges:
 
 ```
     0 --- 1
-    |   / |
-    |  /  |
-    | /   |
+    | ╲   |
+    |  ╲  |
+    |   ╲ |
     2 --- 3
 ```
 Edges: (0,1), (0,2), (1,2), (1,3), (2,3)
+
+Visualizing the graph helps us reason about which representation is most efficient. This graph is **dense** — 5 edges out of a maximum of 6 (for 4 vertices), so an adjacency matrix would waste very little space. For sparse graphs with thousands of vertices but few edges, an adjacency list would be far more memory-efficient.
 
 **Adjacency Matrix** (`adj[u][v] = 1` if edge exists):
 ```
