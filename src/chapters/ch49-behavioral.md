@@ -650,10 +650,10 @@ The shift to remote work has made virtual behavioral interviews the norm. The fo
 
 This chapter focuses on behavioral interviews, which are one component of a comprehensive interview preparation strategy. Related chapters in this book include:
 
-- **Chapter 47: Technical Interview Fundamentals** — Covers coding interviews, algorithm design, and system design. Behavioral and technical interviews are often conducted in the same loop, and strong candidates excel at both.
-- **Chapter 48: System Design Interviews** — System design rounds often blend technical and behavioral skills. Your ability to communicate trade-offs, handle ambiguity, and collaborate with the interviewer during a system design session draws on the same muscles you develop here.
+- **Chapter 47: Problem Solving** — Covers the UMPIRE method for structured problem-solving, pattern matching, and planning solutions. The systematic thinking skills from problem solving directly apply to how you frame behavioral stories.
+- **Chapter 48: Technical Communication** — Covers thinking aloud, whiteboard coding, and handling follow-up questions. The communication skills you develop for technical rounds are the same ones that make your behavioral answers compelling.
 - **Chapter 50: Mock Interviews** — Practice integrating behavioral and technical preparation through full mock interview sessions. The STAR stories you develop here will serve you well in the "Tell me about yourself" opener and the "Questions for me" closer of any interview.
-- **Chapter 51: Negotiation and Offer Evaluation** — After excelling in behavioral rounds, you'll need to negotiate your offer. Understanding your value (which behavioral stories help you articulate) strengthens your negotiation position.
+- **Chapter 51: Computational Thinking** — Develops the problem decomposition and abstraction skills that underpin both technical and behavioral interview performance.
 
 Behavioral interview skills also transfer to other professional contexts: performance reviews, promotion packets, investor pitches, and leadership communication all benefit from the structured storytelling you develop through STAR practice.
 
