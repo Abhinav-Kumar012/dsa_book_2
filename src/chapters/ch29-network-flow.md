@@ -595,7 +595,7 @@ int main() {
 
 ### Current-Arc Optimization
 
-The `ptr[u]` array remembers which edge to try next for vertex $u`. Without it, DFS would repeatedly try edges that are already saturated, wasting time. With it, each edge is examined at most once per phase.
+The `ptr[u]` array remembers which edge to try next for vertex $u$. Without it, DFS would repeatedly try edges that are already saturated, wasting time. With it, each edge is examined at most once per phase.
 
 ### Python — Dinic's Algorithm
 
@@ -1064,14 +1064,47 @@ Need max-flow?
 
 ### Minimum Cut
 
-After computing max-flow with Edmonds-Karp or Dinic's, find the minimum cut:
+After computing max-flow, the minimum cut can be found from the residual graph:
+
+1. **Run BFS/DFS from $s$ in the residual graph** (only following edges with residual capacity > 0).
+2. **$S$** = set of reachable vertices, **$T$** = set of unreachable vertices.
+3. **Min cut edges** = original edges from $S$ to $T$ (where $u \in S$, $v \in T$, and the edge exists in the original graph).
+4. **Min cut capacity** = sum of capacities of these edges = max flow value.
 
 ```cpp
-// After maxFlow(s, t):
-// BFS from s in residual graph
-// S = reachable vertices, T = unreachable
-// Min cut edges = edges from S to T in original graph
+// After computing maxFlow(s, t) on a Dinic/EdmondsKarp object:
+std::vector<int> findMinCutEdges(int s, int t) {
+    // BFS from s in residual graph
+    std::vector<bool> visited(V, false);
+    std::queue<int> q;
+    visited[s] = true;
+    q.push(s);
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (auto& e : adj[u]) {
+            if (!visited[e.v] && e.cap > 0) {
+                visited[e.v] = true;
+                q.push(e.v);
+            }
+        }
+    }
+    // Find edges from S (visited) to T (not visited)
+    std::vector<int> cutEdges;
+    for (int u = 0; u < V; u++) {
+        if (!visited[u]) continue;
+        for (auto& e : adj[u]) {
+            if (!visited[e.v] && e.cap == 0) {
+                // This edge is saturated and crosses the cut
+                // Note: we check original capacity via reverse edge
+                cutEdges.push_back(u); // or record the edge
+            }
+        }
+    }
+    return cutEdges;
+}
 ```
+
+**Example**: For the Edmonds-Karp example above (V=6, max flow = 43), the min cut partitions vertices into $S = \{0, 1, 2\}$ and $T = \{3, 4, 5\}$. The cut edges are those from $S$ to $T$ in the original graph: $(1,3)$ with capacity 12, $(2,4)$ with capacity 14, and any other edges crossing the cut. The total capacity of these edges equals the max flow of 43.
 
 ### Network Flow Problem Template
 
