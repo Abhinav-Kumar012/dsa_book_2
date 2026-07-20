@@ -6,6 +6,33 @@ Dynamic Programming (DP) is one of the most powerful algorithmic paradigms in co
 
 ## 30.1 What Is DP?
 
+### The "Never Solve the Same Problem Twice" Principle
+
+Imagine you're solving a jigsaw puzzle. You wouldn't re-examine pieces you've already placed — you'd remember where they go. DP is exactly this: **solve each subproblem once, write down the answer, and look it up next time you need it.**
+
+Think of it as a **recipe book for problems**:
+1. Break a hard problem into smaller pieces.
+2. Solve the smallest pieces first.
+3. Write each answer in your book.
+4. Combine the answers to solve bigger pieces.
+5. Never re-solve a piece you've already solved.
+
+This "remember and reuse" strategy turns exponential brute-force into efficient polynomial-time algorithms.
+
+### A Concrete Analogy
+
+Suppose you want to know: "How many ways can I climb 5 stairs if I can take 1 or 2 steps at a time?"
+
+Brute force: enumerate every path — 1,1,1,1,1 … 1,2,2 … 2,1,2 … This grows exponentially.
+
+DP insight: to reach stair 5, I must come from stair 4 or stair 3. So:
+- ways(5) = ways(4) + ways(3)
+- But to compute ways(4), I need ways(3) and ways(2) — and I already computed ways(3)!
+
+By computing from the bottom up (ways(0), ways(1), ways(2), …) and storing each answer, I solve the whole problem in O(n) time instead of O(2^n).
+
+---
+
 Dynamic Programming is an optimization technique applied to problems that exhibit two key properties:
 
 1. **Overlapping Subproblems** — The same subproblems are solved multiple times.
@@ -485,6 +512,30 @@ Max value (2D): 10
 Max value (1D): 10
 ```
 
+**Dry Run** with weights = [2, 3, 4, 5], values = [3, 4, 5, 6], capacity = 8:
+
+```
+DP Table (rows = items considered, columns = capacity 0..8):
+
+         w=0  w=1  w=2  w=3  w=4  w=5  w=6  w=7  w=8
+i=0 (  )   0    0    0    0    0    0    0    0    0
+i=1 (w=2,v=3)  0    0    3    3    3    3    3    3    3
+i=2 (w=3,v=4)  0    0    3    4    4    7    7    7    7
+i=3 (w=4,v=5)  0    0    3    4    5    7    8    9    9
+i=4 (w=5,v=6)  0    0    3    4    5    7    8    9   10
+
+Reading dp[4][8] = 10.
+
+How to get 10? Items 2 (w=3, v=4) + Item 4 (w=5, v=6) = weight 8, value 10.
+
+Trace back: dp[4][8] ≠ dp[3][8] (9 vs 10) → item 4 taken.
+  Remaining capacity: 8 - 5 = 3. dp[3][3] = 4.
+  dp[3][3] ≠ dp[2][3] (4 vs 4) → item 3 NOT taken (same value).
+  dp[2][3] ≠ dp[1][3] (4 vs 3) → item 2 taken.
+  Remaining capacity: 3 - 3 = 0. dp[1][0] = 0 → done.
+  Items taken: 2 and 4. ✓
+```
+
 **Complexity**: O(n × W) time. 2D version: O(n × W) space. 1D version: O(W) space.
 
 ### 30.6.3 Longest Common Subsequence (LCS)
@@ -554,6 +605,36 @@ LCS length (1D): 4
 ```
 
 The LCS is "BCBA" (length 4).
+
+**Dry Run** with s1 = "ABCBDAB", s2 = "BDCABA":
+
+```
+DP Table (rows = s1 prefixes, columns = s2 prefixes):
+
+       ""  B  D  C  A  B  A
+""      0  0  0  0  0  0  0
+A       0  0  0  0  1  1  1
+B       0  1  1  1  1  2  2
+C       0  1  1  2  2  2  2
+B       0  1  1  2  2  3  3
+D       0  1  2  2  2  3  3
+A       0  1  2  2  3  3  4
+B       0  1  2  2  3  4  4
+
+Reading dp[7][6] = 4.
+
+Trace back to find the LCS "BCBA":
+  dp[7][6]=4, s1[6]='B' == s2[5]='A'? No → max(dp[6][6], dp[7][5]) = max(4,4)
+  Go up: dp[6][6]=4, s1[5]='A' == s2[5]='A'? Yes → 'A' is in LCS.
+  Move to dp[5][5]=3, s1[4]='D' == s2[4]='B'? No → max(dp[4][5], dp[5][4])
+  dp[4][5]=3, s1[3]='B' == s2[4]='B'? Yes → 'B' is in LCS.
+  Move to dp[3][4]=2, s1[2]='C' == s2[3]='A'? No → max(dp[2][4], dp[3][3])
+  dp[3][3]=2, s1[2]='C' == s2[2]='C'? Yes → 'C' is in LCS.
+  Move to dp[2][2]=1, s1[1]='B' == s2[1]='D'? No → max(dp[1][2], dp[2][1])
+  dp[2][1]=1, s1[1]='B' == s2[0]='B'? Yes → 'B' is in LCS.
+  Move to dp[1][0]=0 → done.
+  LCS (reversed): A, B, C, B → "BCBA" ✓
+```
 
 **Complexity**: O(m × n) time, O(m × n) or O(min(m, n)) space.
 
