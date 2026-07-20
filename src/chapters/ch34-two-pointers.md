@@ -158,6 +158,16 @@ int main() {
 
 **Complexity:** O(n) time, O(1) space.
 
+**Dry run with numbers = [2, 7, 11, 15], target = 9:**
+
+```
+left=0 (2), right=3 (15): sum=17 > 9 → right--
+left=0 (2), right=2 (11): sum=13 > 9 → right--
+left=0 (2), right=1 (7): sum=9 == 9 → found! Return [1, 2]
+```
+
+Only 3 steps instead of checking all 6 pairs. The sorted property lets us eliminate elements in bulk.
+
 **Why it works:** If `sum < target`, increasing `left` is the only way to get a larger sum (since the array is sorted). If `sum > target`, decreasing `right` is the only way. Each step eliminates one element, so we finish in at most n steps.
 
 ### 34.2.4 Container With Most Water (LeetCode 11)
@@ -628,3 +638,14 @@ left=3 (h=2): h[left] < h[right] (2<1)? no → right
 3. **Sort Colors** (LeetCode 75) — Dutch National Flag problem. *Hint: Three pointers — low, mid, high. Swap 0s to front, 2s to back.*
 4. **Move Zeroes** (LeetCode 283) — Move all zeros to end while maintaining order. *Hint: Slow pointer tracks write position, fast pointer scans.*
 5. **Remove Element** (LeetCode 27) — Remove all instances of a value in-place. *Hint: Same pattern as Remove Duplicates — slow tracks write position.*
+
+---
+
+## See Also
+
+- [Chapter 5: Sorting](ch05-sorting.md) — Two pointers often require sorted input; sorting is the natural first step.
+- [Chapter 6: Searching](ch06-searching.md) — Binary search and two pointers are complementary techniques for sorted data.
+- [Chapter 35: Sliding Window](ch35-sliding-window.md) — A related technique for subarray problems; sliding window handles fixed-size windows, two pointers handles variable-size.
+- [Chapter 36: Prefix Sum and Difference Array](ch36-prefix-sum-diff-array.md) — Prefix sums combined with two pointers enable subarray sum queries.
+- [Chapter 37: Monotonic Stack](ch37-monotonic-stack.md) — Another linear-time technique for array problems; often used alongside two pointers.
+- [Chapter 131: Parallel Binary Search](ch131-parallel-binary-search.md) — When binary search on answer is needed for multiple queries, parallel binary search combines with two-pointer-like techniques.

@@ -1019,4 +1019,13 @@ int main() {
 
 ---
 
+## See Also
+
+- [Chapter 5: Sorting](ch05-sorting.md) — Sorting is often a prerequisite for binary search; many search problems assume sorted input.
+- [Chapter 34: Two Pointers](ch34-two-pointers.md) — Two pointers on sorted arrays is a natural extension of binary search thinking.
+- [Chapter 35: Sliding Window](ch35-sliding-window.md) — Another technique for searching through arrays; complements binary search for subarray problems.
+- [Chapter 65: Searching Expanded](ch65-searching-expanded.md) — Advanced search techniques: ternary search, exponential search, and more.
+- [Chapter 131: Parallel Binary Search](ch131-parallel-binary-search.md) — Solving multiple binary searches simultaneously; useful in offline algorithms.
+- [Chapter 18: Segment Tree](ch18-segment-tree.md) — Binary search on segment trees enables order-statistic queries.
+
 *In the next chapter, we'll study hashing — a technique that enables O(1) average-case lookups and is essential for many interview problems.*

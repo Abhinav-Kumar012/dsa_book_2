@@ -1056,4 +1056,12 @@ This means Merge Sort, Quick Sort, and Heap Sort are **asymptotically optimal** 
 
 ---
 
+## See Also
+
+- [Chapter 6: Searching](ch06-searching.md) — Binary search and its variants; searching is the natural complement to sorting.
+- [Chapter 34: Two Pointers](ch34-two-pointers.md) — A technique that often follows sorting; two pointers exploit sorted order for O(n) solutions.
+- [Chapter 39: Divide and Conquer](ch39-divide-conquer.md) — Merge sort and quicksort are divide-and-conquer algorithms; understanding the paradigm deepens sorting knowledge.
+- [Chapter 15: Heaps](ch15-heaps.md) — Heapsort and priority queues; heaps are the foundation for selection-based algorithms.
+- [Chapter 130: Coordinate Compression](ch130-coordinate-compression.md) — A technique that uses sorting to map large value ranges to compact indices.
+
 *In the next chapter, we'll study searching algorithms — particularly binary search, one of the most powerful and versatile techniques in interviews.*
