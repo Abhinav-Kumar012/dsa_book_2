@@ -300,6 +300,53 @@ public class Dijkstra {
 
 Graph: `0-1(4), 0-2(1), 1-3(1), 2-1(2), 2-3(5), 3-4(3)`. Source = 0.
 
+```mermaid
+graph LR
+    0 -- "4" --> 1
+    0 -- "1" --> 2
+    2 -- "2" --> 1
+    1 -- "1" --> 3
+    2 -- "5" --> 3
+    3 -- "3" --> 4
+
+    style 0 fill:#f96,stroke:#333,stroke-width:3px
+    style 1 fill:#9cf,stroke:#333
+    style 2 fill:#9f9,stroke:#333
+    style 3 fill:#fc9,stroke:#333
+    style 4 fill:#f9f,stroke:#333
+```
+
+Step-by-step execution of Dijkstra's algorithm:
+
+```mermaid
+graph TD
+    subgraph "Step 1: Extract (0, dist=0)"
+        S1["dist: [0, ∞, ∞, ∞, ∞]<br/>Process vertex 0 → update neighbors 1,2"]
+    end
+    subgraph "Step 2: Extract (2, dist=1)"
+        S2["dist: [0, 4, 1, ∞, ∞]<br/>Process vertex 2 → update 1→3, 3→6"]
+    end
+    subgraph "Step 3: Extract (1, dist=3)"
+        S3["dist: [0, 3, 1, 6, ∞]<br/>Process vertex 1 → update 3→4"]
+    end
+    subgraph "Step 4: Extract (3, dist=4)"
+        S4["dist: [0, 3, 1, 4, ∞]<br/>Process vertex 3 → update 4→7"]
+    end
+    subgraph "Step 5: Extract (4, dist=7)"
+        S5["dist: [0, 3, 1, 4, 7]<br/>No updates. Done!"]
+    end
+
+    S1 --> S2 --> S3 --> S4 --> S5
+
+    style S1 fill:#fdd,stroke:#333
+    style S2 fill:#dfd,stroke:#333
+    style S3 fill:#ddf,stroke:#333
+    style S4 fill:#fdf,stroke:#333
+    style S5 fill:#dff,stroke:#333
+```
+
+*Final shortest path to vertex 4: 0 → 2 → 1 → 3 → 4 (distance 7)*
+
 | Step | PQ (dist, vertex) | Extracted | Updated | dist[] |
 |------|------------------|-----------|---------|--------|
 | Init | (0,0) | — | — | [0,∞,∞,∞,∞] |
@@ -1102,6 +1149,32 @@ Need shortest paths?
       ├─ V ≤ 400? → Floyd-Warshall: O(V³)
       ├─ Sparse + negative? → Johnson's: O(VE log V)
       └─ Sparse + non-negative? → Dijkstra from each: O(VE log V)
+```
+
+### Decision Flowchart
+
+```mermaid
+flowchart TD
+    A["Need shortest paths?"] --> B{"Unweighted graph?"}
+    B -->|Yes| C["BFS: O(V+E)"]
+    B -->|No| D{"Single source?"}
+    D -->|Yes| E{"DAG?"}
+    E -->|Yes| F["Topo sort + relax<br/>O(V+E)"]
+    E -->|No| G{"All weights ≥ 0?"}
+    G -->|Yes| H["Dijkstra<br/>O((V+E) log V)"]
+    G -->|No| I["Bellman-Ford<br/>O(VE)"]
+    D -->|No| J{"All pairs?"}
+    J -->|Yes| K{"V ≤ 400?"}
+    K -->|Yes| L["Floyd-Warshall<br/>O(V³)"]
+    K -->|No| M{"Sparse + negative?"}
+    M -->|Yes| N["Johnson's<br/>O(VE log V)"]
+    M -->|No| O["Dijkstra from each<br/>O(VE log V)"]
+
+    style H fill:#9f9,stroke:#333,stroke-width:2px
+    style F fill:#9f9,stroke:#333
+    style C fill:#9cf,stroke:#333
+    style L fill:#fc9,stroke:#333
+    style I fill:#fcc,stroke:#333
 ```
 
 ### Key Differences Explained
