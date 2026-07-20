@@ -228,3 +228,45 @@ int main() {
     return 0;
 }
 ```
+
+---
+
+## Exercises
+
+1. **Bloom filter sizing**: Design a Bloom filter for10 million URLs with a false positive rate of1%. How many hash functions and bits do you need?
+
+2. **Count-Min Sketch accuracy**: With width1000 and depth5, what's the expected error bound? How does it change with width?
+
+3. **HyperLogLog precision**: For HLL with2^14 registers, what's the expected standard error? How many distinct elements can it count?
+
+4. **Implement a counting Bloom filter**: Extend the Bloom filter to support deletion by using counters instead of bits.
+
+5. **Streaming median**: Use a combination of data structures to estimate the median of a stream. Compare with exact approaches.
+
+---
+
+## Interview Questions
+
+1. **Q: What is a Bloom filter and when would you use it?**
+   A: A probabilistic set membership data structure. It can say "definitely not in set" or "probably in set." Used for caching (avoid expensive lookups), database query optimization, network routers.
+
+2. **Q: What's the false positive rate of a Bloom filter?**
+   A: Approximately (1 - e^(-kn/m))^k where k = hash functions, n = elements, m = bits. Optimal k = (m/n) × ln(2).
+
+3. **Q: How does HyperLogLog estimate cardinality?**
+   A: It hashes elements and observes the position of the leftmost1-bit in the hash. The maximum position across all elements estimates log₂(cardinality). Using harmonic mean of multiple registers improves accuracy.
+
+4. **Q: Can a Bloom filter have false negatives?**
+   A: No. A Bloom filter only has false positives. If it says an element is not in the set, it's definitely not there. This is because it only sets bits, never clears them.
+
+5. **Q: When would you use Count-Min Sketch vs a Bloom filter?**
+   A: Bloom filter for set membership (yes/no). Count-Min Sketch for frequency estimation (how many times). Both are probabilistic and space-efficient for streaming data.
+
+---
+
+## Cross-References
+
+- [Chapter 7: Hashing](ch07-hashing.md) — Hash function foundations
+- [Chapter 94: Hashing Deep Dive](ch94-hashing-deep-dive.md) — Advanced hash techniques
+- [Chapter 147: Streaming Algorithms](ch147-streaming-algorithms.md) — Other streaming data structures
+- [Chapter 79: Probabilistic DS](ch79-probabilistic-ds.md) — Main chapter reference

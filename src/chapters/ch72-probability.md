@@ -225,3 +225,45 @@ int main() {
 | Birthday Paradox | P ≈ 1 - e^(-n²/2d) | Hash collision analysis |
 | Coupon Collector | E = n × H(n) ≈ n ln n | Coverage problems |
 | Indicator Variables | E[Xi] = P(Xi=1) | Simplify calculations |
+
+---
+
+## Exercises
+
+1. **Dice expectation**: Roll two dice. What's the expected value of their sum? What about their product?
+
+2. **Card matching**: A deck of n cards is shuffled. What's the expected number of cards that remain in their original position?
+
+3. **Random walk**: A drunk person takes steps +1 or -1 with equal probability. After n steps, what's E[position²]?
+
+4. **Loaded coin**: A coin lands heads with probability p. What's the expected number of flips to get k consecutive heads?
+
+5. **Birthday paradox**: How many people are needed for a >50% chance that two share a birthday? Verify with simulation.
+
+---
+
+## Interview Questions
+
+1. **Q: What is linearity of expectation and why is it powerful?**
+   A: E[X + Y] = E[X] + E[Y] always, even if X and Y are dependent. This lets us decompose complex expectations into sums of simple indicator variables.
+
+2. **Q: Explain the birthday paradox.**
+   A: With 23 people, there's a >50% chance two share a birthday. The key insight: we're checking all pairs (~253 pairs for 23 people), not comparing each person to a specific date.
+
+3. **Q: What's the expected number of rolls to see all 6 faces of a die?**
+   A: By the coupon collector problem: 6(1 + 1/2 + 1/3 + 1/4 + 1/5 + 1/6) = 14.7 rolls.
+
+4. **Q: How do you use indicator variables for expected value?**
+   A: Define I_j = 1 if event j occurs, 0 otherwise. Then E[total] = Σ E[I_j] = Σ P(event j). This simplifies many problems.
+
+5. **Q: A random permutation of n elements — what's the expected number of cycles?**
+   A: H(n) = 1 + 1/2 + 1/3 + ... + 1/n ≈ ln(n). Each element has probability 1/k of starting a new cycle among the first k elements.
+
+---
+
+## Cross-References
+
+- [Chapter 61: Game Theory](ch61-game-theory.md) — Expected value in game contexts
+- [Chapter 30: DP Fundamentals](ch30-dp-fundamentals.md) — Probability DP
+- [Chapter 114: Probability DP](ch114-probability-dp.md) — DP with probabilistic transitions
+- [Chapter 71: Combinatorics](ch71-combinatorics.md) — Counting techniques for probability

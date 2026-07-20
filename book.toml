@@ -15,5 +15,5 @@ preferred-dark-theme = "navy"
 git-repository-url = ""
 edit-url-template = ""
 additional-css = ["custom.css"]
-additional-js = ["custom.js"]
+additional-js = ["custom.js", "mermaid-init.js"]
 mathjax-support = true

@@ -13,4 +13,6 @@ Thumbs.db
 *~
 
 # OpenClaw workspace
-.openclaw/
+.openclaw/logs/
+.openclaw/tmp/
+.openclaw/workspace/
