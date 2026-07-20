@@ -93,17 +93,31 @@ A problem has **overlapping subproblems** when a recursive algorithm revisits th
 
 Let's trace the recursion tree for `F(5)`:
 
+```mermaid
+graph TD
+    F5["F(5)"] --> F4["F(4)"]
+    F5 --> F3a["F(3)"]
+    F4 --> F3b["F(3)"]
+    F4 --> F2a["F(2)"]
+    F3a --> F2b["F(2)"]
+    F3a --> F1a["F(1)=1"]
+    F3b --> F2c["F(2)"]
+    F3b --> F1b["F(1)=1"]
+    F2a --> F1c["F(1)=1"]
+    F2a --> F0a["F(0)=0"]
+    F2b --> F1d["F(1)=1"]
+    F2b --> F0b["F(0)=0"]
+    F2c --> F1e["F(1)=1"]
+    F2c --> F0c["F(0)=0"]
+
+    style F3a fill:#f99,stroke:#333,stroke-width:2px
+    style F3b fill:#f99,stroke:#333,stroke-width:2px
+    style F2a fill:#fc9,stroke:#333,stroke-width:2px
+    style F2b fill:#fc9,stroke:#333,stroke-width:2px
+    style F2c fill:#fc9,stroke:#333,stroke-width:2px
 ```
-                        F(5)
-                      /      \
-                  F(4)        F(3)
-                /    \       /    \
-            F(3)    F(2)   F(2)  F(1)
-           /   \    / \    / \
-       F(2)  F(1) F(1) F(0) F(1) F(0)
-      / \
-  F(1) F(0)
-```
+
+*Red = computed twice, orange = computed three times. With DP memoization, each node is computed only once.*
 
 Notice: `F(3)` is computed **twice**, `F(2)` is computed **three times**, `F(1)` is computed **five times**. For `F(n)`, the time complexity is O(2^n) — exponential!
 
@@ -288,6 +302,20 @@ int main() {
 
 Every DP problem can be solved by following this systematic framework:
 
+```mermaid
+flowchart LR
+    S1["1. Define<br/>State"] --> S2["2. Write<br/>Recurrence"]
+    S2 --> S3["3. Identify<br/>Base Cases"]
+    S3 --> S4["4. Determine<br/>Order"]
+    S4 --> S5["5. Extract<br/>Answer"]
+
+    style S1 fill:#fdd,stroke:#333
+    style S2 fill:#dfd,stroke:#333
+    style S3 fill:#ddf,stroke:#333
+    style S4 fill:#fdf,stroke:#333
+    style S5 fill:#dff,stroke:#333
+```
+
 ### Step 1: Define the State
 
 What information do we need to represent a subproblem? This is the most critical step.
@@ -328,6 +356,24 @@ Where is the final answer in the DP table?
 ### Example: Climbing Stairs
 
 **Problem**: You can climb 1 or 2 steps at a time. How many distinct ways to reach step `n`?
+
+```mermaid
+graph LR
+    S0["dp[0]=1"] -->|"+1 step"| S1["dp[1]=1"]
+    S0 -->|"+2 steps"| S2["dp[2]=2"]
+    S1 -->|"+1 step"| S2
+    S1 -->|"+2 steps"| S3["dp[3]=3"]
+    S2 -->|"+1 step"| S3
+    S2 -->|"+2 steps"| S4["dp[4]=5"]
+    S3 -->|"+1 step"| S4
+    S3 -->|"+2 steps"| S5["dp[5]=8"]
+    S4 -->|"+1 step"| S5
+
+    style S0 fill:#9f9,stroke:#333,stroke-width:2px
+    style S5 fill:#f96,stroke:#333,stroke-width:2px
+```
+
+*Green = base case. Orange = answer. Each state transitions to the next via +1 or +2 steps. Recurrence: `dp[i] = dp[i-1] + dp[i-2]`.*
 
 1. **State**: `dp[i]` = number of ways to reach step `i`
 2. **Recurrence**: `dp[i] = dp[i-1] + dp[i-2]` (reach step `i` from step `i-1` or step `i-2`)
