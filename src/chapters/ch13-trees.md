@@ -1003,3 +1003,15 @@ int main() {
 | Build from traversals | O(n) | O(n) |
 | Serialize/Deserialize | O(n) | O(n) |
 | Level-order | O(n) | O(n) |
+
+---
+
+## See Also
+
+- [Chapter 14: Binary Search Trees](ch14-bst.md) — Trees with ordering property; enables O(log n) search, insert, and delete.
+- [Chapter 98: Splay Trees](ch98-splay-trees.md) — Self-adjusting BSTs that bring accessed nodes to the root; excellent for temporal locality.
+- [Chapter 99: Scapegoat and AA Trees](ch99-scapegoat-aa-trees.md) — Simpler balanced BST alternatives: Scapegoat trees use rebuilds, AA trees use simplified red-black rules.
+- [Chapter 15: Heaps](ch15-heaps.md) — Another tree-based structure optimized for priority queue operations.
+- [Chapter 16: Trie](ch16-trie.md) — A tree specialized for string prefix matching.
+- [Chapter 21: Binary Lifting and LCA](ch21-binary-lifting-lca.md) — Tree algorithms for finding lowest common ancestors efficiently.
+- [Chapter 57: Trees Expanded](ch57-trees-expanded.md) — Additional tree topics and advanced patterns.

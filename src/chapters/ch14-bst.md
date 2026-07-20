@@ -1346,3 +1346,14 @@ int main() {
 | `std::map` | O(log n) | O(log n) | O(log n) | O(n) | Yes |
 | `std::unordered_set` | O(1) avg | O(1) avg | O(1) avg | O(n) | No |
 | `std::unordered_map` | O(1) avg | O(1) avg | O(1) avg | O(n) | No |
+
+---
+
+## See Also
+
+- [Chapter 13: Trees](ch13-trees.md) — Tree fundamentals: traversals, recursion on trees, and basic tree properties.
+- [Chapter 98: Splay Trees](ch98-splay-trees.md) — Self-adjusting BST with amortized O(log n); no explicit balance information stored.
+- [Chapter 99: Scapegoat and AA Trees](ch99-scapegoat-aa-trees.md) — Simpler balanced BST alternatives with easier implementation than red-black trees.
+- [Chapter 15: Heaps](ch15-heaps.md) — When you only need min/max extraction, heaps are simpler than BSTs.
+- [Chapter 74: Skip Lists](ch74-skip-lists.md) — A probabilistic alternative to balanced BSTs with expected O(log n) operations.
+- [Chapter 100: Van Emde Boas Trees](ch100-van-emde-boas.md) — For integer keys in a bounded range, vEB trees achieve O(log log n) operations.

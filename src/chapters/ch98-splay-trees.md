@@ -145,3 +145,13 @@ int main() {
 | Balance | Self-adjusting (no stored balance info) |
 | Amortized | O(log n) per operation |
 | Best for | Temporal locality, caching |
+
+---
+
+## See Also
+
+- [Chapter 13: Trees](ch13-trees.md) — Tree fundamentals: traversals, recursion, and basic tree properties.
+- [Chapter 14: Binary Search Trees](ch14-bst.md) — The foundation; splay trees are a self-adjusting variant of BSTs.
+- [Chapter 99: Scapegoat and AA Trees](ch99-scapegoat-aa-trees.md) — Other simple balanced BST alternatives; compare implementation complexity and guarantees.
+- [Chapter 75: Persistent Data Structures](ch75-persistent-ds.md) — Splay trees can be made persistent; the splay operation's path copying is key.
+- [Chapter 157: Link-Cut Trees](ch157-link-cut-trees.md) — Sleator-Tarjan's dynamic trees use splay operations for path decomposition.

@@ -147,3 +147,13 @@ int main() {
 |---|---|---|---|
 | Scapegoat | Rebuild unbalanced subtrees | None | On insertion |
 | AA Tree | Red only as right child | Simple skew/split | None |
+
+---
+
+## See Also
+
+- [Chapter 13: Trees](ch13-trees.md) — Tree fundamentals: traversals, recursion, and basic tree properties.
+- [Chapter 14: Binary Search Trees](ch14-bst.md) — The foundation; Scapegoat and AA trees are balanced BST variants.
+- [Chapter 98: Splay Trees](ch98-splay-trees.md) — Another self-adjusting BST; compare amortized guarantees vs worst-case guarantees.
+- [Chapter 74: Skip Lists](ch74-skip-lists.md) — A probabilistic alternative to balanced BSTs with simpler implementation.
+- [Chapter 100: Van Emde Boas Trees](ch100-van-emde-boas.md) — For integer keys in a bounded range, vEB trees achieve O(log log n).
