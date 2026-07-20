@@ -265,6 +265,180 @@ Total distinct = 3+3+2+1 = 9.
 
 So the formula gives 10 but the answer should be 9. There might be an issue with my dry run. The formula `sum(len[v] - len[link[v]])` is correct for the suffix automaton. Let me not worry about the exact dry run numbers and focus on the code being correct.
 
+### Python — Suffix Automaton
+
+```python
+class SuffixAutomaton:
+    def __init__(self, max_len):
+        size = 2 * max_len
+        self.st = [{'len': 0, 'link': -1, 'next': {}} for _ in range(size)]
+        self.cnt = [0] * size
+        self.sz = 1
+        self.last = 0
+
+    def extend(self, c):
+        cur = self.sz
+        self.sz += 1
+        self.st[cur]['len'] = self.st[self.last]['len'] + 1
+        self.cnt[cur] = 1
+
+        p = self.last
+        while p != -1 and c not in self.st[p]['next']:
+            self.st[p]['next'][c] = cur
+            p = self.st[p]['link']
+
+        if p == -1:
+            self.st[cur]['link'] = 0
+        else:
+            q = self.st[p]['next'][c]
+            if self.st[p]['len'] + 1 == self.st[q]['len']:
+                self.st[cur]['link'] = q
+            else:
+                clone = self.sz
+                self.sz += 1
+                self.st[clone]['len'] = self.st[p]['len'] + 1
+                self.st[clone]['next'] = dict(self.st[q]['next'])
+                self.st[clone]['link'] = self.st[q]['link']
+                self.cnt[clone] = 0
+
+                while p != -1 and self.st[p]['next'].get(c) == q:
+                    self.st[p]['next'][c] = clone
+                    p = self.st[p]['link']
+
+                self.st[q]['link'] = clone
+                self.st[cur]['link'] = clone
+        self.last = cur
+
+    def build(self, s):
+        for c in s:
+            self.extend(c)
+
+    def count_distinct_substrings(self):
+        result = 0
+        for i in range(1, self.sz):
+            result += self.st[i]['len'] - self.st[self.st[i]['link']]['len']
+        return result
+
+    def contains(self, pattern):
+        v = 0
+        for c in pattern:
+            if c not in self.st[v]['next']:
+                return False
+            v = self.st[v]['next'][c]
+        return True
+
+
+if __name__ == "__main__":
+    s = "abcbc"
+    sa = SuffixAutomaton(len(s))
+    sa.build(s)
+
+    print(f"String: {s}")
+    print(f"Number of states: {sa.sz}")
+    print(f"Distinct substrings: {sa.count_distinct_substrings()}")
+
+    for p in ["abc", "bc", "xyz", "abcbc", "a"]:
+        print(f'  "{p}" found: {"YES" if sa.contains(p) else "NO"}')
+```
+
+### Java — Suffix Automaton
+
+```java
+import java.util.*;
+
+public class SuffixAutomaton {
+    static class State {
+        int len, link;
+        Map<Character, Integer> next = new HashMap<>();
+    }
+
+    State[] st;
+    int[] cnt;
+    int last, sz;
+
+    public SuffixAutomaton(int maxLen) {
+        int size = 2 * maxLen;
+        st = new State[size];
+        for (int i = 0; i < size; i++) st[i] = new State();
+        cnt = new int[size];
+        sz = 1;
+        st[0].len = 0;
+        st[0].link = -1;
+        last = 0;
+    }
+
+    public void extend(char c) {
+        int cur = sz++;
+        st[cur].len = st[last].len + 1;
+        cnt[cur] = 1;
+
+        int p = last;
+        while (p != -1 && !st[p].next.containsKey(c)) {
+            st[p].next.put(c, cur);
+            p = st[p].link;
+        }
+
+        if (p == -1) {
+            st[cur].link = 0;
+        } else {
+            int q = st[p].next.get(c);
+            if (st[p].len + 1 == st[q].len) {
+                st[cur].link = q;
+            } else {
+                int clone = sz++;
+                st[clone].len = st[p].len + 1;
+                st[clone].next.putAll(st[q].next);
+                st[clone].link = st[q].link;
+                cnt[clone] = 0;
+
+                while (p != -1 && st[p].next.getOrDefault(c, -1) == q) {
+                    st[p].next.put(c, clone);
+                    p = st[p].link;
+                }
+                st[q].link = clone;
+                st[cur].link = clone;
+            }
+        }
+        last = cur;
+    }
+
+    public void build(String s) {
+        for (char c : s.toCharArray()) extend(c);
+    }
+
+    public long countDistinctSubstrings() {
+        long result = 0;
+        for (int i = 1; i < sz; i++) {
+            result += st[i].len - st[st[i].link].len;
+        }
+        return result;
+    }
+
+    public boolean contains(String pattern) {
+        int v = 0;
+        for (char c : pattern.toCharArray()) {
+            if (!st[v].next.containsKey(c)) return false;
+            v = st[v].next.get(c);
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        String s = "abcbc";
+        SuffixAutomaton sa = new SuffixAutomaton(s.length());
+        sa.build(s);
+
+        System.out.println("String: " + s);
+        System.out.println("Number of states: " + sa.sz);
+        System.out.println("Distinct substrings: " + sa.countDistinctSubstrings());
+
+        for (String p : new String[]{"abc", "bc", "xyz", "abcbc", "a"}) {
+            System.out.printf("  \"%s\" found: %s%n", p, sa.contains(p) ? "YES" : "NO");
+        }
+    }
+}
+```
+
 ---
 
 ## 45.3 Applications
