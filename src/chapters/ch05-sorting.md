@@ -681,6 +681,34 @@ int main() {
 
 **When NOT to use:** When the range k is very large (e.g., sorting 10 numbers in range [0, 10^9]) — the count array would be huge.
 
+### Dry Run
+
+```
+Initial: [4, 2, 2, 8, 3, 3, 1]
+minVal=1, maxVal=8, range=8
+
+Step 1 — Count occurrences:
+  Value:  1  2  3  4  5  6  7  8
+  Count: [1, 2, 2, 1, 0, 0, 0, 1]
+
+Step 2 — Prefix sums (cumulative counts):
+  Count: [1, 3, 5, 6, 6, 6, 6, 7]
+  Meaning: value 1 ends at position 1, value 2 ends at position 3, etc.
+
+Step 3 — Build output (traverse input in reverse for stability):
+  i=6: arr[6]=1 → output[0] = 1, count[1] becomes 0
+  i=5: arr[5]=3 → output[4] = 3, count[3] becomes 4
+  i=4: arr[4]=3 → output[3] = 3, count[3] becomes 3
+  i=3: arr[3]=8 → output[6] = 8, count[8] becomes 6
+  i=2: arr[2]=2 → output[2] = 2, count[2] becomes 2
+  i=1: arr[1]=2 → output[1] = 2, count[2] becomes 1
+  i=0: arr[0]=4 → output[3] = 4, count[4] becomes 3
+
+Output: [1, 2, 2, 3, 3, 4, 8] ✓
+```
+
+**Why traverse in reverse?** It ensures stability — when two elements have the same value, the one appearing later in the input is placed later in the output, preserving their relative order.
+
 ---
 
 ## 5.9 Radix Sort
@@ -778,6 +806,27 @@ If numbers have a fixed number of digits (e.g., 32-bit integers), d is constant 
 **Space:** O(n + b).
 **Stable:** Yes.
 
+### Dry Run
+
+```
+Initial: [170, 45, 75, 90, 802, 24, 2, 66]
+maxVal=802, need 3 digit passes
+
+Sort by ones digit (exp=1):
+  Digits: 170→0, 45→5, 75→5, 90→0, 802→2, 24→4, 2→2, 66→6
+  Stable sort by digit → [170, 90, 802, 2, 24, 45, 75, 66]
+
+Sort by tens digit (exp=10):
+  Digits: 170→7, 45→4, 75→7, 90→9, 802→0, 24→2, 2→0, 66→6
+  Stable sort by digit → [802, 2, 24, 45, 66, 170, 75, 90]
+
+Sort by hundreds digit (exp=100):
+  Digits: 802→8, 2→0, 24→0, 45→0, 66→0, 170→1, 75→0, 90→0
+  Stable sort by digit → [2, 24, 45, 66, 75, 90, 170, 802] ✓
+```
+
+**Key insight:** Each pass uses a *stable* sort. Stability ensures that elements sorted by less significant digits maintain their relative order when sorted by more significant digits. This is why LSD Radix Sort produces a correct final result.
+
 ### When to Use
 
 - When numbers have a bounded number of digits.
@@ -852,6 +901,30 @@ int main() {
 | Worst | O(n²) | All elements in one bucket |
 
 **Space:** O(n + k) where k = number of buckets.
+
+### Dry Run
+
+```
+Initial: [0.897, 0.565, 0.656, 0.1234, 0.665, 0.3434]
+n=6, so 6 buckets covering ranges [0, 0.167), [0.167, 0.333), ...
+
+Step 1 — Distribute into buckets:
+  Bucket 0 [0.000-0.167): [0.1234]
+  Bucket 1 [0.167-0.333): []
+  Bucket 2 [0.333-0.500): [0.3434]
+  Bucket 3 [0.500-0.667): [0.565, 0.656]
+  Bucket 4 [0.667-0.833): [0.665]
+  Bucket 5 [0.833-1.000): [0.897]
+
+Step 2 — Sort each bucket:
+  Bucket 3: [0.565, 0.656] — already in order
+  All others: single elements, trivially sorted
+
+Step 3 — Concatenate all buckets:
+  [0.1234, 0.3434, 0.565, 0.656, 0.665, 0.897] ✓
+```
+
+**Why uniform distribution matters:** If all elements land in one bucket, we degrade to O(n²) since that bucket holds all n elements. Uniform distribution keeps buckets small and gives O(n) average time.
 
 ---
 
