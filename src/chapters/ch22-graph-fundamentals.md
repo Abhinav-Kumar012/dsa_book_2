@@ -216,35 +216,62 @@ int main() {
 
 ### Choosing a Representation — Decision Flowchart
 
-```
-Start
-  │
-  ├─ Need O(1) edge query AND V ≤ 2000? → Adjacency Matrix
-  │
-  ├─ Algorithm needs edges sorted by weight? → Edge List
-  │   (e.g., Kruskal's MST)
-  │
-  ├─ Sparse graph (E << V²)? → Adjacency List ✓
-  │   (most interview problems)
-  │
-  └─ Dense graph (E ≈ V²)? → Adjacency Matrix
-      (simpler code, same asymptotic space)
+```mermaid
+flowchart TD
+    A["Start: Choose Graph Representation"] --> B{"Need O(1) edge query<br/>AND V ≤ 2000?"}
+    B -->|Yes| C["Adjacency Matrix<br/>O(V²) space"]
+    B -->|No| D{"Algorithm needs edges<br/>sorted by weight?"}
+    D -->|Yes| E["Edge List<br/>O(E) space"]
+    D -->|No| F{"Sparse graph?<br/>(E ≪ V²)"}
+    F -->|Yes| G["Adjacency List ✅<br/>O(V+E) space"]
+    F -->|No| H["Adjacency Matrix<br/>simpler code"]
+
+    style G fill:#9f9,stroke:#333,stroke-width:2px
+    style C fill:#9cf,stroke:#333
+    style E fill:#fc9,stroke:#333
+    style H fill:#9cf,stroke:#333
 ```
 
 ### Concrete Example: Same Graph, Three Representations
 
 Consider this undirected graph with 4 vertices and 5 edges:
 
-```
+```mermaid
+graph LR
     0 --- 1
-    | ╲   |
-    |  ╲  |
-    |   ╲ |
+    0 --- 2
+    1 --- 2
+    1 --- 3
     2 --- 3
+
+    style 0 fill:#f96,stroke:#333,stroke-width:2px
+    style 1 fill:#9cf,stroke:#333
+    style 2 fill:#9f9,stroke:#333
+    style 3 fill:#fc9,stroke:#333
 ```
+
 Edges: (0,1), (0,2), (1,2), (1,3), (2,3)
 
 Visualizing the graph helps us reason about which representation is most efficient. This graph is **dense** — 5 edges out of a maximum of 6 (for 4 vertices), so an adjacency matrix would waste very little space. For sparse graphs with thousands of vertices but few edges, an adjacency list would be far more memory-efficient.
+
+The three representations of this graph:
+
+```mermaid
+graph TD
+    subgraph "Adjacency Matrix"
+        M["     0  1  2  3<br/> 0 [ 0, 1, 1, 0 ]<br/> 1 [ 1, 0, 1, 1 ]<br/> 2 [ 1, 1, 0, 1 ]<br/> 3 [ 0, 1, 1, 0 ]"]
+    end
+    subgraph "Adjacency List"
+        L["0: [1, 2]<br/>1: [0, 2, 3]<br/>2: [0, 1, 3]<br/>3: [1, 2]"]
+    end
+    subgraph "Edge List"
+        E["[(0,1), (0,2),<br/> (1,2), (1,3),<br/> (2,3)]"]
+    end
+
+    style M fill:#eef,stroke:#333
+    style L fill:#efe,stroke:#333
+    style E fill:#fef,stroke:#333
+```
 
 **Adjacency Matrix** (`adj[u][v] = 1` if edge exists):
 ```
