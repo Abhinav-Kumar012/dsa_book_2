@@ -170,6 +170,132 @@ int main() {
 
 **Space Complexity:** $O(V + E)$ for the adjacency list, distance array, and priority queue.
 
+### Python — Dijkstra's Algorithm
+
+```python
+import heapq
+from typing import List, Tuple
+
+def dijkstra(source: int, V: int, adj: List[List[Tuple[int, int]]]) -> List[int]:
+    """Returns shortest distances from source to all vertices."""
+    dist = [float('inf')] * V
+    dist[source] = 0
+    pq = [(0, source)]  # (distance, vertex)
+
+    while pq:
+        d, u = heapq.heappop(pq)
+        if d > dist[u]:
+            continue  # Skip stale entries
+        for v, w in adj[u]:
+            if dist[u] + w < dist[v]:
+                dist[v] = dist[u] + w
+                heapq.heappush(pq, (dist[v], v))
+    return dist
+
+def dijkstra_with_path(source: int, target: int, V: int,
+                       adj: List[List[Tuple[int, int]]]) -> Tuple[List[int], List[int]]:
+    """Returns (distances, path) from source to target."""
+    dist = [float('inf')] * V
+    parent = [-1] * V
+    dist[source] = 0
+    pq = [(0, source)]
+
+    while pq:
+        d, u = heapq.heappop(pq)
+        if d > dist[u]:
+            continue
+        if u == target:
+            break
+        for v, w in adj[u]:
+            if dist[u] + w < dist[v]:
+                dist[v] = dist[u] + w
+                parent[v] = u
+                heapq.heappush(pq, (dist[v], v))
+
+    path = []
+    if dist[target] != float('inf'):
+        cur = target
+        while cur != -1:
+            path.append(cur)
+            cur = parent[cur]
+        path.reverse()
+    return dist, path
+
+
+if __name__ == "__main__":
+    V = 5
+    adj = [[] for _ in range(V)]
+    def add_edge(u, v, w):
+        adj[u].append((v, w))
+        adj[v].append((u, w))
+
+    add_edge(0, 1, 4)
+    add_edge(0, 2, 1)
+    add_edge(1, 3, 1)
+    add_edge(2, 1, 2)
+    add_edge(2, 3, 5)
+    add_edge(3, 4, 3)
+
+    dist = dijkstra(0, V, adj)
+    print("Shortest distances from 0:")
+    for i in range(V):
+        print(f"  to {i}: {dist[i]}")
+
+    dist, path = dijkstra_with_path(0, 4, V, adj)
+    print(f"Shortest path to 4: {' '.join(map(str, path))} (distance {dist[4]})")
+```
+
+### Java — Dijkstra's Algorithm
+
+```java
+import java.util.*;
+
+public class Dijkstra {
+    public static long[] solve(int source, int V, List<List<int[]>> adj) {
+        long[] dist = new long[V];
+        Arrays.fill(dist, Long.MAX_VALUE);
+        dist[source] = 0;
+        // Min-heap: {distance, vertex}
+        PriorityQueue<long[]> pq = new PriorityQueue<>(Comparator.comparingLong(a -> a[0]));
+        pq.offer(new long[]{0, source});
+
+        while (!pq.isEmpty()) {
+            long[] top = pq.poll();
+            long d = top[0];
+            int u = (int) top[1];
+            if (d > dist[u]) continue;
+            for (int[] edge : adj.get(u)) {
+                int v = edge[0], w = edge[1];
+                if (dist[u] + w < dist[v]) {
+                    dist[v] = dist[u] + w;
+                    pq.offer(new long[]{dist[v], v});
+                }
+            }
+        }
+        return dist;
+    }
+
+    public static void main(String[] args) {
+        int V = 5;
+        List<List<int[]>> adj = new ArrayList<>();
+        for (int i = 0; i < V; i++) adj.add(new ArrayList<>());
+
+        // Undirected edges
+        int[][] edges = {{0,1,4},{0,2,1},{1,3,1},{2,1,2},{2,3,5},{3,4,3}};
+        for (int[] e : edges) {
+            adj.get(e[0]).add(new int[]{e[1], e[2]});
+            adj.get(e[1]).add(new int[]{e[0], e[2]});
+        }
+
+        long[] dist = solve(0, V, adj);
+        System.out.println("Shortest distances from 0:");
+        for (int i = 0; i < V; i++) {
+            System.out.println("  to " + i + ": " + dist[i]);
+        }
+    }
+}
+```
+
 ### Dry Run
 
 Graph: `0-1(4), 0-2(1), 1-3(1), 2-1(2), 2-3(5), 3-4(3)`. Source = 0.
@@ -298,6 +424,117 @@ int main() {
 
 **Space Complexity:** $O(V + E)$.
 
+### Python — Bellman-Ford Algorithm
+
+```python
+def bellman_ford(source, V, edges):
+    """
+    Returns (distances, has_negative_cycle).
+    edges: list of (u, v, w) tuples.
+    """
+    INF = float('inf')
+    dist = [INF] * V
+    dist[source] = 0
+
+    # Relax all edges V-1 times
+    for _ in range(V - 1):
+        any_update = False
+        for u, v, w in edges:
+            if dist[u] != INF and dist[u] + w < dist[v]:
+                dist[v] = dist[u] + w
+                any_update = True
+        if not any_update:
+            break
+
+    # Check for negative cycles
+    has_negative_cycle = False
+    for u, v, w in edges:
+        if dist[u] != INF and dist[u] + w < dist[v]:
+            has_negative_cycle = True
+            break
+
+    return dist, has_negative_cycle
+
+
+if __name__ == "__main__":
+    V = 5
+    edges = [
+        (0, 1, 6), (0, 2, 7), (1, 2, 8), (1, 3, 5),
+        (1, 4, -4), (2, 3, -3), (2, 4, 9), (3, 1, -2),
+        (4, 0, 2), (4, 3, 7)
+    ]
+
+    dist, has_neg = bellman_ford(0, V, edges)
+    if has_neg:
+        print("Negative cycle detected!")
+    else:
+        print("Distances from 0:")
+        for i in range(V):
+            print(f"  to {i}: {dist[i]}")
+```
+
+### Java — Bellman-Ford Algorithm
+
+```java
+import java.util.*;
+
+public class BellmanFord {
+    static class Edge {
+        int u, v, w;
+        Edge(int u, int v, int w) { this.u = u; this.v = v; this.w = w; }
+    }
+
+    public static long[] solve(int source, int V, List<Edge> edges, boolean[] hasNegativeCycle) {
+        long[] dist = new long[V];
+        Arrays.fill(dist, Long.MAX_VALUE);
+        dist[source] = 0;
+
+        // Relax all edges V-1 times
+        for (int i = 0; i < V - 1; i++) {
+            boolean anyUpdate = false;
+            for (Edge e : edges) {
+                if (dist[e.u] != Long.MAX_VALUE && dist[e.u] + e.w < dist[e.v]) {
+                    dist[e.v] = dist[e.u] + e.w;
+                    anyUpdate = true;
+                }
+            }
+            if (!anyUpdate) break;
+        }
+
+        // Check for negative cycles
+        hasNegativeCycle[0] = false;
+        for (Edge e : edges) {
+            if (dist[e.u] != Long.MAX_VALUE && dist[e.u] + e.w < dist[e.v]) {
+                hasNegativeCycle[0] = true;
+                break;
+            }
+        }
+        return dist;
+    }
+
+    public static void main(String[] args) {
+        int V = 5;
+        List<Edge> edges = List.of(
+            new Edge(0, 1, 6), new Edge(0, 2, 7), new Edge(1, 2, 8),
+            new Edge(1, 3, 5), new Edge(1, 4, -4), new Edge(2, 3, -3),
+            new Edge(2, 4, 9), new Edge(3, 1, -2), new Edge(4, 0, 2),
+            new Edge(4, 3, 7)
+        );
+
+        boolean[] hasNeg = new boolean[1];
+        long[] dist = solve(0, V, edges, hasNeg);
+        if (hasNeg[0]) {
+            System.out.println("Negative cycle detected!");
+        } else {
+            System.out.println("Distances from 0:");
+            for (int i = 0; i < V; i++) {
+                System.out.println("  to " + i + ": " + dist[i]);
+            }
+        }
+    }
+}
+```
+
 ### Dry Run
 
 Graph with edges: `0→1(6), 0→2(7), 1→2(8), 1→3(5), 1→4(-4), 2→3(-3), 2→4(9), 3→1(-2), 4→0(2), 4→3(7)`. Source = 0.
@@ -403,6 +640,120 @@ int main() {
 **Space Complexity:** $O(V^2)$ for the distance matrix.
 
 **When to use:** $V \leq 400$ (with 1-second time limit). For $V = 1000$, $V^3 = 10^9$ is borderline.
+
+### Python — Floyd-Warshall Algorithm
+
+```python
+def floyd_warshall(V, adj):
+    """
+    Returns dist[i][j] = shortest path from i to j.
+    adj: adjacency matrix, adj[i][j] = weight or float('inf') if no edge.
+    """
+    dist = [row[:] for row in adj]  # Deep copy
+
+    for k in range(V):
+        for i in range(V):
+            for j in range(V):
+                if dist[i][k] < float('inf') and dist[k][j] < float('inf'):
+                    dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
+    return dist
+
+def has_negative_cycle(dist, V):
+    """Check if dist[i][i] < 0 for any i."""
+    for i in range(V):
+        if dist[i][i] < 0:
+            return True
+    return False
+
+def build_matrix(V, edges):
+    """Build adjacency matrix from edge list."""
+    INF = float('inf')
+    dist = [[INF] * V for _ in range(V)]
+    for i in range(V):
+        dist[i][i] = 0
+    for u, v, w in edges:
+        dist[u][v] = min(dist[u][v], w)
+    return dist
+
+
+if __name__ == "__main__":
+    V = 4
+    edges = [(0, 1, 5), (0, 3, 10), (1, 2, 3), (2, 3, 1)]
+    adj = build_matrix(V, edges)
+    dist = floyd_warshall(V, adj)
+
+    print("All-pairs shortest distances:")
+    for i in range(V):
+        row = []
+        for j in range(V):
+            row.append("INF" if dist[i][j] == float('inf') else str(dist[i][j]))
+        print(" ".join(row))
+```
+
+### Java — Floyd-Warshall Algorithm
+
+```java
+public class FloydWarshall {
+    static final long INF = (long) 1e18;
+
+    public static long[][] solve(int V, long[][] adj) {
+        long[][] dist = new long[V][V];
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                dist[i][j] = adj[i][j];
+            }
+        }
+
+        for (int k = 0; k < V; k++) {
+            for (int i = 0; i < V; i++) {
+                for (int j = 0; j < V; j++) {
+                    if (dist[i][k] < INF && dist[k][j] < INF) {
+                        dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);
+                    }
+                }
+            }
+        }
+        return dist;
+    }
+
+    public static boolean hasNegativeCycle(long[][] dist, int V) {
+        for (int i = 0; i < V; i++) {
+            if (dist[i][i] < 0) return true;
+        }
+        return false;
+    }
+
+    public static long[][] buildMatrix(int V, int[][] edges) {
+        long[][] dist = new long[V][V];
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                dist[i][j] = (i == j) ? 0 : INF;
+            }
+        }
+        for (int[] e : edges) {
+            dist[e[0]][e[1]] = Math.min(dist[e[0]][e[1]], e[2]);
+        }
+        return dist;
+    }
+
+    public static void main(String[] args) {
+        int V = 4;
+        int[][] edges = {{0, 1, 5}, {0, 3, 10}, {1, 2, 3}, {2, 3, 1}};
+        long[][] adj = buildMatrix(V, edges);
+        long[][] dist = solve(V, adj);
+
+        System.out.println("All-pairs shortest distances:");
+        for (int i = 0; i < V; i++) {
+            StringBuilder sb = new StringBuilder();
+            for (int j = 0; j < V; j++) {
+                if (j > 0) sb.append(" ");
+                sb.append(dist[i][j] >= INF ? "INF" : dist[i][j]);
+            }
+            System.out.println(sb.toString());
+        }
+    }
+}
+```
 
 ### Path Reconstruction
 
