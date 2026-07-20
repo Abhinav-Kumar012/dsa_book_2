@@ -340,6 +340,30 @@ int main() {
 }
 ```
 
+**Dry run with nums = [0, 0, 1, 1, 1, 2, 2, 3, 3, 4]:**
+
+```
+slow=0, fast scans from 1 to 9
+
+fast=1: nums[1]=0, nums[slow]=0 → same, skip
+fast=2: nums[2]=1, nums[slow]=0 → different!
+  slow=1, nums[1] = 1  → array: [0, 1, 1, 1, 1, 2, 2, 3, 3, 4]
+fast=3: nums[3]=1, nums[slow]=1 → same, skip
+fast=4: nums[4]=1, nums[slow]=1 → same, skip
+fast=5: nums[5]=2, nums[slow]=1 → different!
+  slow=2, nums[2] = 2  → array: [0, 1, 2, 1, 1, 2, 2, 3, 3, 4]
+fast=6: nums[6]=2, nums[slow]=2 → same, skip
+fast=7: nums[7]=3, nums[slow]=2 → different!
+  slow=3, nums[3] = 3  → array: [0, 1, 2, 3, 1, 2, 2, 3, 3, 4]
+fast=8: nums[8]=3, nums[slow]=3 → same, skip
+fast=9: nums[9]=4, nums[slow]=3 → different!
+  slow=4, nums[4] = 4  → array: [0, 1, 2, 3, 4, 2, 2, 3, 3, 4]
+
+Result: k = slow + 1 = 5, unique elements = [0, 1, 2, 3, 4]
+```
+
+The slow pointer tracks where to write the next unique element. The fast pointer scans ahead to find new values. Each element is written at most once → O(n).
+
 **Complexity:** O(n) time, O(1) space.
 
 ### 34.3.3 Merge Two Sorted Arrays (in-place, from the end)
@@ -380,6 +404,30 @@ int main() {
     return 0;
 }
 ```
+
+**Dry run with nums1 = [1, 2, 3, 0, 0, 0] (m=3), nums2 = [2, 5, 6] (n=3):**
+
+```
+Start: i=2 (nums1[2]=3), j=2 (nums2[2]=6), k=5
+
+Step 1: nums1[2]=3 vs nums2[2]=6 → 6 is larger
+  nums1[5] = 6, j=1, k=4  → [1, 2, 3, 0, 0, 6]
+
+Step 2: nums1[2]=3 vs nums2[1]=5 → 5 is larger
+  nums1[4] = 5, j=0, k=3  → [1, 2, 3, 0, 5, 6]
+
+Step 3: nums1[2]=3 vs nums2[0]=2 → 3 is larger
+  nums1[3] = 3, i=1, k=2  → [1, 2, 3, 3, 5, 6]
+
+Step 4: nums1[1]=2 vs nums2[0]=2 → equal, take nums2 (or nums1, either works)
+  nums1[2] = 2, j=-1, k=1  → [1, 2, 2, 3, 5, 6]
+
+Step 5: j < 0, copy remaining nums1 elements (already in place)
+
+Result: [1, 2, 2, 3, 5, 6] ✓
+```
+
+**Why merge from the end?** If we merged from the front, we'd overwrite elements in nums1 that haven't been processed yet. Merging from the back fills the empty space at the end of nums1 first, never overwriting unprocessed data.
 
 **Complexity:** O(m + n) time, O(1) space.
 
