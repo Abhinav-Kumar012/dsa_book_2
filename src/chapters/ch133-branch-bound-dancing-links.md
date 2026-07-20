@@ -141,80 +141,45 @@ int main() {
 
 ---
 
-### Dancing Links Implementation (Sudoku Solver)
+---
 
-```cpp
-#include <iostream>
-#include <vector>
-#include <array>
+## Interview Questions
 
-// Dancing Links solves exact cover problems
-// Applied to Sudoku: each cell must have exactly one value
-// Each row, column, and 3x3 box must have each digit exactly once
+### Q1: How does Branch and Bound differ from plain backtracking?
+**Answer**: Branch and Bound adds pruning via lower/upper bounds. Before exploring a subtree, it computes a bound on the best solution reachable from that node. If the bound is worse than the best solution found so far, the entire subtree is pruned. Plain backtracking explores all possibilities without such pruning.
 
-class SudokuDLX {
-    std::array<std::array<int, 9>, 9> grid;
-    bool solved;
-    
-    bool isValid(int row, int col, int num) {
-        for (int i = 0; i < 9; i++)
-            if (grid[row][i] == num || grid[i][col] == num) return false;
-        int r0 = 3 * (row / 3), c0 = 3 * (col / 3);
-        for (int i = r0; i < r0 + 3; i++)
-            for (int j = c0; j < c0 + 3; j++)
-                if (grid[i][j] == num) return false;
-        return true;
-    }
-    
-    bool solve() {
-        for (int r = 0; r < 9; r++)
-            for (int c = 0; c < 9; c++)
-                if (grid[r][c] == 0) {
-                    for (int num = 1; num <= 9; num++) {
-                        if (isValid(r, c, num)) {
-                            grid[r][c] = num;
-                            if (solve()) return true;
-                            grid[r][c] = 0;
-                        }
-                    }
-                    return false;
-                }
-        return true;
-    }
-    
-public:
-    SudokuDLX() : solved(false) {}
-    
-    bool solve(std::array<std::array<int, 9>, 9>& puzzle) {
-        grid = puzzle;
-        solved = solve();
-        if (solved) puzzle = grid;
-        return solved;
-    }
-};
+### Q2: What is the exact cover problem, and why is Dancing Links effective for it?
+**Answer**: An exact cover problem asks: given a universe of elements and a collection of subsets, find a subcollection that covers every element exactly once. DLX is effective because the cover/uncover operations on the circular doubly linked list allow O(1) restoration during backtracking, making the search very efficient.
 
-int main() {
-    std::array<std::array<int, 9>, 9> puzzle = {{
-        {5, 3, 0, 0, 7, 0, 0, 0, 0},
-        {6, 0, 0, 1, 9, 5, 0, 0, 0},
-        {0, 9, 8, 0, 0, 0, 0, 6, 0},
-        {8, 0, 0, 0, 6, 0, 0, 0, 3},
-        {4, 0, 0, 8, 0, 3, 0, 0, 1},
-        {7, 0, 0, 0, 2, 0, 0, 0, 6},
-        {0, 6, 0, 0, 0, 0, 2, 8, 0},
-        {0, 0, 0, 4, 1, 9, 0, 0, 5},
-        {0, 0, 0, 0, 8, 0, 0, 7, 9}
-    }};
-    
-    SudokuDLX solver;
-    if (solver.solve(puzzle)) {
-        std::cout << "Solved Sudoku:\\n";
-        for (auto& row : puzzle) {
-            for (int val : row) std::cout << val << " ";
-            std::cout << "\\n";
-        }
-    }
-    
-    return 0;
-}
-```
+### Q3: When would you use Branch and Bound over dynamic programming for optimization?
+**Answer**: Branch and Bound is preferable when: (1) the problem has natural bounding functions that prune heavily, (2) the state space is too large for DP (exponential states), or (3) you need the actual solution, not just the value. DP is better when overlapping subproblems exist and the state space is manageable.
+
+### Q4: What is the time complexity of Branch and Bound?
+**Answer**: Worst case is still exponential (same as brute force), but good bounds can prune the search space dramatically. The actual performance depends entirely on the quality of the bounding function. For TSP with a good lower bound (e.g., MST), it can solve instances much larger than brute force.
+
+### Q5: Name three problems that can be modeled as exact cover.
+**Answer**: Sudoku (each cell, row-column-box constraints satisfied exactly once), N-Queens (each row, column, and diagonal used exactly once), and pentomino tiling (each board cell covered exactly once by a pentomino piece).
+
+---
+
+## Exercises
+
+1. **TSP Bounding**: Modify the TSP Branch and Bound code to use the MST lower bound instead of simple pruning by `bestCost`. Compare the number of nodes explored.
+
+2. **N-Queens via DLX**: Model the N-Queens problem as an exact cover problem and solve it using Dancing Links. How many solutions exist for N=8?
+
+3. **Branch and Bound for 0/1 Knapsack**: Implement a Branch and Bound solver for the 0/1 Knapsack problem using the fractional knapsack value as the upper bound.
+
+4. **Beam Search Variant**: Replace the DFS in the Branch and Bound TSP solver with a beam search (keep top-k nodes at each level). Compare solution quality vs. runtime.
+
+5. **Sudoku Benchmark**: Compare the performance of the simple backtracking Sudoku solver vs. the DLX-based solver on 100 hard Sudoku puzzles.
+
+---
+
+## See Also
+
+- [Chapter 9: Backtracking](ch09-backtracking.md) — Branch and Bound extends backtracking with bounding functions for pruning.
+- [Chapter 8: Recursion](ch08-recursion.md) — Both BnB and DLX are fundamentally recursive algorithms.
+- [Chapter 132: IDA* and Beam Search](ch132-ida-star-beam-search.md) — Alternative search strategies: IDA* uses heuristic bounds with iterative deepening; beam search limits width.
+- [Chapter 5: Sorting](ch05-sorting.md) — Sorting edges/nodes by cost improves bounding quality in BnB.
+- [Chapter 29: Network Flow](ch29-network-flow.md) — Some constraint satisfaction problems can be solved with flow instead of DLX.
