@@ -287,6 +287,201 @@ For node 9 (representing "she"):
 
 **Matches**: (3, "his"), (5, "she"), (5, "he"), (7, "hers") ✓
 
+### Python — Aho-Corasick Algorithm
+
+```python
+from collections import deque
+
+class AhoCorasick:
+    def __init__(self):
+        self.nodes = [{'next': [-1] * 26, 'link': 0, 'dict_link': -1,
+                        'output': False, 'pattern_idx': -1}]
+        self.size = 1
+
+    def insert(self, pattern, idx):
+        v = 0
+        for ch in pattern:
+            c = ord(ch) - ord('a')
+            if self.nodes[v]['next'][c] == -1:
+                self.nodes[v]['next'][c] = self.size
+                self.nodes.append({'next': [-1] * 26, 'link': 0,
+                                   'dict_link': -1, 'output': False,
+                                   'pattern_idx': -1})
+                self.size += 1
+            v = self.nodes[v]['next'][c]
+        self.nodes[v]['output'] = True
+        self.nodes[v]['pattern_idx'] = idx
+
+    def build(self):
+        q = deque()
+        for c in range(26):
+            u = self.nodes[0]['next'][c]
+            if u != -1:
+                self.nodes[u]['link'] = 0
+                self.nodes[u]['dict_link'] = -1
+                q.append(u)
+            else:
+                self.nodes[0]['next'][c] = 0
+
+        while q:
+            v = q.popleft()
+            for c in range(26):
+                u = self.nodes[v]['next'][c]
+                if u != -1:
+                    self.nodes[u]['link'] = self.nodes[self.nodes[v]['link']]['next'][c]
+                    if self.nodes[self.nodes[u]['link']]['output']:
+                        self.nodes[u]['dict_link'] = self.nodes[u]['link']
+                    else:
+                        self.nodes[u]['dict_link'] = self.nodes[self.nodes[u]['link']]['dict_link']
+                    q.append(u)
+                else:
+                    self.nodes[v]['next'][c] = self.nodes[self.nodes[v]['link']]['next'][c]
+
+    def search(self, text):
+        matches = []
+        v = 0
+        for i, ch in enumerate(text):
+            c = ord(ch) - ord('a')
+            if c < 0 or c >= 26:
+                v = 0
+                continue
+            v = self.nodes[v]['next'][c]
+            temp = v
+            while temp != -1:
+                if self.nodes[temp]['output']:
+                    matches.append((i, self.nodes[temp]['pattern_idx']))
+                temp = self.nodes[temp]['dict_link']
+        return matches
+
+
+if __name__ == "__main__":
+    ac = AhoCorasick()
+    patterns = ["he", "she", "his", "hers"]
+    for i, p in enumerate(patterns):
+        ac.insert(p, i)
+    ac.build()
+
+    text = "ahishers"
+    print(f"Text: {text}")
+    print(f"Patterns: {' '.join(f'\"{p}\"' for p in patterns)}\n")
+
+    matches = ac.search(text)
+    print("Matches found:")
+    for pos, idx in matches:
+        start = pos - len(patterns[idx]) + 1
+        print(f'  Pattern "{patterns[idx]}" at position {start} ("{text[start:pos+1]}")')
+```
+
+### Java — Aho-Corasick Algorithm
+
+```java
+import java.util.*;
+
+public class AhoCorasick {
+    static class Node {
+        int[] next = new int[26];
+        int link = 0, dictLink = -1;
+        boolean output = false;
+        int patternIdx = -1;
+        Node() { Arrays.fill(next, -1); }
+    }
+
+    List<Node> nodes = new ArrayList<>();
+    int size = 1;
+
+    public AhoCorasick() {
+        nodes.add(new Node());
+    }
+
+    public void insert(String pattern, int idx) {
+        int v = 0;
+        for (char ch : pattern.toCharArray()) {
+            int c = ch - 'a';
+            if (nodes.get(v).next[c] == -1) {
+                nodes.get(v).next[c] = size;
+                nodes.add(new Node());
+                size++;
+            }
+            v = nodes.get(v).next[c];
+        }
+        nodes.get(v).output = true;
+        nodes.get(v).patternIdx = idx;
+    }
+
+    public void build() {
+        Queue<Integer> q = new ArrayDeque<>();
+        for (int c = 0; c < 26; c++) {
+            int u = nodes.get(0).next[c];
+            if (u != -1) {
+                nodes.get(u).link = 0;
+                nodes.get(u).dictLink = -1;
+                q.offer(u);
+            } else {
+                nodes.get(0).next[c] = 0;
+            }
+        }
+
+        while (!q.isEmpty()) {
+            int v = q.poll();
+            for (int c = 0; c < 26; c++) {
+                int u = nodes.get(v).next[c];
+                if (u != -1) {
+                    nodes.get(u).link = nodes.get(nodes.get(v).link).next[c];
+                    if (nodes.get(nodes.get(u).link).output) {
+                        nodes.get(u).dictLink = nodes.get(u).link;
+                    } else {
+                        nodes.get(u).dictLink = nodes.get(nodes.get(u).link).dictLink;
+                    }
+                    q.offer(u);
+                } else {
+                    nodes.get(v).next[c] = nodes.get(nodes.get(v).link).next[c];
+                }
+            }
+        }
+    }
+
+    public List<int[]> search(String text) {
+        List<int[]> matches = new ArrayList<>();
+        int v = 0;
+        for (int i = 0; i < text.length(); i++) {
+            int c = text.charAt(i) - 'a';
+            if (c < 0 \|\| c >= 26) { v = 0; continue; }
+            v = nodes.get(v).next[c];
+            int temp = v;
+            while (temp != -1) {
+                if (nodes.get(temp).output) {
+                    matches.add(new int[]{i, nodes.get(temp).patternIdx});
+                }
+                temp = nodes.get(temp).dictLink;
+            }
+        }
+        return matches;
+    }
+
+    public static void main(String[] args) {
+        AhoCorasick ac = new AhoCorasick();
+        String[] patterns = {"he", "she", "his", "hers"};
+        for (int i = 0; i < patterns.length; i++) ac.insert(patterns[i], i);
+        ac.build();
+
+        String text = "ahishers";
+        System.out.println("Text: " + text);
+        System.out.print("Patterns: ");
+        for (String p : patterns) System.out.print("\"" + p + "\" ");
+        System.out.println("\n");
+
+        List<int[]> matches = ac.search(text);
+        System.out.println("Matches found:");
+        for (int[] m : matches) {
+            int pos = m[0], idx = m[1];
+            int start = pos - patterns[idx].length() + 1;
+            System.out.printf("  Pattern \"%s\" at position %d (\"%s\")%n",
+                patterns[idx], start, text.substring(start, pos + 1));
+        }
+    }
+}
+```
+
 ---
 
 ## 46.3 Multi-Pattern Matching
