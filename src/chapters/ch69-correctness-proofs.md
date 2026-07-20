@@ -240,3 +240,59 @@ int main() {
 | Induction | Recursive algorithms | Base case + inductive step |
 | Exchange Argument | Greedy algorithms | Transform OPT to GREEDY |
 | Invariant Maintenance | Data structures | Property holds after every operation |
+
+---
+
+## Interview Questions
+
+### Q1: What is a loop invariant and how do you use one?
+**Answer**: A loop invariant is a condition true before and after every iteration. To use one: (1) **Initialization** — prove it's true before the loop, (2) **Maintenance** — prove that if true at the start of an iteration, it's true at the end, (3) **Termination** — prove the loop terminates and the invariant gives the correct result. This mirrors mathematical induction.
+
+### Q2: Prove that insertion sort is correct using a loop invariant.
+**Answer**: Invariant: After iteration i, the subarray arr[0..i] is sorted. **Init**: i=0, single element is sorted. **Maintenance**: Inserting arr[i] into the sorted arr[0..i-1] produces a sorted arr[0..i]. **Termination**: i=n, so arr[0..n-1] is fully sorted.
+
+### Q3: How do you prove a greedy algorithm is correct using the exchange argument?
+**Answer**: Let OPT be an optimal solution and GREEDY be our solution. Show that for any optimal solution differing from GREEDY, we can swap elements (exchange) to make it more like GREEDY without worsening the solution. Conclude GREEDY is at least as good as OPT.
+
+### Q4: Why is proving correctness important in interviews?
+**Answer**: It demonstrates that you understand *why* your solution works, not just *that* it works. Interviewers want to see reasoning ability. A correct proof also catches bugs — if you can't prove it's correct, it probably isn't. At companies like Google and Microsoft, explaining correctness is often worth more than the code itself.
+
+### Q5: What's the difference between proving correctness and testing?
+**Answer**: Testing checks specific inputs; correctness proofs cover all inputs. Testing can show the presence of bugs but never their absence. A proof guarantees the algorithm works for every valid input. However, proofs can have errors too — best practice is both proof and testing.
+
+---
+
+## Exercises
+
+1. **Loop Invariant for Selection Sort**: Write the loop invariant for selection sort and prove it formally (initialization, maintenance, termination).
+
+2. **Prove Merge Correctness**: Prove that the merge step in merge sort correctly produces a sorted array from two sorted halves.
+
+3. **Exchange Argument for Huffman**: Use the exchange argument to prove that Huffman coding produces an optimal prefix-free code.
+
+4. **Invariant for a Stack**: Define a loop invariant for a function that reverses an array using a stack, and prove it's correct.
+
+5. **Find the Bug**: The following binary search has a bug. Identify it, fix it, and prove the fixed version correct using a loop invariant:
+   ```cpp
+   int search(vector<int>& a, int t) {
+       int lo = 0, hi = a.size();
+       while (lo < hi) {
+           int mid = (lo + hi) / 2;
+           if (a[mid] == t) return mid;
+           if (a[mid] < t) lo = mid;
+           else hi = mid - 1;
+       }
+       return -1;
+   }
+   ```
+
+---
+
+## See Also
+
+- [Chapter 3: Complexity Analysis](ch03-complexity-analysis.md) — Correctness and complexity are the two pillars of algorithm analysis; prove both.
+- [Chapter 5: Sorting](ch05-sorting.md) — Sorting algorithms are classic examples for loop invariant proofs (insertion sort, selection sort).
+- [Chapter 8: Recursion](ch08-recursion.md) — Recursive algorithms are proved correct by induction; the recursive call is the inductive step.
+- [Chapter 6: Searching](ch06-searching.md) — Binary search is the canonical example of loop invariant analysis.
+- [Chapter 9: Backtracking](ch09-backtracking.md) — Backtracking correctness relies on exhaustive search with pruning; the invariant ensures no valid solution is missed.
+- [Chapter 30: Greedy Algorithms](ch30-greedy.md) — The exchange argument is the primary tool for proving greedy correctness.
