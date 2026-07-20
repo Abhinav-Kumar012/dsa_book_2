@@ -17,6 +17,19 @@ Sorting enables efficient solutions to many problems:
 
 Many interview problems have a hidden sorting step that transforms a hard problem into an easy one.
 
+### Quick Reference: Which Sort to Use?
+
+| Situation | Best Choice | Why |
+|---|---|---|
+| General purpose | `std::sort` | IntroSort hybrid, O(n log n) guaranteed |
+| Need stability | `std::stable_sort` or Merge Sort | Preserves relative order of equal elements |
+| Nearly sorted data | Insertion Sort | O(n) on nearly sorted input |
+| Small array (n < 50) | Insertion Sort | Low overhead, cache-friendly |
+| Integers in small range | Counting Sort | O(n + k), beats comparison sorts |
+| Large n, bounded digits | Radix Sort | O(d × n), linear for fixed-width ints |
+| Guaranteed O(n log n), in-place | Heap Sort | Best worst-case in-place sort |
+| Linked list | Merge Sort | O(1) extra space on linked lists |
+
 ---
 
 ## 5.2 Bubble Sort
@@ -259,6 +272,10 @@ int main() {
 2. **Recursively** sort each half.
 3. **Merge** the two sorted halves.
 
+### Why It Works — Intuition
+
+Imagine you have two sorted decks of cards. Merging them is easy: compare the top cards, take the smaller one, repeat. This merge step is O(n). Now, how do we get sorted decks? We split the array in half, sort each half (recursively), and merge. The splitting continues until we have single elements (which are trivially sorted). The total work at each level of recursion is O(n), and there are O(log n) levels — giving O(n log n) overall.
+
 ### Visualization
 
 ```
@@ -359,6 +376,10 @@ int main() {
 1. **Pick a pivot** element.
 2. **Partition:** Rearrange so elements < pivot are on the left, elements > pivot are on the right.
 3. **Recursively** sort left and right partitions.
+
+### Why It Works — Intuition
+
+Think of organizing books on a shelf. Pick one book as a reference (the pivot). Put all thinner books to its left, all thicker books to its right. Now the pivot is in its final position! Recurse on the left and right groups. The key insight: after partitioning, the pivot doesn't need to move again. Each partition step does O(n) work, and if partitions are roughly balanced, we get O(log n) levels → O(n log n) total.
 
 ### Lomuto Partition Scheme
 
